@@ -64,7 +64,7 @@ model Gear {
   description     String
   attack          Int
   armor           Int
-  isTwoHanded     Int
+  isTwoHanded     Boolean
   equip_location  Int
   preferred_class String
   health_bonus    Int
