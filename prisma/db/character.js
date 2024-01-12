@@ -1,58 +1,48 @@
 const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient()
 
-const createCharacter = async (
-    name, 
-    gender, 
-    character_class, 
-    currentHP, 
-    maxHP, 
-    xp, 
-    level, 
-    graphicURL, 
-    gold, 
-    head_gear1, 
-    leaft_hand_gear2, 
-    right_hand_gear3, 
-    foot_gear4, 
-    chest_gear5, 
-    base_attack, 
-    base_armor, 
-    base_speed, 
-    isNPC, 
-    location_coordinates, 
-    inventoryid, 
-    stagescompleted) => {
-    try {
-        await prisma.client.query(
-            `INSERT INTO characters(name, gender, class, currentHP,  maxHP, xp, level, graphicURL, gold, head_gear1, leaft_hand_gear2, right_hand_gear3, foot_gear4, chest_gear5, base_attack, base_armor, base_speed, isNPC, location_coordinates, inventoryid, stagescompleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)`,
-               [name, 
-                gender, 
-                character_class, 
-                currentHP, 
-                maxHP, 
-                xp, 
-                level, 
-                graphicURL, 
-                gold, 
-                head_gear1, 
-                leaft_hand_gear2, 
-                right_hand_gear3, 
-                foot_gear4, 
-                chest_gear5, 
-                base_attack, 
-                base_armor, 
-                base_speed, 
-                isNPC, 
-                location_coordinates, 
-                inventoryid, 
-                stagescompleted]
-        );
-    } catch (error) {
-        console.log(error);
+const characters =[
+    {
+        name:'sal',
+        gender:'male',
+        character_class:'warrior',
+        currentHP:100,
+        maxHP:100,
+        xp:0,
+        level:1,
+        graphicURL:'https://i.imgur.com/0LX0K0o.png',
+        gold:0,
+        head_gear1:1,
+        leaft_hand_gear2:2,
+        right_hand_gear3:3,
+        foot_gear4:4,
+        chest_gear5:5,
+        base_attack:10,
+        base_armor:10,
+        base_speed:10,
+        isNPC:false,
+        location_coordinates:null,
+        inventory_id:1,
+        stagescompleted:0
     }
+]
+
+const createCharacter = async () => {
+    console.log('createCharacter');
+
+    await prisma.character.createMany({
+        data:characters
+    })
+
 };
 
-module.exports = {
-    createCharacter
-};
+main()
+.then(async () => {
+    await prisma.$disconnect()
+    console.log("done");
+  })
+  .catch(async (e) => {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  })
