@@ -75,7 +75,7 @@ CREATE TABLE "Character_Class" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(40) NOT NULL,
     "description" TEXT NOT NULL,
-    "begininning_attack" INTEGER NOT NULL,
+    "beginning_attack" INTEGER NOT NULL,
     "beginning_armor" INTEGER NOT NULL,
     "beginning_speed" INTEGER NOT NULL,
     "beginning_hp" INTEGER NOT NULL,
