@@ -15,7 +15,7 @@ const characters =[
         graphicURL:'',
         gold:0,
         head_gear1:1,
-        leaft_hand_gear2:2,
+        left_hand_gear2:2,
         right_hand_gear3:3,
         foot_gear4:4,
         chest_gear5:5,
