@@ -80,11 +80,11 @@ model Character_Class {
   id                 Int    @id @default(autoincrement())
   name               String @db.VarChar(40)
   description        String
-  begininning_attack Int
+  beginning_attack   Int
   beginning_armor    Int
   beginning_speed    Int
   beginning_hp       Int
-  graphicURL         String
+  graphicUrl         String
 }
 
 model Monster {
