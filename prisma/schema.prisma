@@ -84,7 +84,7 @@ model Character_Class {
   beginning_armor    Int
   beginning_speed    Int
   beginning_hp       Int
-  graphicURL         Int
+  graphicURL         String
 }
 
 model Monster {
