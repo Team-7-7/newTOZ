@@ -3,11 +3,13 @@ const prisma = new PrismaClient()
 
 const users =[
     {
+        id:1,
         username:'sal',
         password:'password',
-        characterid:1,
         isAdmin:false,
         isBanned:false,
+        createdAt: Date, Time,
+        characterid:1,
         phone:'555-555-5555'
     }
 ]

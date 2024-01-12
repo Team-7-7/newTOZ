@@ -11,7 +11,7 @@ const classes =[
         beginning_armor: 15,    
         beginning_speed: 5,  
         beginning_hp: 100,       
-        graphicURL: 'https://i.imgur.com/0LX0K0o.png',    
+        graphicURL: '',    
     },
         {
         id:2,
@@ -21,7 +21,7 @@ const classes =[
         beginning_armor: 5,
         beginning_speed: 15,
         beginning_hp: 100,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
+        graphicURL:'',
        
     },
     {
@@ -32,15 +32,15 @@ const classes =[
         beginning_armor: 5,
         beginning_speed: 15,
         beginning_hp: 100,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
+        graphicURL:'',
     }
 ]
 
 
-const createClass = async () => {
+const createCharacter_Class = async () => {
     console.log('createClass');
 
-    await prisma.class.createMany({
+    await prisma.Character_Class.createMany({
         data:classes
     })
 

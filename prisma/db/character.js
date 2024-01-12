@@ -3,6 +3,8 @@ const prisma = new PrismaClient()
 
 const characters =[
     {
+        id:1,
+        user_id:1,
         name:'sal',
         gender:'male',
         character_class:'warrior',
@@ -10,7 +12,7 @@ const characters =[
         maxHP:100,
         xp:0,
         level:1,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
+        graphicURL:'',
         gold:0,
         head_gear1:1,
         leaft_hand_gear2:2,
@@ -20,6 +22,7 @@ const characters =[
         base_attack:10,
         base_armor:10,
         base_speed:10,
+        magic_points:null,
         isNPC:false,
         location_coordinates:null,
         inventory_id:1,

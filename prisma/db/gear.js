@@ -3,79 +3,89 @@ const prisma = new PrismaClient()
 
 const gears =[
     {
+        id:1,
         name:'sword',
         description:'A sword',
         attack:10,
         armor:0,
         isTwoHanded:false,
-        equip_location:'right_hand',
+        equip_location:3,
         preferred_class:'warrior',
         health_bonus:0,
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
-        price:10
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
     },
     {
+        id:2,
         name:'shield',
         description:'A shield',
         attack:0,
         armor:10,
         isTwoHanded:false,
-        equip_location:'left_hand',
+        equip_location:2,
         preferred_class:'warrior',
         health_bonus:0,
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
-        price:10
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
     },
     {
+        id:3,
         name:'helmet',
         description:'A helmet',
         attack:0,
         armor:10,
         isTwoHanded:false,
-        equip_location:'head',
+        equip_location:1,
         preferred_class:'warrior',
         health_bonus:0,
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
-        price:10
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
     },
     {
+        id:4,
         name:'boots',
         description:'A boots',
         attack:0,
         armor:10,
         isTwoHanded:false,
-        equip_location:'feet',
+        equip_location:4,
         preferred_class:'warrior',
         health_bonus:0,
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
-        price:10
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
     },
     {
+        id:5,
         name:'chestplate',
         description:'A chestplate',
         attack:0,
         armor:10,
         isTwoHanded:false,
-        equip_location:'chest',
+        equip_location:5,
         preferred_class:'warrior',
         health_bonus:0,
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'https://i.imgur.com/0LX0K0o.png',
-        price:10
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
     }
 ]
 
