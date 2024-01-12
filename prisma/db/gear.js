@@ -1,42 +1,111 @@
 const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient()
 
-const createGear = async (
-    name, 
-    description, 
-    attack, 
-    armor, 
-    isTwoHanded, 
-    equip_location, 
-    preferred_class, 
-    health_bonus,
-    armor_bonus,
-    attack_bonus,
-    speed_bonus,
-    graphicURL,
-    price) => { try{
-        await prisma.client.query(
-            `INSERT INTO gear(name, description, attack, armor, isTwoHanded, equip_location, preferred_class, health_bonus, armor_bonus, attack_bonus, speed_bonus, graphicURL, price) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13)`,
-           [name, 
-            description, 
-            attack, 
-            armor, 
-            isTwoHanded, 
-            equip_location, 
-            preferred_class, 
-            health_bonus, 
-            armor_bonus, 
-            attack_bonus, 
-            speed_bonus, 
-            graphicURL, 
-            price]
-        );
-    } catch (error) {
-        console.log(error);
+const gears =[
+    {
+        id:1,
+        name:'sword',
+        description:'A sword',
+        attack:10,
+        armor:0,
+        isTwoHanded:false,
+        equip_location:3,
+        preferred_class:'warrior',
+        health_bonus:0,
+        armor_bonus:0,
+        attack_bonus:0,
+        speed_bonus:0,
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
+    },
+    {
+        id:2,
+        name:'shield',
+        description:'A shield',
+        attack:0,
+        armor:10,
+        isTwoHanded:false,
+        equip_location:2,
+        preferred_class:'warrior',
+        health_bonus:0,
+        armor_bonus:0,
+        attack_bonus:0,
+        speed_bonus:0,
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
+    },
+    {
+        id:3,
+        name:'helmet',
+        description:'A helmet',
+        attack:0,
+        armor:10,
+        isTwoHanded:false,
+        equip_location:1,
+        preferred_class:'warrior',
+        health_bonus:0,
+        armor_bonus:0,
+        attack_bonus:0,
+        speed_bonus:0,
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
+    },
+    {
+        id:4,
+        name:'boots',
+        description:'A boots',
+        attack:0,
+        armor:10,
+        isTwoHanded:false,
+        equip_location:4,
+        preferred_class:'warrior',
+        health_bonus:0,
+        armor_bonus:0,
+        attack_bonus:0,
+        speed_bonus:0,
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
+    },
+    {
+        id:5,
+        name:'chestplate',
+        description:'A chestplate',
+        attack:0,
+        armor:10,
+        isTwoHanded:false,
+        equip_location:5,
+        preferred_class:'warrior',
+        health_bonus:0,
+        armor_bonus:0,
+        attack_bonus:0,
+        speed_bonus:0,
+        graphicURL:'',
+        price:10,
+        Character_Gear: []
     }
-};
+]
 
-module.exports = {
-    createGear
-};
+const createGear = async function() {
+    console.log('createGear');
+
+    await prisma.gear.createMany({
+        data:gears
+    })
+
+}
+
+
+main()
+.then(async () => {
+    await prisma.$disconnect()
+    console.log("done");
+  })
+  .catch(async (e) => {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  })
