@@ -9,3 +9,97 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           Int        @id @default(autoincrement())
+  username     String     @unique @db.VarChar(40)
+  password     String
+  isAdmin      Boolean    @default(false)
+  isBanned     Boolean    @default(false)
+  createdAt    DateTime   @default(now()) @db.Timestamp(6)
+  character_id Character?
+  phone        Int?
+}
+
+model Character {
+  id                   Int              @id @default(autoincrement())
+  user_id              Int?             @unique
+  User                 User?            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  name                 String           @db.VarChar(40)
+  gender               String           @db.VarChar(20)
+  character_class      String           @db.VarChar(30)
+  currentHP            Int
+  maxHP                Int
+  xp                   Int
+  level                Int
+  graphicUrl           String
+  gold                 Int
+  head_gear1           Int?
+  left_hand_gear2      Int?
+  right_hand_gear3     Int?
+  foot_gear4           Int?
+  chest_gear5          Int?
+  base_attack          Int
+  base_armor           Int
+  base_speed           Int
+  magic_points         Int?
+  current_mp           Int?
+  isNPC                Boolean          @default(false)
+  location_coordinates String?
+  inventory            Character_Gear[]
+  stagescompleted      Int              @default(0)
+}
+
+model Character_Gear {
+  id           Int       @id @default(autoincrement())
+  character_id Int
+  gear_id      Int
+  Character    Character @relation(fields: [character_id], references: [id])
+  gear         Gear      @relation(fields: [gear_id], references: [id])
+}
+
+model Gear {
+  id              Int              @id @default(autoincrement())
+  name            String           @db.VarChar(40)
+  description     String
+  attack          Int
+  armor           Int
+  isTwoHanded     Int
+  equip_location  Int
+  preferred_class String
+  health_bonus    Int
+  armor_bonus     Int
+  attack_bonus    Int
+  speed_bonus     Int
+  graphicUrl      String
+  price           Int
+  Character_Gear  Character_Gear[]
+}
+
+model Character_Class {
+  id                 Int    @id @default(autoincrement())
+  name               String @db.VarChar(40)
+  description        String
+  begininning_attack Int
+  beginning_armor    Int
+  beginning_speed    Int
+  beginning_hp       Int
+  graphicURL         Int
+}
+
+model Monster {
+  id            Int     @id @default(autoincrement())
+  name          String  @db.VarChar(40)
+  description   String
+  base_attack   Int
+  base_armor    Int
+  base_speed    Int
+  level         Int
+  attack_name   String
+  graphicUrl    String
+  xp_base_value Int
+  maxHP         Int
+  currentHP     Int
+  isBoss        Boolean @default(false)
+  loot_value    Int
+}
