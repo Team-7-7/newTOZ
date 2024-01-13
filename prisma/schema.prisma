@@ -17,14 +17,15 @@ model User {
   isAdmin      Boolean    @default(false)
   isBanned     Boolean    @default(false)
   createdAt    DateTime   @default(now()) @db.Timestamp(6)
-  character_id Character?
+  character    Character? @relation(fields: [character_id], references: [id])
+  character_id Int?       @unique
   phone        Int?
+  email        String?
 }
 
 model Character {
   id                   Int              @id @default(autoincrement())
-  user_id              Int?             @unique
-  User                 User?            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user                 User? 
   name                 String           @db.VarChar(40)
   gender               String           @db.VarChar(20)
   character_class      String           @db.VarChar(30)
@@ -102,4 +103,16 @@ model Monster {
   currentHP     Int
   isBoss        Boolean @default(false)
   loot_value    Int
+}
+
+model Spells {
+  id            Int     @id @default(autoincrement())
+  spell_name    String  @db.VarChar(40)
+  description   String
+  health_bonus  Int
+  armor_bonus   Int
+  attack_bonus  Int
+  speed_bonus   Int
+  graphicUrl    String
+  level         Int
 }
