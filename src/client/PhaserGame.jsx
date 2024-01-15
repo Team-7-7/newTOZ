@@ -28,7 +28,6 @@ function preload ()
 {
     this.load.image('floor', 'assets/floor.png');
     this.load.image('tiles', 'assets/100x100images.png');
-    // this.load.tilemapCSV('map', 'assets/level1.csv');
     this.load.tilemapTiledJSON('map', 'assets/level1.json');
 
 
@@ -46,11 +45,8 @@ function create ()
 
   // loads the map and makes the walls solid    
     const map = this.make.tilemap({key:"map"});
-
     const tileset = map.addTilesetImage('100x100images', 'tiles');
-
     const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
-
     WorldLayer.setCollisionByProperty({ collides: true });
 
 
@@ -95,7 +91,7 @@ function create ()
      });
 
     
-
+     //camera controls, follows player and zooms in
      this.cameras.main.startFollow(player, true, 0.05, 0.05);
      this.cameras.main.setZoom(2); // 1 is the default zoom level
       // Set boundaries for the camera
