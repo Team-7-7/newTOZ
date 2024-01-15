@@ -3,8 +3,8 @@ import Phaser from 'phaser';
 const PhaserGame = () => {
   var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 800,
+    width: 1600,
+    height: 1200,
     physics: {
         default: 'arcade',
         arcade: {
@@ -27,21 +27,40 @@ var game = new Phaser.Game(config);
 function preload ()
 {
     this.load.image('floor', 'assets/floor.png');
+    this.load.image('tiles', 'assets/100x100images.png');
+    // this.load.tilemapCSV('map', 'assets/level1.csv');
+    this.load.tilemapTiledJSON('map', 'assets/level1.json');
+
 
     this.load.spritesheet('fighter', 'assets/fighter.png', { frameWidth: 32, frameHeight: 48 });
+
+
 }
 
 function create ()
 {
+
     //  A simple background for our game
-    this.add.image(400, 400, 'floor');
+    this.add.image(800, 600, 'floor');
+
+
+  // loads the map and makes the walls solid    
+    const map = this.make.tilemap({key:"map"});
+
+    const tileset = map.addTilesetImage('100x100images', 'tiles');
+
+    const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
+
+    WorldLayer.setCollisionByProperty({ collides: true });
+
 
    
     // The player and its settings
-    player = this.physics.add.sprite(10, 10, 'fighter');
+    player = this.physics.add.sprite(50, 50, 'fighter');
 
     // keep the player on the map
-    player.setCollideWorldBounds(true);
+    player.setCollideWorldBounds(true); 
+    this.physics.add.collider(player, WorldLayer);
 
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
@@ -66,7 +85,22 @@ function create ()
 
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
+    this.keys = this.input.keyboard.addKeys({
+      w: Phaser.Input.Keyboard.KeyCodes.W,
+      a: Phaser.Input.Keyboard.KeyCodes.A,
+      s: Phaser.Input.Keyboard.KeyCodes.S,
+      d: Phaser.Input.Keyboard.KeyCodes.D,
+      k: Phaser.Input.Keyboard.KeyCodes.K,
+  
+     });
 
+    
+
+     this.cameras.main.startFollow(player, true, 0.05, 0.05);
+     this.cameras.main.setZoom(2); // 1 is the default zoom level
+      // Set boundaries for the camera
+    this.cameras.main.setBounds(0, 0, 1600, 1200);
+   
     
 }
 
@@ -77,13 +111,13 @@ function update ()
         return;
     }
 
-    if (cursors.left.isDown)
+    if (this.keys.a.isDown || cursors.left.isDown)
     {
         player.setVelocityX(-160);
 
         player.anims.play('left', true);
     }
-    else if (cursors.right.isDown)
+    else if (this.keys.d.isDown || cursors.right.isDown)
     {
         player.setVelocityX(160);
 
@@ -93,15 +127,15 @@ function update ()
     {
       player.setVelocityX(0);
 
-      player.anims.play('right', true);
+      player.anims.play('turn', true);
     }
-    if(cursors.up.isDown)
+    if(this.keys.w.isDown || cursors.up.isDown)
     {
         player.setVelocityY(-160);
 
-        player.anims.play('right', true);
+        player.anims.play('left', true);
     }
-    else if(cursors.down.isDown)
+    else if(this.keys.s.isDown || cursors.down.isDown)
     {
         player.setVelocityY(160);
 
@@ -111,7 +145,16 @@ function update ()
     {
       player.setVelocityY(0);
     }
+
+    if (this.keys.k.isDown)
+    {
+        console.log('k is pressed, attacking now');
+
+    }
+
 }
+
+
 
   return <div id="phaser-game"></div>;
 };
