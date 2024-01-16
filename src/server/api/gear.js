@@ -1,7 +1,6 @@
-
+const express = require('express');
 const router = require("express").Router();
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../client');
 
 // GET /api/gear //
 router.get("/", async (req, res, next) => {
@@ -12,3 +11,5 @@ router.get("/", async (req, res, next) => {
     console.log(error);
   }
 }); 
+
+module.exports = router;
