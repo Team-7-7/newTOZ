@@ -18,7 +18,7 @@ const createCharacter_Gear = async () => {
 
 };
 
-main()
+createCharacter_Gear()
 .then(async () => {
     await prisma.$disconnect()
     console.log("done");

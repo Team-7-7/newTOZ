@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/server/main.js -w src/server",
     "start": "NODE_ENV=production node src/server/main.js",
-    "build": "vite build"
+    "build": "vite build",
+    "seed": "npx prisma migrate reset && node prisma/db/monster.js && node prisma/db/class.js && node prisma/db/gear.js && node prisma/db/character.js && node prisma/db/user.js  && node prisma/db/character_gear.js"
   },
   "dependencies": {
     "@prisma/client": "^5.8.0",

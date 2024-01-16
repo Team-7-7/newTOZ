@@ -15,9 +15,8 @@ const gears =[
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'',
+        graphicUrl:'',
         price:10,
-        Character_Gear: []
     },
     {
         id:2,
@@ -32,9 +31,8 @@ const gears =[
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'',
+        graphicUrl:'',
         price:10,
-        Character_Gear: []
     },
     {
         id:3,
@@ -49,9 +47,8 @@ const gears =[
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'',
+        graphicUrl:'',
         price:10,
-        Character_Gear: []
     },
     {
         id:4,
@@ -66,9 +63,8 @@ const gears =[
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'',
+        graphicUrl:'',
         price:10,
-        Character_Gear: []
     },
     {
         id:5,
@@ -83,9 +79,8 @@ const gears =[
         armor_bonus:0,
         attack_bonus:0,
         speed_bonus:0,
-        graphicURL:'',
+        graphicUrl:'',
         price:10,
-        Character_Gear: []
     }
 ]
 
@@ -99,7 +94,7 @@ const createGear = async function() {
 }
 
 
-main()
+createGear()
 .then(async () => {
     await prisma.$disconnect()
     console.log("done");
