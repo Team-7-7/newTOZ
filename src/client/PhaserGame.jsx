@@ -27,7 +27,9 @@ var game = new Phaser.Game(config);
 function preload ()
 {
     this.load.image('floor', 'assets/floor.png');
-    this.load.image('tiles', 'assets/100x100images.png');
+    // this.load.image('tiles', 'assets/100x100images.png');
+    this.load.image('tiles', 'assets/25x25Tiles.png');
+
     this.load.tilemapTiledJSON('map', 'assets/level1.json');
 
 
@@ -45,7 +47,9 @@ function create ()
 
   // loads the map and makes the walls solid    
     const map = this.make.tilemap({key:"map"});
-    const tileset = map.addTilesetImage('100x100images', 'tiles');
+    // const tileset = map.addTilesetImage('100x100images', 'tiles');
+    const tileset = map.addTilesetImage('25x25Tiles', 'tiles');
+
     const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
     WorldLayer.setCollisionByProperty({ collides: true });
 
