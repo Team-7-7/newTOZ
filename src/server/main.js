@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 // 'verify' function via util.js checks for valid token. Import with: const verify = require('../util') 
 
 //API ROUTES//
-// app.use('/api', require("../../api"))
+app.use('/api', require('./api'))
 app.use('/auth', require('./auth'))
 
 //SERVER//
