@@ -9,6 +9,7 @@ import Login from './Login';
 import Navigation from './Navigation';
 import Profile from './Profile';
 import Register from './Register';
+import CharacterSelection from './CharacterSelection';
 
 const App = () => {
 
@@ -23,6 +24,7 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/about' element={<About/>} />
           <Route path='/admin' element={<Admin />} />
+          <Route path='/character' element={<CharacterSelection />} />
           <Route path='/game' element={<Game />} />
           <Route path='/header' element={<Header />} />
           <Route path='/home' element={<Home />} />
