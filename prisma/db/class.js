@@ -11,7 +11,7 @@ const classes =[
         beginning_armor: 15,    
         beginning_speed: 5,  
         beginning_hp: 100,       
-        graphicURL: '',    
+        graphicUrl: '',    
     },
         {
         id:2,
@@ -21,7 +21,7 @@ const classes =[
         beginning_armor: 5,
         beginning_speed: 15,
         beginning_hp: 100,
-        graphicURL:'',
+        graphicUrl:'',
        
     },
     {
@@ -32,7 +32,7 @@ const classes =[
         beginning_armor: 5,
         beginning_speed: 15,
         beginning_hp: 100,
-        graphicURL:'',
+        graphicUrl:'',
     }
 ]
 
@@ -46,7 +46,7 @@ const createCharacter_Class = async () => {
 
 };
 
-main()
+createCharacter_Class()
 .then(async () => {
     await prisma.$disconnect()
     console.log("done");

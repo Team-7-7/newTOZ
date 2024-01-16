@@ -28,7 +28,7 @@ router.get("/", async (req, res, next) => {
 
 // // GET /api/creatures/:id //
 // router.get("/:id", async (req, res, next) => {
-//   // grab the id from the url
+//   // grab the id from the Url
 //   const { id } = req.params;
 //   try {
 //     const classId = await prisma.creature.findUnique({
@@ -41,7 +41,7 @@ router.get("/", async (req, res, next) => {
 // });
 
 // router.delete("/:id", async (req, res, next) => {
-//   // grab the id from the url
+//   // grab the id from the Url
 //   const { id } = req.params;
 //   try {
 //     const classToDelete = await prisma.creature.delete({

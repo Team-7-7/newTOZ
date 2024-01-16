@@ -8,9 +8,9 @@ const users =[
         password:'password',
         isAdmin:false,
         isBanned:false,
-        createdAt: Date, Time,
-        characterid:1,
-        phone:'555-555-5555'
+        character_id:1,
+        phone:555555555,
+        email:'sal@sal.com'
     }
 ]
 
@@ -25,7 +25,7 @@ const createUser = async () => {
 
 
 
-main()
+createUser()
 .then(async () => {
     await prisma.$disconnect()
     console.log("done");

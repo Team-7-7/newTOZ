@@ -11,7 +11,7 @@ const monsters =[
         base_armor:10,
         level:1,
         attack_name:'slime attack',
-        graphicURL:'',
+        graphicUrl:'',
         xp_base_value:10,
         maxHP:10,
         currentHP:10,
@@ -28,7 +28,7 @@ const monsters =[
         base_armor:10,
         level:1,
         attack_name:'goblin attack',
-        graphicURL:'',
+        graphicUrl:'',
         xp_base_value:10,
         maxHP:10,
         currentHP:10,
@@ -45,7 +45,7 @@ const monsters =[
         base_armor:10,
         level:1,
         attack_name:'orc attack',
-        graphicURL:'',
+        graphicUrl:'',
         xp_base_value:10,
         maxHP:10,
         currentHP:10,
@@ -62,7 +62,7 @@ const monsters =[
         base_armor:10,
         level:1,
         attack_name:'troll attack',
-        graphicURL:'',
+        graphicUrl:'',
         xp_base_value:10,
         maxHP:10,
         currentHP:10,
@@ -79,7 +79,7 @@ const monsters =[
         base_armor:10,
         level:1,
         attack_name:'dragon attack',
-        graphicURL:'',
+        graphicUrl:'',
         xp_base_value:10,
         maxHP:10,
         currentHP:10,
@@ -97,7 +97,7 @@ const createMonster = async () => {
 
 };
 
-main()
+createMonster()
 .then(async () => {
     await prisma.$disconnect()
     console.log("done");

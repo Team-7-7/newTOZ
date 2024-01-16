@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "Character_Class" ALTER COLUMN "graphicURL" SET DATA TYPE TEXT;
+ALTER TABLE "Character_Class" ALTER COLUMN "graphicUrl" SET DATA TYPE TEXT;

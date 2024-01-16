@@ -4,7 +4,6 @@ const prisma = new PrismaClient()
 const characters =[
     {
         id:1,
-        user_id:1,
         name:'sal',
         gender:'male',
         character_class:'warrior',
@@ -12,7 +11,7 @@ const characters =[
         maxHP:100,
         xp:0,
         level:1,
-        graphicURL:'',
+        graphicUrl:'',
         gold:0,
         head_gear1:1,
         left_hand_gear2:2,
@@ -25,7 +24,7 @@ const characters =[
         magic_points:null,
         isNPC:false,
         location_coordinates:null,
-        inventory_id:1,
+        // inventory:1,
         stagescompleted:0
     }
 ]
@@ -38,8 +37,7 @@ const createCharacter = async () => {
     })
 
 };
-
-main()
+createCharacter()
 .then(async () => {
     await prisma.$disconnect()
     console.log("done");

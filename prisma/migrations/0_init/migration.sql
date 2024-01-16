@@ -79,7 +79,7 @@ CREATE TABLE "Character_Class" (
     "beginning_armor" INTEGER NOT NULL,
     "beginning_speed" INTEGER NOT NULL,
     "beginning_hp" INTEGER NOT NULL,
-    "graphicURL" INTEGER NOT NULL,
+    "graphicUrl" INTEGER NOT NULL,
 
     CONSTRAINT "Character_Class_pkey" PRIMARY KEY ("id")
 );
