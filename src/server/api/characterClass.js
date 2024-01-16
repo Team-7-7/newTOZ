@@ -1,44 +1,39 @@
-
+const express = require('express');
 const router = require("express").Router();
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../client');
 
 
-// GET /api/characterClass //
+// GET /api/characterclass //
 router.get("/", async (req, res, next) => {
   try {
-    
-    res.send("welcome to the characterClass api");
+    const charClasses = await prisma.character_Class.findMany();
+    res.send(charClasses);
   } catch (error) {
     console.log(error);
   }
+  next();
 });
+
+// GET /api/character-class/:id //
+router.get("/:id", async (req, res, next) => {
+  const { id } = req.params
+  console.log(id)
+  try {
+    const user = await prisma.character_Class.findUnique({
+      where: { id:+id, }
+    });
+  res.send(user)
+  } catch (error) {
+    console.log(error);
+  }
+  next()
+}); 
+
 
 //***********   the below should work for api features when route is confirmed +++++++++++++++++++ */
 
-// // GET /api/class //
-// router.get("/", async (req, res, next) => {
-//   try {
-//     const classes = await prisma.creature.findMany();
-//     res.send(classes);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 
-// // GET /api/creatures/:id //
-// router.get("/:id", async (req, res, next) => {
-//   // grab the id from the Url
-//   const { id } = req.params;
-//   try {
-//     const classId = await prisma.creature.findUnique({
-//       where: { id: +id },
-//     });
-//     res.send(classId);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+
 
 // router.delete("/:id", async (req, res, next) => {
 //   // grab the id from the Url
