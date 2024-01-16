@@ -8,7 +8,7 @@ const PhaserGame = () => {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false
+            debug: true
         }
     },
     scene: {
@@ -19,6 +19,8 @@ const PhaserGame = () => {
 };
 
 var player;
+var chest1;
+var chest2;
 var cursors;
 var gameOver = false;
 
@@ -27,14 +29,12 @@ var game = new Phaser.Game(config);
 function preload ()
 {
     this.load.image('floor', 'assets/floor.png');
-    // this.load.image('tiles', 'assets/100x100images.png');
     this.load.image('tiles', 'assets/25x25Tiles.png');
-
     this.load.tilemapTiledJSON('map', 'assets/level1.json');
 
 
     this.load.spritesheet('fighter', 'assets/fighter.png', { frameWidth: 32, frameHeight: 48 });
-
+    this.load.spritesheet('chest', 'assets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
 
 }
 
@@ -47,9 +47,7 @@ function create ()
 
   // loads the map and makes the walls solid    
     const map = this.make.tilemap({key:"map"});
-    // const tileset = map.addTilesetImage('100x100images', 'tiles');
     const tileset = map.addTilesetImage('25x25Tiles', 'tiles');
-
     const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
     WorldLayer.setCollisionByProperty({ collides: true });
 
@@ -93,6 +91,23 @@ function create ()
       k: Phaser.Input.Keyboard.KeyCodes.K,
   
      });
+
+     //chests
+    const openChest = (chest) => {
+        console.log(`collided with chest`);
+        if (this.keys.k.isDown){  // this line requires attack button to open chest
+        chest.setFrame(1);
+        }
+        //add code here for loot
+    };    
+    chest1 = this.physics.add.staticSprite(300, 150, 'chest', 2);
+    chest2 = this.physics.add.staticSprite(700, 550, 'chest', 2);
+
+
+    this.physics.add.collider(player, chest1, ()=>openChest(chest1));
+    this.physics.add.collider(player, chest2, ()=>openChest(chest2));
+
+  
 
     
      //camera controls, follows player and zooms in
