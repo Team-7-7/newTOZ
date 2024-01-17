@@ -34,7 +34,9 @@ const Register = () => {
 
 
   return (
-    <>
+    <section
+    id="main"
+    > 
       <h1>Register</h1>
       
         <input type="text" placeholder="username" required value={username} onChange={(e) => setUsername(e.target.value)}></input><br />
@@ -44,7 +46,7 @@ const Register = () => {
       
       <h3>Option back to Login</h3>
       <button onClick={(e) => navigate('../login')}>Already registered? Login</button>
-    </>
+    </section>
   )
 }
 
