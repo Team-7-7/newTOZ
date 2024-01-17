@@ -8,9 +8,13 @@ form {
   font-family: Futura, helvetica, sans-serif;
 }
 
-#header{}
+#header{
+  margin: 20px;
+}
 
-#navigation{}
+#navigation{
+  margin: 20px;
+}
 
 .nav{
   margin-left:9px;
@@ -21,6 +25,13 @@ form {
   height:300px;
   border:1px solid black;
   background-color: rgb(201, 201, 205);
+  margin: 20px;
+}
+#Game{
+  width: auto;
+  height: auto;
+  border: none;
+
 }
 
 .footer {

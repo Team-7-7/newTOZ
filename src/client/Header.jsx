@@ -1,6 +1,7 @@
 const Header = () => {
   return (
-    <h1>Header: Tower of Zarpulen</h1>
+    
+    <h1> Tower of Zarpulen</h1>
   )
 }
 
