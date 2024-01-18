@@ -3,7 +3,6 @@ const prisma = new PrismaClient()
 
 const characters =[
     {
-        id:1,
         name:'sal',
         gender:'male',
         character_class:'warrior',
