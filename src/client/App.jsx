@@ -26,16 +26,16 @@ const App = () => {
 
         <Routes>
           <Route id="main-section" path='/' element={<Home />}  />
-          <Route path='/about' element={<About/>} id="main-section" />
-          <Route path='/admin' element={<Admin />} id="main-section"/>
-          <Route path='/character' element={<CharacterSelection className="main-section"/>} />
-          <Route path='/game' element={<Game />} id="excludeGame"/>
-          <Route path='/header' element={<Header />} className="main-section"/>
-          <Route path='/home' element={<Home />} id="main-section"/>
-          <Route path='/login' element={<Login />} className="main-section"/>
-          <Route path='/navigation' element={<Navigation className="main-section"/>} />
-          <Route path='/profile' element={<Profile />} id="main-section"/>
-          <Route path='/register' element={<Register />} className="main-section"/>
+          <Route path='/about' element={<About/>}  />
+          <Route path='/admin' element={<Admin />} />
+          <Route path='/character' element={<CharacterSelection />} />
+          <Route path='/game' element={<Game />} />
+          <Route path='/header' element={<Header />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/navigation' element={<Navigation />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/register' element={<Register />} />
         </Routes>
       </section>
       
