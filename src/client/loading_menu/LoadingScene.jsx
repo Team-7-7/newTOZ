@@ -11,7 +11,7 @@ export class LoadScene extends Phaser.Scene {
     
     }
     
-    perload(){
+    preload(){
 
     }
     

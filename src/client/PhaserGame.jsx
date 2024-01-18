@@ -8,20 +8,18 @@ const PhaserGame = () => {
   var config = {
     type: Phaser.AUTO,
     parent:'//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js',
-  scale:{
-    mode: Phaser.Scale.ScaleModes.RESIZE,
-    width: window.innerWidth,
-    height: window.innerHeight,
-  },
-    // width: 1600,
-    // height: 1200,
+    
+    width: 1600,
+    height: 1200,
+
+ 
     physics: {
         default: 'arcade',
         arcade: {
             debug: true
         }
     },
-    scene:[ Level1, LoadScene, MenuScene,]
+    scene:[LoadScene, MenuScene, Level1]
     };
     var game = new Phaser.Game(config);
 
