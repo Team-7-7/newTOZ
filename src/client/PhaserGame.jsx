@@ -10,6 +10,7 @@ const PhaserGame = () => {
   var config = {
     type: Phaser.AUTO,
     parent:'//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js',
+
   // scale:{
   //   mode: Phaser.Scale.ScaleModes.RESIZE,
   //   width: window.innerWidth,
@@ -23,7 +24,8 @@ const PhaserGame = () => {
             debug: true
         }
     },
-    scene:[ Level1, LoadScene, MenuScene,PauseScene,]
+    scene:[LoadScene, MenuScene, Level1,PauseScene]
+
     };
     var game = new Phaser.Game(config);
 

@@ -1,7 +1,7 @@
 import {CST} from "./loading_menu/CST.jsx"
+
 import { PauseScene } from "./pauseScene.jsx";
-
-
+import {  MenuScene } from "./loading_menu/MenuScene.jsx";
 
 export class Level1 extends Phaser.Scene {
     constructor(){
@@ -165,9 +165,7 @@ export class Level1 extends Phaser.Scene {
           console.log('p is pressed, pausing game');
             this.scene.pause("LEVEL1");
             this.scene.launch("PAUSE");
-
       }
-
   
   }
   
