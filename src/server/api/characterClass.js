@@ -11,10 +11,10 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
-  next();
+  // next();
 });
 
-// GET /api/character-class/:id //
+// GET /api/characterclass/:id //
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params
   console.log(id)
@@ -26,8 +26,9 @@ router.get("/:id", async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
-  next()
+  // next()
 }); 
+
 
 
 //***********   the below should work for api features when route is confirmed +++++++++++++++++++ */
