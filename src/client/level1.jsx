@@ -1,4 +1,5 @@
 import {CST} from "./loading_menu/CST.jsx"
+import { PauseScene } from "./pauseScene.jsx";
 
 
 
@@ -14,15 +15,9 @@ export class Level1 extends Phaser.Scene {
     this.gameOver=false;
     }
     
-
-
   init(){
 
   }
-
-
-
-
 
   preload ()
   {
@@ -87,6 +82,7 @@ export class Level1 extends Phaser.Scene {
         s: Phaser.Input.Keyboard.KeyCodes.S,
         d: Phaser.Input.Keyboard.KeyCodes.D,
         k: Phaser.Input.Keyboard.KeyCodes.K,
+        p: Phaser.Input.Keyboard.KeyCodes.P,
     
        });
   
@@ -164,6 +160,14 @@ export class Level1 extends Phaser.Scene {
           console.log('k is pressed, attacking now');
   
       }
+      if (this.keys.p.isDown)
+      {
+          console.log('p is pressed, pausing game');
+            this.scene.pause("LEVEL1");
+            this.scene.launch("PAUSE");
+
+      }
+
   
   }
   
