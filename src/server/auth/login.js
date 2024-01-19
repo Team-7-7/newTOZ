@@ -23,10 +23,12 @@ router.post('/', async (req, res) => {
     
     const isPasswordVerified = await bcrypt.compare(password, user.password);
 
-    isPasswordVerified?
-    res.send(jwt.sign({ id: user.id, username }, process.env.JWT_SECRET, { expiresIn: '2w', }))
-    :
-    res.sendStatus(401);
+    if (isPasswordVerified){
+    const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET, { expiresIn: '2w', });
+    res.status(201).send({ id: user.id, username, token });
+
+    } else {
+    res.sendStatus(401)};
 
   } catch(error){
     return res.status(401).send({ message: "Login failed, invalid username and/or password. Do you need to register?"});

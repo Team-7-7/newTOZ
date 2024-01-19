@@ -24,7 +24,7 @@ router.get("/:id", async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
-  next()
+  // next()
 }); 
 
 // POST /api/character/ //

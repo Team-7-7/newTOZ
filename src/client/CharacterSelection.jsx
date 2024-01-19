@@ -16,7 +16,7 @@ const CharacterSelection = () => {
   const navigate = useNavigate();
 
   const token = useSelector(state => state.token.token)
-  const user = useSelector(state => state.user.user)
+  const user = useSelector(state => state.user.userRecord)
 
   if (user) {
     const { id } = user;
@@ -48,7 +48,8 @@ const CharacterSelection = () => {
 
   //create new character in DB for the user
     //grab info for specific warrior
-    const { name, beginning_attack, beginning_armor, beginning_speed, beginning_hp, graphicUrl } = characterClasses[selectedClass];
+    const classIndex = parseInt(selectedClass) - 1  // subtract one from the id to sync up with the character class array index
+    const { name, beginning_attack, beginning_armor, beginning_speed, beginning_hp, graphicUrl } = characterClasses[classIndex];
     const userID = user.id     
     
     //create new character in DB
@@ -74,25 +75,24 @@ const CharacterSelection = () => {
     dispatch(setUserCharacter(newCharacter.data))
 
     //connect character ID onto user record
-    const updateUserWithCharacterId = await axios.patch('/api/user', {
+    const { data: updateUserWithCharacterId } = await axios.patch('/api/user', {
       character_id: +newCharacter.data.id,
       id: +userID
     })
-    // dispatch(removeUser());
-    // dispatch(setUser(updateUserWithCharacterId.data))
 
-    // console.log(updateUserWithCharacterId.data)
-    // const userCharacter = useSelector(state => state.userCharacter.character)
-    // if (userCharacter) console.log(userCharacter)
+    dispatch(removeUser())
+    dispatch(setUser(updateUserWithCharacterId))
 
-    console.log('done!')
-    navigate('/game')
-    // if (userCharacter) {navigate('/game')}
-    // else window.alert("Registration Failed")
-
-    //**************************** 
+      //**************************** 
     //TODO: phase 2 create an inventory# on character db record 
     //**************************** 
+
+    console.log('done!')
+    // navigate('/game')
+    if (updateUserWithCharacterId) {navigate('/game')}
+    else window.alert("Registration Failed")
+
+  
   } catch(error){
     console.error(error)
   }
