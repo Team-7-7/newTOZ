@@ -81,6 +81,22 @@ const gears =[
         speed_bonus:0,
         graphicUrl:'',
         price:10,
+    },
+    {
+        id:6,
+        name:'health potion',
+        description:'Drink this potion to restore your health',
+        attack:0,
+        armor:10,
+        isTwoHanded:false,
+        equip_location:5,
+        preferred_class:'warrior',
+        health_bonus:10,
+        armor_bonus:0,
+        attack_bonus:0,
+        speed_bonus:0,
+        graphicUrl:'',
+        price:50,
     }
 ]
 
