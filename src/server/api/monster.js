@@ -16,7 +16,6 @@ router.get("/", async (req, res, next) => {
 // GET /api/monster/:id //
 router.get("/:id", async (req, res, next) => {
   const { id } = req.params
-  console.log(id)
   try {
     const user = await prisma.monster.findUnique({
       where: { id:+id, }

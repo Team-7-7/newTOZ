@@ -21,7 +21,7 @@ const gears =[
     {
         id:2,
         name:'shield',
-        description:'A shield',
+        description:'A shield increases your ability to defend',
         attack:0,
         armor:10,
         isTwoHanded:false,
