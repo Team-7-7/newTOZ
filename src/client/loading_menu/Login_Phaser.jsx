@@ -44,6 +44,7 @@ create(){
     element.addListener('click');
 
     element.on('click', (event) => {
+        
         if(event.target.name === 'loginButton')
         {
             const inputUsername = element.getChildByID('username');
@@ -54,38 +55,42 @@ create(){
             {
                 //  Turn off the click events
                 element.removeListener('click');
-    
-                //  Hide the login element
-                element.setVisible(false);
-    
-                //  Populate the text with whatever they typed in
-                
-                text.setText('Hurry ' + inputUsername.value +'! The princess is in danger!');
+                //  Tween the login form out
+                element.scene.tweens.add({ targets: element.rotate3d, x: 1, w: 90, duration: 3000, ease: 'Power3' });
+
+                element.scene.tweens.add({
+                    targets: element, scaleX: 2, scaleY: 2, y: 700, duration: 3000, ease: 'Power3',
+                    onComplete: function ()
+                    {
+                        element.setVisible(false);
+                    }
+                });
+
+                //  Populate the text with whatever they typed in as the username!
+                text.setText(` Hurry ${inputUsername.value}! The princess is in danger!`);
             }
             else
             {
                 //  Flash the prompt
-
-                console.log('text object:', text); // Check the text object
-                console.log('text alpha:', text.alpha); // Check the alpha property of the text object
-
-                console.log('element object:', element); // Check the element object    
-                console.log('element y:', element.y); // Check the y property of the element object
-
+                
+                console.log(text)
+                console.log(element)
 
                 this.scene.tweens.add({
                     targets: text,
-                    alpha: 0.2,
-                    duration: 250,
+                    alpha: 0.1,
+                    duration: 200,
                     ease: 'Power3',
-                    yoyo: true
+                    yoyo: true,
                 });
-                this.tweens.add({
+              
+                this.scene.tweens.add({
                     targets: element,
                     y:300,
                     duration: 3000,
-                    ease: 'Power3'
+                    ease: 'Power3',
                 });
+            
             }
         }
     });
