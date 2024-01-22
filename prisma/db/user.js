@@ -16,7 +16,6 @@ const createUser = async () => {
 
     const users =[
         {
-            id:1,
             username:'sal',
             password:hashedPassword,
             isAdmin:false,
