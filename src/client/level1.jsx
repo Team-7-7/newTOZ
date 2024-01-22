@@ -1,4 +1,8 @@
+// level1.jsx
+
 import {CST} from "./loading_menu/CST.jsx"
+
+import eventsCenter from './EventsCenter.jsx' // this allows communication between scenes
 
 import { PauseScene } from "./pauseScene.jsx";
 import {  MenuScene } from "./loading_menu/MenuScene.jsx";
@@ -13,6 +17,8 @@ export class Level1 extends Phaser.Scene {
     this.chest2;
     this.cursors;
     this.gameOver=false;
+    // this.gold;
+    // this.characterGold= 4;
     }
     
   init(){
@@ -28,13 +34,15 @@ export class Level1 extends Phaser.Scene {
   
       this.load.spritesheet('fighter', 'assets/fighter.png', { frameWidth: 32, frameHeight: 48 });
       this.load.spritesheet('chest', 'assets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
+      this.load.spritesheet('goldCoin', 'assets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
   
   }
   
   create ()
   {
   
-      //  A simple background for our game
+    this.scene.run('pauseScene'); // used to keep the pause scene updated with stats  
+    //  A simple background for our game
       this.add.image(800, 600, 'floor');
   
   
@@ -86,27 +94,48 @@ export class Level1 extends Phaser.Scene {
     
        });
   
+       this.collectItem = (item) => {
+        console.log('collecting item function');
+        item.destroy();        //item is removed from the scene
+
+        //item is added to inventory
+          console.log('Character Gold should be increasing');
+          eventsCenter.emit('updateGold', 3);
+          eventsCenter.emit('Test');
+          console.log('emit should have been sent');
+      };
+
        //chests
       const openChest = (chest) => {
-          console.log(`collided with chest`);
           if (this.keys.k.isDown){  // this line requires attack button to open chest
           chest.setFrame(1);
-          }
-          //add code here for loot
-      };    
-      this.chest1 = this.physics.add.staticSprite(300, 150, 'chest', 2);
+          // eventsCenter.emit('Test');
+
+        //add code here for loot
+            const gold = this.physics.add.sprite(370,60,'goldCoin');
+            gold.setSize(40,40);
+            this.physics.add.collider(this.player, gold, () => {
+                    console.log('Player collided with gold coin');
+                    this.collectItem(gold);
+            }, null, this);
+          };
+      };   
+
+      this.chest1 = this.physics.add.staticSprite(300, 40, 'chest', 2);
       this.chest2 = this.physics.add.staticSprite(700, 550, 'chest', 2);
   
+ 
   
       this.physics.add.collider(this.player, this.chest1, ()=>openChest(this.chest1));
       this.physics.add.collider(this.player, this.chest2, ()=>openChest(this.chest2));
-  
-    
+    //   this.physics.add.collider(this.player, this.gold, ()=>collectItem(this.gold));
+
+
   
       
        //camera controls, follows player and zooms in
        this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
-       this.cameras.main.setZoom(2); // 1 is the default zoom level
+       this.cameras.main.setZoom(3.5); // 1 is the default zoom level
         // Set boundaries for the camera
       this.cameras.main.setBounds(0, 0, 1600, 1200);
      
