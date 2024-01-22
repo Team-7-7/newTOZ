@@ -1,5 +1,11 @@
 import {CST} from "./CST.jsx";
 import "../loginform.css";
+import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
+import { setToken } from '../reducers/registrationSlice';
+import { removeUser, setUser } from '../reducers/loginSlice';
+import { setUserCharacter } from '../reducers/characterSelectionSlice';
+
 
 export class LoginScene extends Phaser.Scene {
     constructor(){
@@ -49,10 +55,53 @@ create(){
         {
             const inputUsername = element.getChildByID('username');
             const inputPassword = element.getChildByID('password');
-    
+            
             //  Have they entered anything?
             if (inputUsername.value !== '' && inputPassword.value !== '')
-            {
+            {      
+                const loginLogic = async () =>{
+                try {
+                    // validate user and issue a JWT Token
+                    const { data: token } = await axios.post("/auth/login", {
+                        username: inputUsername.value,
+                        password: inputPassword.value,
+                    })
+                    localStorage.setItem("TOKEN", token)
+                    console.log(token) 
+
+                    //get user ID
+                    const userId = token.id
+                    console.log(userId)
+
+                    //get User Record from DB and set it in state
+                    const { data: userRecord } = await axios.get(`/api/user/${userId}`);
+                    console.log("user record: ", userRecord)
+                    
+                    // TO DO -> SELECT CHARACTER CLASS
+                    // if no character is associated with the user yet, take them to the character selection page
+                    // if (!userRecord.character_id) { navigate('/character') }
+
+                    //load up character information into state
+                    const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
+                    console.log(characterRecord);
+                    localStorage.setItem("CHARACTER", characterRecord)
+
+
+                } catch(err) {
+                    console.log(err)
+                    }
+                }
+
+                loginLogic();
+
+                //REDUX STUFF TO DO
+                    // dispatch(setToken(token.token))
+                    // dispatch(setUser({ id: userId }));
+                    // dispatch(removeUser());  //Clears User data out of state if already there
+                    // dispatch(setUser(userRecord));
+                    // dispatch(setUserCharacter(characterRecord));
+
+
                 //  Turn off the click events
                 element.removeListener('click');
                 //  Tween the login form out
@@ -67,7 +116,12 @@ create(){
                 });
 
                 //  Populate the text with whatever they typed in as the username!
+                const hasToken = localStorage.getItem("TOKEN");
+                if (hasToken) {
                 text.setText(` Hurry ${inputUsername.value}! The princess is in danger!`);
+                } else {
+                text.setText(` ${inputUsername.value}! You need to register!`);
+                }
             }
             else
             {
