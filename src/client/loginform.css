@@ -4,3 +4,11 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'pixle script bold';
+  src: url( '../../public/assets/fonts/AncientModernTales-a7Po.ttf' ) format( 'opentype' );
+  font-weight: bold;
+  font-style: normal;
+}
+
