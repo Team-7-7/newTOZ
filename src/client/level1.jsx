@@ -17,8 +17,7 @@ export class Level1 extends Phaser.Scene {
     this.chest2;
     this.cursors;
     this.gameOver=false;
-    // this.gold;
-    // this.characterGold= 4;
+
     }
     
   init(){
@@ -32,7 +31,7 @@ export class Level1 extends Phaser.Scene {
       this.load.tilemapTiledJSON('map', '/assets/level1.json');
   
   
-      this.load.spritesheet('fighter', 'assets/fighter.png', { frameWidth: 32, frameHeight: 48 });
+      this.load.spritesheet('knight', 'assets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
       this.load.spritesheet('chest', 'assets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
       this.load.spritesheet('goldCoin', 'assets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
   
@@ -56,7 +55,8 @@ export class Level1 extends Phaser.Scene {
   
      
       // The player and its settings
-      this.player = this.physics.add.sprite(50, 50, 'fighter');
+      this.player = this.physics.add.sprite(90, 90, 'knight');
+      this.player.setSize(60,54);
   
       // keep the player on the map
       this.player.setCollideWorldBounds(true); 
@@ -65,23 +65,37 @@ export class Level1 extends Phaser.Scene {
       //  Our player animations, turning, walking left and walking right.
       this.anims.create({
           key: 'left',
-          frames: this.anims.generateFrameNumbers('fighter', { start: 0, end: 3 }),
+          frames: this.anims.generateFrameNumbers('knight', { start: 9, end: 12 }),
           frameRate: 10,
           repeat: -1
       });
   
       this.anims.create({
           key: 'turn',
-          frames: [ { key: 'fighter', frame: 4 } ],
-          frameRate: 20
+          frames: [ { key: 'knight', frame: 1 } ],
+
+          frameRate: -1
       });
   
       this.anims.create({
           key: 'right',
-          frames: this.anims.generateFrameNumbers('fighter', { start: 5, end: 8 }),
+          frames: this.anims.generateFrameNumbers('knight', { start: 2, end: 5 }),
           frameRate: 10,
           repeat: -1
       });
+
+      this.anims.create({
+        key: 'attackRight',
+        frames: this.anims.generateFrameNumbers('knight', { start: 14, end: 19 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'attackLeft',
+        frames: this.anims.generateFrameNumbers('knight', { start: 20, end: 25 }),
+        frameRate: 10,
+        repeat: -1
+    });
   
       //  Input Events
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -136,9 +150,11 @@ export class Level1 extends Phaser.Scene {
       
        //camera controls, follows player and zooms in
        this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
-       this.cameras.main.setZoom(3.5); // 1 is the default zoom level
+       this.cameras.main.setZoom(3); // 1 is the default zoom level
         // Set boundaries for the camera
-      this.cameras.main.setBounds(0, 0, 1600, 1200);
+    //   this.cameras.main.setBounds(0, 0, 1600, 1200);k
+      this.cameras.main.setBounds(-200, -200, 2000, 1600);
+
      
       eventsCenter.on('gameOver', (bool)=> {
         console.log('someone quit the game');
@@ -192,7 +208,11 @@ export class Level1 extends Phaser.Scene {
   
       if (this.keys.k.isDown)
       {
-          console.log('k is pressed, attacking now');
+          this.player.anims.play('attackLeft', true);
+        //   this.player.on('animationupdate-attackRight', function (animation, frame) {
+        //     console.log(frame.frame.name);
+   
+        
   
       }
       if (this.keys.p.isDown)

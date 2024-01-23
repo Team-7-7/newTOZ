@@ -115,7 +115,8 @@ create ()
 
     quitButton.on('pointerup', function(event){
         console.log('quit the game function required')
-        this.gameOver=true; // may need to emit this to the level1 scene
+        // may need to emit this to the level1 scene
+        eventsCenter.emit('gameOver', true);
 
     }, this);
 
