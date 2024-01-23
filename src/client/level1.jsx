@@ -41,7 +41,8 @@ export class Level1 extends Phaser.Scene {
   create ()
   {
   
-    this.scene.run('pauseScene'); // used to keep the pause scene updated with stats  
+    this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
+
     //  A simple background for our game
       this.add.image(800, 600, 'floor');
   
@@ -113,7 +114,7 @@ export class Level1 extends Phaser.Scene {
 
         //add code here for loot
             const gold = this.physics.add.sprite(370,60,'goldCoin');
-            gold.setSize(40,40);
+            gold.setSize(22,22);
             this.physics.add.collider(this.player, gold, () => {
                     console.log('Player collided with gold coin');
                     this.collectItem(gold);
@@ -139,6 +140,11 @@ export class Level1 extends Phaser.Scene {
         // Set boundaries for the camera
       this.cameras.main.setBounds(0, 0, 1600, 1200);
      
+      eventsCenter.on('gameOver', (bool)=> {
+        console.log('someone quit the game');
+        this.gameOver = bool;
+
+    }, this);
       
   }
   
