@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const gearSlice = createSlice({
   name: 'gear',
   initialState: {
-    inventory: []
+    inventory: [],
+    inventory
   },
   reducers: {
     setAllGear: (state, action) => {
