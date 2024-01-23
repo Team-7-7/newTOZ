@@ -19,7 +19,7 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
         password,
     });
 
-    localStorage.setItem("TOKEN", token);
+    localStorage.setItem("TOKEN", JSON.stringify(token));
     const userId = token.id;
 
     dispatch(setToken(token.token));
@@ -40,6 +40,7 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
     // Load up character information into state
     const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
     dispatch(setUserCharacter(characterRecord));
+    localStorage.setItem("CHARACTER", JSON.stringify(characterRecord));
     console.log("character record set up in redux state");
 
     // Load up inventory into state
@@ -52,7 +53,6 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
     });
 
     console.log("login and character load up a SUCCESS");
-    localStorage.setItem("TOKEN", token);
 
     // You can add additional logic here based on the success of the login
     // For example, navigate to the game page or display an alert
