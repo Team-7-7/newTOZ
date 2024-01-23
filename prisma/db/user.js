@@ -26,11 +26,11 @@ const createUser = async () => {
         },
     
         {
-            id: 2,
             username:'nickgo',
             password:hashedPizza,
             isAdmin:true,
             isBanned:false,
+            character_id:2,
             phone:2121234567,
             email:'x@nickgolebiewski.com'
         }

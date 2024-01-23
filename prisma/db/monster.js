@@ -3,7 +3,6 @@ const prisma = new PrismaClient()
 
 const monsters =[
     {
-        id:1,
         name:'slime',
         description:'A slime',
         base_attack:10,
@@ -20,7 +19,6 @@ const monsters =[
 
     },
     {
-        id:2,
         name:'goblin',
         description:'A goblin',
         base_attack:10,
@@ -37,7 +35,6 @@ const monsters =[
 
     },
     {
-        id:3,
         name:'orc',
         description:'A orc',
         base_attack:10,
@@ -54,7 +51,6 @@ const monsters =[
 
     },
     {
-        id:4,
         name:'troll',
         description:'A troll',
         base_attack:10,
@@ -71,7 +67,6 @@ const monsters =[
 
     },
     {
-        id:5,
         name:'dragon',
         description:'A dragon',
         base_attack:10,

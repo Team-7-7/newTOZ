@@ -23,7 +23,30 @@ const characters =[
         magic_points:null,
         isNPC:false,
         location_coordinates:null,
-        // inventory:1,
+        stagescompleted:0
+    },
+
+    {
+        name:'nick',
+        gender:'male',
+        character_class:'rogue',
+        currentHP:100,
+        maxHP:100,
+        xp:1200,
+        level:3,
+        graphicUrl:'',
+        gold:300,
+        head_gear1:1,
+        left_hand_gear2:2,
+        right_hand_gear3:3,
+        foot_gear4:4,
+        chest_gear5:5,
+        base_attack:12,
+        base_armor:5,
+        base_speed:15,
+        magic_points:null,
+        isNPC:false,
+        location_coordinates:null,
         stagescompleted:0
     }
 ]
