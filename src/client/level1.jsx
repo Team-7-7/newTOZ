@@ -31,7 +31,14 @@ export class Level1 extends Phaser.Scene {
       this.load.tilemapTiledJSON('map', '/assets/level1.json');
   
   
-      this.load.spritesheet('knight', 'assets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
+      // the three classes sprites load here
+      // ************************** needs logic to choose sprite based on character sheet ***********************
+      // this.load.spritesheet('playerSprite', 'assets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
+      this.load.spritesheet('playerSprite', 'assets/mage78x60.png', { frameWidth: 78, frameHeight: 60 });
+      // this.load.spritesheet('playerSprite', 'assets/rogue78x60.png', { frameWidth: 78, frameHeight: 60 });
+
+      
+      
       this.load.spritesheet('chest', 'assets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
       this.load.spritesheet('goldCoin', 'assets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
   
@@ -55,7 +62,7 @@ export class Level1 extends Phaser.Scene {
   
      
       // The player and its settings
-      this.player = this.physics.add.sprite(90, 90, 'knight');
+      this.player = this.physics.add.sprite(90, 90, 'playerSprite');
       this.player.setSize(60,54);
   
       // keep the player on the map
@@ -65,34 +72,34 @@ export class Level1 extends Phaser.Scene {
       //  Our player animations, turning, walking left and walking right.
       this.anims.create({
           key: 'left',
-          frames: this.anims.generateFrameNumbers('knight', { start: 9, end: 12 }),
+          frames: this.anims.generateFrameNumbers('playerSprite', { start: 9, end: 12 }),
           frameRate: 10,
           repeat: -1
       });
   
       this.anims.create({
           key: 'turn',
-          frames: [ { key: 'knight', frame: 1 } ],
+          frames: [ { key: 'playerSprite', frame: 1 } ],
 
           frameRate: -1
       });
   
       this.anims.create({
           key: 'right',
-          frames: this.anims.generateFrameNumbers('knight', { start: 2, end: 5 }),
+          frames: this.anims.generateFrameNumbers('playerSprite', { start: 2, end: 5 }),
           frameRate: 10,
           repeat: -1
       });
 
       this.anims.create({
         key: 'attackRight',
-        frames: this.anims.generateFrameNumbers('knight', { start: 14, end: 19 }),
+        frames: this.anims.generateFrameNumbers('playerSprite', { start: 14, end: 19 }),
         frameRate: 10,
         repeat: -1
     });
     this.anims.create({
         key: 'attackLeft',
-        frames: this.anims.generateFrameNumbers('knight', { start: 20, end: 25 }),
+        frames: this.anims.generateFrameNumbers('playerSprite', { start: 20, end: 25 }),
         frameRate: 10,
         repeat: -1
     });
