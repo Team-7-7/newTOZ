@@ -26,21 +26,21 @@ export class Level1 extends Phaser.Scene {
 
   preload ()
   {
-      this.load.image('floor', '/assets/floor.png');
-      this.load.image('tiles', '/assets/25x25Tiles.png');
-      this.load.tilemapTiledJSON('map', '/assets/level1.json');
+      this.load.image('floor', '/assets/levelAssets/floor.png');
+      this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
+      this.load.tilemapTiledJSON('map', '/assets/levelAssets/level1.json');
   
   
       // the three classes sprites load here
       // ************************** needs logic to choose sprite based on character sheet ***********************
       // this.load.spritesheet('playerSprite', 'assets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
-      this.load.spritesheet('playerSprite', 'assets/mage78x60.png', { frameWidth: 78, frameHeight: 60 });
+      this.load.spritesheet('playerSprite', 'assets/levelAssets/mage78x60.png', { frameWidth: 78, frameHeight: 60 });
       // this.load.spritesheet('playerSprite', 'assets/rogue78x60.png', { frameWidth: 78, frameHeight: 60 });
 
       
       
-      this.load.spritesheet('chest', 'assets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
-      this.load.spritesheet('goldCoin', 'assets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
+      this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
+      this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
   
   }
   
