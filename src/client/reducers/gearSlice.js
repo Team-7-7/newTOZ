@@ -4,7 +4,6 @@ export const gearSlice = createSlice({
   name: 'gear',
   initialState: {
     inventory: [],
-    inventory
   },
   reducers: {
     setAllGear: (state, action) => {
