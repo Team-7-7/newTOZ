@@ -5,7 +5,7 @@ import {CST} from "./loading_menu/CST.jsx"
 import eventsCenter from './EventsCenter.jsx' // this allows communication between scenes
 
 import { PauseScene } from "./pauseScene.jsx";
-import {  MenuScene } from "./loading_menu/MenuScene.jsx";
+
 
 export class Level1 extends Phaser.Scene {
     constructor(){
