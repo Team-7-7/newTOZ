@@ -3,6 +3,8 @@ const router = require("express").Router();
 const prisma = require('../client');
 
 // GET /api/character //
+// gets a list of ALL users
+// todo: ADMIN only access
 router.get("/", async (req, res, next) => {
   try {
     const allChars = await prisma.character.findMany();
@@ -18,7 +20,7 @@ router.get("/:id", async (req, res, next) => {
   console.log(id)
   try {
     const user = await prisma.character.findUnique({
-      where: { id:+id, }
+      where: { id:parseInt(id), }
     });
   res.send(user)
   } catch (error) {
