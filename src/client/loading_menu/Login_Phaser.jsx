@@ -92,6 +92,7 @@ export class LoginScene extends Phaser.Scene {
                        
 
                         // this.scene.start(CST.SCENES.MENU, { text: ` Hurry ${inputUsername.value}! The princess is in danger!` });
+
                     }
 
                     loginLogic();
@@ -146,6 +147,7 @@ export class LoginScene extends Phaser.Scene {
                     });
 
                 }
+
 
             }
         });

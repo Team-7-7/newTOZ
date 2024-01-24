@@ -7,11 +7,11 @@ export const characterSelectionSlice = createSlice({
   },
   reducers: {
     setUserCharacter: (state, action) => {
-      state.userCharacter = action.payload;
+      state.character = action.payload;
     },
 
     removeUserCharacter: (state) => {
-      state.userCharacter = null;
+      state.character = null;
     }
   }
 });

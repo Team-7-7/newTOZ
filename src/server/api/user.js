@@ -9,7 +9,8 @@ router.get("/:id", async (req, res, next) => {
  const { id } = req.params
   console.log(id)
   try {
-    res.send("welcome to the user api");
+    const allUsers = await prisma.user.findMany()
+    res.send(allUsers);
   } catch (error) {
     console.log(error);
   }
