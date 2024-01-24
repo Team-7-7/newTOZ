@@ -46,7 +46,7 @@ form {
 
 @font-face {
   font-family: 'p-script';
-  src: url( '../../public/assets/fonts/53198.otf' ) format( 'opentype' );
+  src: url( '/assets/fonts/53198.ot' ) format( 'opentype' );
   font-weight: normal;
   font-style: normal;
 }

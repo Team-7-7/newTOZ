@@ -1,7 +1,7 @@
 import {CST} from "./loading_menu/CST.jsx"
 
 import { PauseScene } from "./pauseScene.jsx";
-import {  MenuScene } from "./loading_menu/MenuScene.jsx";
+import {  Menu } from "./loading_menu/MenuScene.jsx";
 
 export class Level1 extends Phaser.Scene {
     constructor(){
