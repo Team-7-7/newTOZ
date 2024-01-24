@@ -14,15 +14,15 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
     ///////////////////////////////
 
 
-    const { data: token } = await axios.post("/auth/login", {
+    const { data: loginResponse } = await axios.post("/auth/login", {
         username,
         password,
     });
 
-    localStorage.setItem("TOKEN", JSON.stringify(token));
-    const userId = token.id;
+    localStorage.setItem("TOKEN", JSON.stringify(loginResponse.token));
+    const userId = loginResponse.id;
 
-    dispatch(setToken(token.token));
+    dispatch(setToken(loginResponse.token));
     dispatch(setUser({ id: userId }));
 
     // Get User Record from DB and set it in state
@@ -40,7 +40,7 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
     // Load up character information into state
     const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
     dispatch(setUserCharacter(characterRecord));
-    localStorage.setItem("CHARACTER", JSON.stringify(characterRecord));
+    // localStorage.setItem("CHARACTER", JSON.stringify(characterRecord)); // Possible security issue to put in state
     console.log("character record set up in redux state");
 
     // Load up inventory into state
@@ -56,7 +56,7 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
 
     // You can add additional logic here based on the success of the login
     // For example, navigate to the game page or display an alert
-    if (token) {
+    if (loginResponse) {
       console.log("Officially thunked. Navigate to the game page");
       navigate('/game')
     } else {
