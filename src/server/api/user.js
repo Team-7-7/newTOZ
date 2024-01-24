@@ -5,7 +5,9 @@ const verify = require('../util')
 
 // GET /api/user 
 // GET All users -> Would need to be admin to access
-router.get("/", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
+ const { id } = req.params
+  console.log(id)
   try {
     res.send("welcome to the user api");
   } catch (error) {
@@ -21,8 +23,11 @@ router.get("/:id", async (req, res, next) => {
   const { id } = req.params
   console.log(id)
   try {
+    if (!id) {
+      throw new Error('ID is required');
+    }
     const user = await prisma.user.findUnique({
-      where: { id:parseInt(id), }
+      where: { id:parseInt(id, 10) }
     });
   res.send(user)
   } catch (error) {

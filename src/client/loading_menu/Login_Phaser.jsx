@@ -1,7 +1,7 @@
 import { CST } from "./CST.jsx";
 import "../loginform.css";
 import axios from 'axios';
-import { Menu } from "./MenuScene.jsx";
+
 
 
 export class LoginScene extends Phaser.Scene {
@@ -65,11 +65,11 @@ export class LoginScene extends Phaser.Scene {
                                 password: inputPassword.value,
                             })
                             localStorage.setItem("TOKEN", JSON.stringify(token))
-                            console.log(token)
+                           
 
                             //get user ID
                             const userId = token.id
-                            console.log(userId)
+                           
 
                             //get User Record from DB and set it in state
                             const { data: userRecord } = await axios.get(`/api/user/${userId}`);
@@ -81,14 +81,15 @@ export class LoginScene extends Phaser.Scene {
 
                             //load up character information into state
                             const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
-                            console.log(characterRecord);
+                           
                             localStorage.setItem("CHARACTER", characterRecord)
-                            this.scene.start("MENU")
+                            console.log(CST.SCENES.LOAD)
+                            this.scene.start(CST.SCENES.MENU)
 
                         } catch (err) {
                             console.log(err)
                         }
-                        console.log(CST.SCENES.LOAD)
+                       
 
                         // this.scene.start(CST.SCENES.MENU, { text: ` Hurry ${inputUsername.value}! The princess is in danger!` });
                     }
