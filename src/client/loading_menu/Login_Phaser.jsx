@@ -1,8 +1,12 @@
 import { CST } from "./CST.jsx";
 import "../loginform.css";
 import axios from 'axios';
-
-
+import { store } from "../store"
+import { removeUserCharacter, setUserCharacter } from '../reducers/characterSelectionSlice';
+import { removeToken, setToken } from '../reducers/registrationSlice';
+import { setUser, removeUser } from '../reducers/loginSlice';
+import { addItemToInventory, removeAllGear } from '../reducers/gearSlice';
+import CharacterSelection from '../CharacterSelection.jsx'
 
 export class LoginScene extends Phaser.Scene {
     constructor() {
@@ -64,32 +68,59 @@ export class LoginScene extends Phaser.Scene {
                                 username: inputUsername.value,
                                 password: inputPassword.value,
                             })
-                            localStorage.setItem("TOKEN", JSON.stringify(token))
-                           
+                            localStorage.setItem("TOKEN", JSON.stringify(token.token))
+
 
                             //get user ID
                             const userId = token.id
-                           
+
 
                             //get User Record from DB and set it in state
                             const { data: userRecord } = await axios.get(`/api/user/${userId}`);
                             console.log("user record: ", userRecord)
 
-                            // TO DO -> SELECT CHARACTER CLASS
+                            // TO DO -> SELECT CHARACTER CLASS /////////
                             // if no character is associated with the user yet, take them to the character selection page
-                            // if (!userRecord.character_id) { navigate('/character') }
+                            if (!userRecord.character_id) {
 
+                                console.log('no character record, you need to build your character')
+                                // TO DO!
+                                // navigate('/character') 
+                            }
+                            /////////////////////////////////////////////
+
+                            
                             //load up character information into state
-                            const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
-                           
-                            localStorage.setItem("CHARACTER", characterRecord)
+                            if (userRecord.character_id) {
+                                const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
+                                store.dispatch(setUserCharacter(characterRecord));
+                                //load up 
+                                const { data: userInventory } = await axios.get(`/api/inventory/${userRecord.character_id}`);
+                                console.log("UserInventory : ", userInventory)
+                                userInventory.forEach(async (gearItem) => {
+                                    const { data: gearDetails } = await axios.get(`/api/gear/${gearItem.gear_id}`)
+                                    store.dispatch(addItemToInventory(gearDetails));
+                                    console.log(gearDetails.name, "added to Inventory in State")
+                                });
+                            }
+
+                            // localStorage.setItem("CHARACTER", characterRecord)
+
+                            //Set Redux State with character info
+                            store.dispatch(setToken(token.token))
+                            store.dispatch(setUser({ id: userId }));
+                            store.dispatch(removeUser());  //Clears User data out of state if already there
+                            store.dispatch(setUser(userRecord));
+
+
+
                             console.log(CST.SCENES.LOAD)
                             this.scene.start(CST.SCENES.MENU)
 
                         } catch (err) {
                             console.log(err)
                         }
-                       
+
 
                         // this.scene.start(CST.SCENES.MENU, { text: ` Hurry ${inputUsername.value}! The princess is in danger!` });
 
@@ -97,12 +128,7 @@ export class LoginScene extends Phaser.Scene {
 
                     loginLogic();
 
-                    //REDUX STUFF TO DO
-                    // dispatch(setToken(token.token))
-                    // dispatch(setUser({ id: userId }));
-                    // dispatch(removeUser());  //Clears User data out of state if already there
-                    // dispatch(setUser(userRecord));
-                    // dispatch(setUserCharacter(characterRecord));
+
 
 
                     //  Turn off the click events
