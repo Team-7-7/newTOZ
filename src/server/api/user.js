@@ -6,8 +6,6 @@ const verify = require('../util')
 // GET /api/user 
 // GET All users -> Would need to be admin to access
 router.get("/", async (req, res, next) => {
- const { id } = req.params
-  console.log(id)
   try {
     const allUsers = await prisma.user.findMany()
     res.send(allUsers);
