@@ -6,6 +6,7 @@ import eventsCenter from './EventsCenter.jsx' // this allows communication betwe
 
 import { PauseScene } from "./pauseScene.jsx";
 
+import { store } from "./store"; // brings in redux store
 
 export class Level1 extends Phaser.Scene {
     constructor(){
@@ -26,6 +27,14 @@ export class Level1 extends Phaser.Scene {
 
   preload ()
   {
+    const state = store.getState()
+    console.log(state, "in preload")
+    console.log(state.userCharacter.character.character_class)
+    
+    
+    
+    
+    
       this.load.image('floor', '/assets/levelAssets/floor.png');
       this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
       this.load.tilemapTiledJSON('map', '/assets/levelAssets/level1.json');
