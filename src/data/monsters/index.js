@@ -1,6 +1,3 @@
-import StoneGolem from './golems/StoneGolem';
-import FireGolem from './golems/FireGolem';
-import CopperGolem from './golems/CopperGolem';
 import Gotoku from './ghost/Gotoku';
 import Onre from './ghost/Onre';
 import Yurei from './ghost/Yurei';

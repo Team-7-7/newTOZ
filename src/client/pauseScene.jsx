@@ -34,10 +34,16 @@ init(){
 
 preload ()
 {
-    this.load.image('fighterPauseScene', '/assets/fighterPauseScene.png');
-    this.load.spritesheet('playButton', 'assets/playButton110x60.png', { frameWidth: 110, frameHeight: 60 });
-    this.load.spritesheet('saveButton', 'assets/saveButton110x60.png', { frameWidth: 110, frameHeight: 60 });
-    this.load.spritesheet('quitButton', 'assets/quitButton110x60.png', { frameWidth: 110, frameHeight: 60 });
+
+    // ***********  needs logic to choose which pause scene based on player character ********************************
+    this.load.image('playerPauseScene', '/assets/pauseAssets/knightPauseScene.png');
+    // this.load.image('playerPauseScene', '/assets/pauseAssets/magePauseScene.png');
+    // this.load.image('playerPauseScene', '/assets/pauseAssets/roguePauseScene.png');
+
+
+    this.load.spritesheet('playButton', 'assets/pauseAssets/playButton110x60.png', { frameWidth: 110, frameHeight: 60 });
+    this.load.spritesheet('saveButton', 'assets/pauseAssets/saveButton110x60.png', { frameWidth: 110, frameHeight: 60 });
+    this.load.spritesheet('quitButton', 'assets/pauseAssets/quitButton110x60.png', { frameWidth: 110, frameHeight: 60 });
 
 }
 
@@ -59,7 +65,7 @@ create ()
             
 
     //  A simple background for our pause Screen
-    this.add.image(800, 600, 'fighterPauseScene');
+    this.add.image(800, 600, 'playerPauseScene');
 
 
 

@@ -26,7 +26,7 @@ router.get("/:id", async (req, res, next) => {
       throw new Error('ID is required');
     }
     const user = await prisma.user.findUnique({
-      where: { id:parseInt(id, 10) }
+      where: { id:parseInt(id) }
     });
   res.send(user)
   } catch (error) {
