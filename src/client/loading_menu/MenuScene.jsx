@@ -36,5 +36,8 @@ export class Menu extends Phaser.Scene {
         this.input.keyboard.on('keydown-ENTER', () => {
             this.scene.start(CST.SCENES.LEVEL1);
         })
+        this.input.on('pointerup', () => {
+            this.scene.start(CST.SCENES.LEVEL1);
+        })
     }
 }
