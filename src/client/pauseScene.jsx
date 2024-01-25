@@ -2,6 +2,8 @@
 
 import eventsCenter from "./EventsCenter.jsx";
 import { CST } from "./loading_menu/CST.jsx";
+import { store } from "./store"; // brings in redux store
+
 
 
 export class PauseScene extends Phaser.Scene {
@@ -35,11 +37,21 @@ init(){
 preload ()
 {
 
-    // ***********  needs logic to choose which pause scene based on player character ********************************
-    this.load.image('playerPauseScene', '/assets/pauseAssets/knightPauseScene.png');
-    // this.load.image('playerPauseScene', '/assets/pauseAssets/magePauseScene.png');
-    // this.load.image('playerPauseScene', '/assets/pauseAssets/roguePauseScene.png');
+    const state = store.getState() // this brings in the state from redux
+    console.log(state, "in preload")
+    console.log('this is the character class: ', state.userCharacter.character.character_class)
 
+    switch(state.userCharacter.character.character_class){
+        case "warrior":
+            this.load.image('playerPauseScene', '/assets/pauseAssets/knightPauseScene.png');
+            break;
+        case "mage":
+            this.load.image('playerPauseScene', '/assets/pauseAssets/magePauseScene.png');
+            break;
+        case "rogue":    
+            this.load.image('playerPauseScene', '/assets/pauseAssets/roguePauseScene.png');
+            break;
+    }
 
     this.load.spritesheet('playButton', 'assets/pauseAssets/playButton110x60.png', { frameWidth: 110, frameHeight: 60 });
     this.load.spritesheet('saveButton', 'assets/pauseAssets/saveButton110x60.png', { frameWidth: 110, frameHeight: 60 });

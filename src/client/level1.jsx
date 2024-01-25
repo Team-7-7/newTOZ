@@ -6,6 +6,9 @@ import eventsCenter from "./EventsCenter.jsx"; // this allows communication betw
 
 import { PauseScene } from "./pauseScene.jsx";
 
+
+import { store } from "./store"; // brings in redux store
+
 export class Level1 extends Phaser.Scene {
   constructor() {
     super({
@@ -52,6 +55,54 @@ export class Level1 extends Phaser.Scene {
 
   create() {
     this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
+    this.gameOver=false;
+    
+
+    }
+    
+  init(){
+  }
+
+  preload ()
+  {
+    const state = store.getState() // this brings in the state from redux
+    console.log(state, "in preload")
+    console.log('this is the character class: ', state.userCharacter.character.character_class)
+    
+    
+    
+    
+    
+      this.load.image('floor', '/assets/levelAssets/floor.png');
+      this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
+      this.load.tilemapTiledJSON('map', '/assets/levelAssets/level1.json');
+  
+  
+      // the three classes sprites load here
+      switch(state.userCharacter.character.character_class){
+      case "warrior":
+          console.log('loading the warrior');
+          this.load.spritesheet('playerSprite', 'assets/levelAssets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
+          break;
+      case "mage":
+          console.log('loading the mage');
+          this.load.spritesheet('playerSprite', 'assets/levelAssets/mage78x60.png', { frameWidth: 78, frameHeight: 60 });
+          break;
+      case "rogue":
+          console.log('loading the rogue');
+          this.load.spritesheet('playerSprite', 'assets/levelAssets/rogue78x60.png', { frameWidth: 78, frameHeight: 60 });
+          break;
+      };
+      
+      this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
+      this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
+  
+  }
+  
+  create ()
+  {
+
+    this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
     //  A simple background for our game
     this.add.image(800, 600, "floor");
@@ -202,6 +253,95 @@ export class Level1 extends Phaser.Scene {
         );
       }
     };
+  
+      //  Input Events
+      this.cursors = this.input.keyboard.createCursorKeys();
+      this.keys = this.input.keyboard.addKeys({
+        w: Phaser.Input.Keyboard.KeyCodes.W,
+        a: Phaser.Input.Keyboard.KeyCodes.A,
+        s: Phaser.Input.Keyboard.KeyCodes.S,
+        d: Phaser.Input.Keyboard.KeyCodes.D,
+        k: Phaser.Input.Keyboard.KeyCodes.K,
+        p: Phaser.Input.Keyboard.KeyCodes.P,
+        l: Phaser.Input.Keyboard.KeyCodes.L,
+    
+       });
+  
+       this.collectItem = (item) => {
+        console.log('collecting item function');
+        item.destroy();        //item is removed from the scene
+
+        //item is added to inventory
+          const amountOfGold=1+ Math.floor(Math.random()*5);
+          console.log('Character Gold should be increasing by ', amountOfGold);
+
+          eventsCenter.emit('updateGold', amountOfGold);
+          eventsCenter.emit('Test');
+          console.log('emit should have been sent');
+        
+      };
+
+       //chests
+       // chest functions broken into two functions to avoid unwanted collisions (gold in walls, etc) 
+      const openChestTopRight = (chest) => {
+        //if you want the loot to be above or to the right of the chest
+          if (this.keys.k.isDown){  // this line requires attack button to open chest
+          chest.setFrame(1);
+          const xlocation=chest.x+30;
+          const ylocation=chest.y+30;
+          console.log('xlocation is: ', xlocation);
+
+        //add code here for loot
+            // const gold = this.physics.add.sprite(370,60,'goldCoin');
+            const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
+
+            gold.setSize(22,22);
+            this.physics.add.collider(this.player, gold, () => {
+                    this.collectItem(gold);
+            }, null, this);
+          };
+      };   
+
+      const openChestBottomLeft = (chest) => {
+        //if you want the loot to be below or to the left of the chest
+        if (this.keys.k.isDown){  // this line requires attack button to open chest
+        chest.setFrame(1);
+        const xlocation=chest.x-30;
+        const ylocation=chest.y-30;
+        console.log('xlocation is: ', xlocation);
+
+      //add code here for loot
+          // const gold = this.physics.add.sprite(370,60,'goldCoin');
+          const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
+
+          gold.setSize(22,22);
+          this.physics.add.collider(this.player, gold, () => {
+                  console.log('Player collided with gold coin');
+                  this.collectItem(gold);
+          }, null, this);
+        };
+    };   
+
+      this.chest1 = this.physics.add.staticSprite(300, 40, 'chest', 2);
+      this.chest2 = this.physics.add.staticSprite(1185, 71, 'chest', 2);
+      this.chest3 = this.physics.add.staticSprite(80, 448, 'chest', 2);
+      this.chest4 = this.physics.add.staticSprite(319, 833, 'chest', 2);
+      this.chest5 = this.physics.add.staticSprite(790, 966, 'chest', 2);
+      this.chest6 = this.physics.add.staticSprite(1345, 565, 'chest', 2);
+
+
+    // stairs to next level located at 1570, 80
+
+  
+ 
+  
+      this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
+      this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
+      this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
+      this.physics.add.collider(this.player, this.chest4, ()=>openChestBottomLeft(this.chest4));
+      this.physics.add.collider(this.player, this.chest5, ()=>openChestBottomLeft(this.chest5));
+      this.physics.add.collider(this.player, this.chest6, ()=>openChestBottomLeft(this.chest6));
+
 
     this.chest1 = this.physics.add.staticSprite(300, 40, "chest", 2);
     this.chest2 = this.physics.add.staticSprite(700, 550, "chest", 2);
@@ -218,6 +358,12 @@ export class Level1 extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     this.cameras.main.setZoom(3); // 1 is the default zoom level
     // Set boundaries for the camera
+  
+      
+       //camera controls, follows player and zooms in
+       this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
+       this.cameras.main.setZoom(1); // 1 is the default zoom level
+        // Set boundaries for the camera
     //   this.cameras.main.setBounds(0, 0, 1600, 1200);k
     this.cameras.main.setBounds(-200, -200, 2000, 1600);
 
@@ -282,3 +428,14 @@ export class Level1 extends Phaser.Scene {
       }
     }
   }
+
+
+      if (this.keys.l.isDown)
+      {
+          console.log('The player is at these coordinates', `x: ${this.player.x}`, `y: ${this.player.y}`);
+
+      }
+  
+  }
+  
+  };
