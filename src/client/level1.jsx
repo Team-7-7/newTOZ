@@ -426,9 +426,6 @@ export class Level1 extends Phaser.Scene {
 
     } else { this.monster.anims.play('SkeletonIdle', true);
       }
-    }
-  }
-
 
       if (this.keys.l.isDown)
       {
