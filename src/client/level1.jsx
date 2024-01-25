@@ -24,55 +24,13 @@ export class Level1 extends Phaser.Scene {
 
   init() {}
 
-  preload() {
-    this.load.image("floor", "/assets/levelAssets/floor.png");
-    this.load.image("tiles", "/assets/levelAssets/25x25Tiles.png");
-    this.load.tilemapTiledJSON("map", "/assets/levelAssets/level1.json");
-
-    // the three classes sprites load here
-    // ************************** needs logic to choose sprite based on character sheet ***********************
-    // this.load.spritesheet('playerSprite', 'assets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
-    this.load.spritesheet("playerSprite", "assets/levelAssets/mage78x60.png", {
-      frameWidth: 78,
-      frameHeight: 60,
-    });
-    // this.load.spritesheet('playerSprite', 'assets/rogue78x60.png', { frameWidth: 78, frameHeight: 60 });
-    this.load.atlas(
-      "skeleton",
-      "assets/levelAssets/skeleton_spritesheet.png",
-      "assets/levelAssets/skeleton_sprites.json"
-    );
-
-    this.load.spritesheet("chest", "assets/levelAssets/chest_sprite.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-    this.load.spritesheet("goldCoin", "assets/levelAssets/goldCoin.png", {
-      frameWidth: 40,
-      frameHeight: 40,
-    });
-  }
-
-  create() {
-    this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
-    this.gameOver=false;
-    
-
-    }
-    
-  init(){
-  }
-
   preload ()
   {
+    
     const state = store.getState() // this brings in the state from redux
     console.log(state, "in preload")
     console.log('this is the character class: ', state.userCharacter.character.character_class)
-    
-    
-    
-    
-    
+
       this.load.image('floor', '/assets/levelAssets/floor.png');
       this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
       this.load.tilemapTiledJSON('map', '/assets/levelAssets/level1.json');
@@ -93,10 +51,16 @@ export class Level1 extends Phaser.Scene {
           this.load.spritesheet('playerSprite', 'assets/levelAssets/rogue78x60.png', { frameWidth: 78, frameHeight: 60 });
           break;
       };
+
+      this.load.atlas(
+        "skeleton",
+        "assets/levelAssets/skeleton_spritesheet.png",
+        "assets/levelAssets/skeleton_sprites.json"
+      );
       
       this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
-  
+      
   }
   
   create ()
@@ -168,17 +132,6 @@ export class Level1 extends Phaser.Scene {
       repeat: -1,
     });
 
-    //  Input Events
-    this.cursors = this.input.keyboard.createCursorKeys();
-    this.keys = this.input.keyboard.addKeys({
-      w: Phaser.Input.Keyboard.KeyCodes.W,
-      a: Phaser.Input.Keyboard.KeyCodes.A,
-      s: Phaser.Input.Keyboard.KeyCodes.S,
-      d: Phaser.Input.Keyboard.KeyCodes.D,
-      k: Phaser.Input.Keyboard.KeyCodes.K,
-      p: Phaser.Input.Keyboard.KeyCodes.P,
-    });
-
     //monster and its settings
     this.monster = this.physics.add.sprite(300, 300, "skeleton", "sprite9");
     this.monster.setSize(60, 54);
@@ -220,39 +173,6 @@ export class Level1 extends Phaser.Scene {
     //play monster animations
     this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', true);
 
-    this.collectItem = (item) => {
-      console.log("collecting item function");
-      item.destroy(); //item is removed from the scene
-
-      //item is added to inventory
-      console.log("Character Gold should be increasing");
-      eventsCenter.emit("updateGold", 3);
-      eventsCenter.emit("Test");
-      console.log("emit should have been sent");
-    };
-
-    //chests
-    const openChest = (chest) => {
-      if (this.keys.k.isDown) {
-        // this line requires attack button to open chest
-        chest.setFrame(1);
-        // eventsCenter.emit('Test');
-
-        //add code here for loot
-        const gold = this.physics.add.sprite(370, 60, "goldCoin");
-        gold.setSize(22, 22);
-        this.physics.add.collider(
-          this.player,
-          gold,
-          () => {
-            console.log("Player collided with gold coin");
-            this.collectItem(gold);
-          },
-          null,
-          this
-        );
-      }
-    };
   
       //  Input Events
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -342,28 +262,11 @@ export class Level1 extends Phaser.Scene {
       this.physics.add.collider(this.player, this.chest5, ()=>openChestBottomLeft(this.chest5));
       this.physics.add.collider(this.player, this.chest6, ()=>openChestBottomLeft(this.chest6));
 
-
-    this.chest1 = this.physics.add.staticSprite(300, 40, "chest", 2);
-    this.chest2 = this.physics.add.staticSprite(700, 550, "chest", 2);
-
-    this.physics.add.collider(this.player, this.chest1, () =>
-      openChest(this.chest1)
-    );
-    this.physics.add.collider(this.player, this.chest2, () =>
-      openChest(this.chest2)
-    );
-    //   this.physics.add.collider(this.player, this.gold, ()=>collectItem(this.gold));
-
+      
     //camera controls, follows player and zooms in
     this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
-    this.cameras.main.setZoom(3); // 1 is the default zoom level
+    this.cameras.main.setZoom(1); // 1 is the default zoom level
     // Set boundaries for the camera
-  
-      
-       //camera controls, follows player and zooms in
-       this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
-       this.cameras.main.setZoom(1); // 1 is the default zoom level
-        // Set boundaries for the camera
     //   this.cameras.main.setBounds(0, 0, 1600, 1200);k
     this.cameras.main.setBounds(-200, -200, 2000, 1600);
 

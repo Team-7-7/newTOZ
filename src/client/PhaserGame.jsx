@@ -24,8 +24,8 @@ const PhaserGame = () => {
             debug: true
         }
     },
-    //scene:[ LoginScene, Load, Menu, Level1, PauseScene]
-    scene:[ Load, Menu, Level1, PauseScene]
+    scene:[ LoginScene, Load, Menu, Level1, PauseScene]
+    // scene:[ Load, Menu, Level1, PauseScene]
   
 
     };
