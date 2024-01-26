@@ -1,3 +1,4 @@
+//CST.jsx
 export const CST = {
     SCENES: {
        LOGIN: "LOGIN",
