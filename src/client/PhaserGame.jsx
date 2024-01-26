@@ -1,3 +1,4 @@
+//PhaserGame.jsx
 
 import Phaser from 'phaser';
 import {Level1} from './level1';
@@ -30,7 +31,7 @@ const PhaserGame = () => {
 
     };
     
-    // var game = new Phaser.Game(config);
+    //var game = new Phaser.Game(config);
     WebFont.load({
       custom: {
           families: ['p-script', 'pixle script bold']
