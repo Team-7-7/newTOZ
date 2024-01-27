@@ -8,7 +8,6 @@ const Footer = () => {
       <Link className="nav" to="../about">About</Link>
       <Link className="nav" to="/login">Login</Link>
       <Link className="nav" to="/register">Register</Link>
-      <Link className="nav" to="/admin">Admin</Link>
       <Link className="nav" to="/game">Hide Windows</Link>
     </div>
   )
