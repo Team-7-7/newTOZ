@@ -7,6 +7,7 @@ import Header from './Header';
 import Home from './Home';
 import Login from './Login';
 import Navigation from './Navigation';
+import PhaserGame from './PhaserGame';
 import Profile from './Profile';
 import Register from './Register';
 import CharacterSelection from './CharacterSelection';
@@ -17,9 +18,9 @@ const App = () => {
 
   return (
     <>
-      <section id="header"> <Header /> </section>
+      {/* <section id="header"> <Header /> </section>
 
-      <section id="navigation"> <Navigation /> </section>
+      <section id="navigation"> <Navigation /> </section> */}
 
       {/* <section id="main" > */}
       <section>
@@ -38,7 +39,10 @@ const App = () => {
           <Route path='/register' element={<Register />} />
         </Routes>
       </section>
-      
+
+      <section id="game">
+        <PhaserGame />
+      </section>
       <section id="footer"> <Footer /> </section>
     </>
   );
