@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { logoutThunk } from './redux/thunks/logoutThunk';
 
 const Footer = () => {
   return (
@@ -8,6 +9,7 @@ const Footer = () => {
       <Link className="nav" to="../about">About</Link>
       <Link className="nav" to="/login">Login</Link>
       <Link className="nav" to="/register">Register</Link>
+      <Link className="nav" onClick={(e)=>dispatch(logoutThunk())}>Logout</Link>
       <Link className="nav" to="/game">Hide Windows</Link>
     </div>
   )
