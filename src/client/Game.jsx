@@ -3,13 +3,15 @@ import PhaserGame from './PhaserGame';
 
 const Game = () => {
   return (
-    <section
-    id="Game"
-    > 
-        <PhaserGame />
+    <>
+    </>
+    // <section
+    // id="Game"
+    // > 
+    //     <PhaserGame />
 
 
-    </section>
+    // </section>
 
 
   )
