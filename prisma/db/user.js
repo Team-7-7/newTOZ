@@ -13,6 +13,7 @@ const createUser = async () => {
 
     const hashedPassword = await hasher("password", saltRounds);
     const hashedPizza = await hasher("pizza", saltRounds);
+    const hashedjoe = await hasher("joe", saltRounds);
 
     const users =[
         {
@@ -33,7 +34,16 @@ const createUser = async () => {
             character_id:2,
             phone:2121234567,
             email:'x@nickgolebiewski.com'
-        }
+        },
+        {
+            username:'joe',
+            password:hashedjoe,
+            isAdmin:false,
+            isBanned:false,
+            character_id:3,
+            phone:555555555,
+            email:'joe@joe.com'
+        },
     ]
 
     await prisma.user.createMany({

@@ -32,6 +32,14 @@ const Character_Gear = [
     character_id: 2,
     gear_id: 1,
   },
+  {
+    character_id: 3,
+    gear_id: 7,
+  },
+  {
+    character_id: 3,
+    gear_id: 1,
+  },
 ];
 
 const createCharacter_Gear = async () => {

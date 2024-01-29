@@ -24,6 +24,20 @@ export class PauseScene extends Phaser.Scene {
     this.characterLevel = 0;
     this.characterGold=0;
     this.loadedCharacterStats = false;
+    this.head_gear1 = 7;
+    this.left_hand_gear2=7;
+    this.right_hand_gear3=7;
+    this.foot_gear4 =7;
+    this.chest_gear5=7;
+    this.backpack1 =7;
+    this.backpack2 =7;
+    this.backpack3 =7;
+    this.backpack4 =7;
+    this.backpack5 =7;
+    this.backpack6 =7;
+    this.backpack7 =7;
+    this.backpack8 =7;
+    
     // this.playButton;
     // this.saveButton;
     // this.quitButton;
@@ -52,6 +66,21 @@ preload ()
     this.characterLevel += state.userCharacter.character.level;
     this.characterGold += state.userCharacter.character.gold;
     this.loadedCharacterStats = true;
+    this.head_gear1 = state.userCharacter.character.head_gear1;
+    this.left_hand_gear2=state.userCharacter.character.left_hand_gear2;
+    this.foot_gear4 =state.userCharacter.character.foot_gear4;
+    this.chest_gear5=state.userCharacter.character.chest_gear5;
+    this.backpack1 =7;
+    this.backpack2 =7;
+    this.backpack3 =7;
+    this.backpack4 =7;
+    this.backpack5 =7;
+    this.backpack6 =7;
+    this.backpack7 =7;
+    this.backpack8 =7;
+    // this.right_hand_gear3=state.userCharacter.character.right_hand_gear3;
+    this.right_hand_gear3=state.gear.inventory[0].graphicUrl;
+
     }
 
 
@@ -71,17 +100,31 @@ preload ()
     this.load.spritesheet('playButton', 'assets/pauseAssets/playButton110x60.png', { frameWidth: 110, frameHeight: 60 });
     this.load.spritesheet('saveButton', 'assets/pauseAssets/saveButton110x60.png', { frameWidth: 110, frameHeight: 60 });
     this.load.spritesheet('quitButton', 'assets/pauseAssets/quitButton110x60.png', { frameWidth: 110, frameHeight: 60 });
+    this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
+    this.load.spritesheet('empty','assets/levelAssets/emptySlot50x50.png', {frameWidth: 50, frameHeight: 50}) ;
+
 
 }
 
 create ()
 {
+console.log ('top of create: in the right hand of the character is: ', this.right_hand_gear3);
+
     eventsCenter.on('updateGold', (moreGold)=> {
         console.log('updateGold event triggered with amount:', moreGold);
         this.characterGold +=moreGold;
         this.characterXp += Math.round(moreGold/2);
 
     }, this);
+
+    eventsCenter.on('lootedItem', (item)=>{
+        console.log('in the pause Scene, the lootem item is a ', item);
+        if(item = 'sword'){
+                    this.right_hand_gear3 = 1;
+        }
+        console.log ('in the right hand of the character is: ', this.right_hand_gear3);
+
+    })
 
 
     // ***************  this is a test to see if the emitter is working correctly ************************************
@@ -102,6 +145,10 @@ create ()
     this.add.text(850, 370, this.characterXp, { font: "30px p-script", fill: "#7e4035" });
     this.add.text(850, 425, this.characterLevel, { font: "30px p-script", fill: "#7e4035" });
     this.add.text(850, 480, this.characterGold, { font: "30px p-script", fill: "#7e4035" });
+    this.add.sprite(1054,626, this.right_hand_gear3);
+    // if(this.right_hand_gear3 === 1){
+    //     this.add.sprite(1054,626, sword);
+    
 
 
 
