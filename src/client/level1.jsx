@@ -57,8 +57,10 @@ export class Level1 extends Phaser.Scene {
       //this loads the monster spritesheet and JSON together
       this.load.atlas("skeleton", "assets/levelAssets/skeleton_spritesheet.png", "assets/levelAssets/skeleton_sprites.json");
       
-      this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
-      this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
+      this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 });
+      this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
+      this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
+
       
   }
   
@@ -203,18 +205,21 @@ export class Level1 extends Phaser.Scene {
     
        });
   
-       this.collectItem = (item) => {
+       this.collectItem = (item, lootItem) => {
         console.log('collecting item function');
         item.destroy();        //item is removed from the scene
 
         //item is added to inventory
+        if(lootItem === 'lootGold'){
           const amountOfGold=1+ Math.floor(Math.random()*5);
           console.log('Character Gold should be increasing by ', amountOfGold);
 
           eventsCenter.emit('updateGold', amountOfGold);
-          eventsCenter.emit('Test');
-          console.log('emit should have been sent');
-        
+
+        }else {
+          console.log('the item picked up is a ', lootItem);
+          eventsCenter.emit('lootedItem', lootItem);
+        }
       };
 
        //chests
@@ -233,7 +238,7 @@ export class Level1 extends Phaser.Scene {
 
             gold.setSize(22,22);
             this.physics.add.collider(this.player, gold, () => {
-                    this.collectItem(gold);
+                    this.collectItem(gold, 'lootGold');
             }, null, this);
           };
       };   
@@ -253,7 +258,16 @@ export class Level1 extends Phaser.Scene {
           gold.setSize(22,22);
           this.physics.add.collider(this.player, gold, () => {
                   console.log('Player collided with gold coin');
-                  this.collectItem(gold);
+                  this.collectItem(gold, 'lootGold');
+                }, null, this);
+          // sword code here        
+          const sword = this.physics.add.sprite(xlocation-20, ylocation-20,'sword'); 
+          sword.setSize(20,30);
+          this.physics.add.collider(this.player, sword, () => {
+            console.log('Player collided with sword');
+            this.collectItem(sword, 'lootsword');
+          
+
           }, null, this);
         };
     };   
@@ -284,7 +298,7 @@ export class Level1 extends Phaser.Scene {
     this.cameras.main.setZoom(1); // 1 is the default zoom level
     // Set boundaries for the camera
     //   this.cameras.main.setBounds(0, 0, 1600, 1200);k
-    this.cameras.main.setBounds(-200, -200, 2000, 1600);
+    this.cameras.main.setBounds(-500, -500, 2300, 2100);
 
     eventsCenter.on(
       "gameOver",

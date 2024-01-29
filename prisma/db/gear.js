@@ -15,7 +15,7 @@ const gears = [
     armor_bonus: 0,
     attack_bonus: 0,
     speed_bonus: 0,
-    graphicUrl: "",
+    graphicUrl: "assets/levelAssets/swordIcon25x48.png",
     price: 100,
   },
   {
@@ -98,6 +98,22 @@ const gears = [
     speed_bonus: 0,
     graphicUrl: "",
     price: 50,
+  },
+  {
+    // id:7,
+    name: "empty",
+    description: "a dark void of nothingness",
+    attack: 0,
+    armor: 0,
+    isTwoHanded: false,
+    equip_location: 0,
+    preferred_class: "",
+    health_bonus: 0,
+    armor_bonus: 0,
+    attack_bonus: 0,
+    speed_bonus: 0,
+    graphicUrl: "empty",
+    price: 0,
   },
 ];
 

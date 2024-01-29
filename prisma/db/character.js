@@ -48,6 +48,29 @@ const characters =[
         isNPC:false,
         location_coordinates:null,
         stagescompleted:0
+    },
+    {
+        name:'Zymok',
+        gender:'male',
+        character_class:'rogue',
+        currentHP:100,
+        maxHP:100,
+        xp:1200,
+        level:3,
+        graphicUrl:'',
+        gold:300,
+        head_gear1:7,
+        left_hand_gear2:7,
+        right_hand_gear3:7,
+        foot_gear4:7,
+        chest_gear5:7,
+        base_attack:12,
+        base_armor:5,
+        base_speed:15,
+        magic_points:null,
+        isNPC:false,
+        location_coordinates:null,
+        stagescompleted:0
     }
 ]
 
