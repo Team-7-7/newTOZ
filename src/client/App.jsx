@@ -14,30 +14,15 @@ import Profile from './Profile';
 import Register from './Register';
 import CharacterSelection from './CharacterSelection';
 
+import { useDispatch } from 'react-redux';
+import { preloadGear } from './redux/thunks/gearThunks';
 
 const App = () => {
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   console.log("in use effect")
-  //   console.log("use effect-->token get", localStorage.getItem("TOKEN"))
-  //   try {
-  //     const token = localStorage.getItem("TOKEN")
-  //     const getUserFromToken = async () => {
-  //       const { data } = await axios.get("/api/user/me", {
-  //         headers: {
-  //           Authorization: "Bearer " + token,
-  //         },
-  //       })
-  //       console.log(data)
-  //       return data.userInfo.id
-  //     }
-  //     if (token) {
-  //       const id = getUserFromToken();
-  //       console.log(id)
-
-  //     }
-  //   } catch (error) { console.error(error) }
-  // }, []);
+  useEffect(() => {
+    dispatch(preloadGear());
+  }, [dispatch]);
 
   return (
     <>

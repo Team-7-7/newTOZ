@@ -4,6 +4,7 @@ export const gearSlice = createSlice({
   name: 'gear',
   initialState: {
     inventory: [],
+    allPossibleGear: {},
   },
   reducers: {
     setAllGear: (state, action) => {
@@ -25,11 +26,16 @@ export const gearSlice = createSlice({
 
     removeAllGear: (state) => {
       state.inventory = [];
-    }
+    },
+
+    //stores all gear listings from the DB
+    setAllPossibleGear: (state, action) => {
+      state.allPossibleGear = action.payload;
+    },
   }
 });
 
-export const { setAllGear, removeAllGear, addItemToInventory, removeItemFromInventory } = gearSlice.actions
+export const { setAllGear, removeAllGear, addItemToInventory, removeItemFromInventory, setAllPossibleGear } = gearSlice.actions
 
 export default gearSlice.reducer
 

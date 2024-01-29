@@ -17,9 +17,7 @@ export class LoginScene extends Phaser.Scene {
         })
     }
 
-
     init(data) {
-
     }
 
     preload() {
@@ -43,7 +41,7 @@ export class LoginScene extends Phaser.Scene {
         bg1.setPosition(this.scale.width / 2, this.scale.height / 2);
 
 
-        const text = this.add.text(20, 20, 'time is of the essences login to save the princess', { color: 'white', fontFamily: 'p-script', fontSize: '32px' })
+        const text = this.add.text(20, 20, 'Time is of the essence login to save the princess', { color: 'white', fontFamily: 'p-script', fontSize: '32px' })
 
         const element = this.add.dom(400, 600).createFromCache('nameform');
 
@@ -91,7 +89,7 @@ export class LoginScene extends Phaser.Scene {
                             }
                             /////////////////////////////////////////////
 
-                            
+
                             //load up character information into state
                             if (userRecord.character_id) {
                                 const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
