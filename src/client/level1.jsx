@@ -18,7 +18,9 @@ export class Level1 extends Phaser.Scene {
     this.chest1;
     this.chest2;
     this.cursors;
-    this.monster;
+    this.monster = {
+      health: 100,
+    };
     this.gameOver = false;
   }
 
@@ -52,11 +54,8 @@ export class Level1 extends Phaser.Scene {
           break;
       };
 
-      this.load.atlas(
-        "skeleton",
-        "assets/levelAssets/skeleton_spritesheet.png",
-        "assets/levelAssets/skeleton_sprites.json"
-      );
+      //this loads the monster spritesheet and JSON together
+      this.load.atlas("skeleton", "assets/levelAssets/skeleton_spritesheet.png", "assets/levelAssets/skeleton_sprites.json");
       
       this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
@@ -135,10 +134,27 @@ export class Level1 extends Phaser.Scene {
     //monster and its settings
     this.monster = this.physics.add.sprite(300, 300, "skeleton", "sprite9");
     this.monster.setSize(60, 54);
+    
+    //green rectangle that shows current monster health
+    this.monster.healthBar= this.add.rectangle(this.monster.x, this.monster.y - 20, 100,10, 0x00ff00);
 
-    // //keeps monster in bounds
-    // this.monster.setColliderWorldBounds(true);
-    // this.physics.add.collider(this.monster, WorldLayer);
+    //white rectangle that shows monster health
+    this.monster.healthBarBackground = this.add.rectangle(this.monster.x, this.monster.y - 20, 100, 10, 0xffffff);
+
+    //subtract health from monster
+    this.monster.health -= 10;
+
+    //update the width of the health bar
+    //this.monster.healthBar.width = this.monster.health;
+
+    //destroy health bar after monster dies
+    //this.monster.healthBar.destroy();
+    //this.monster.healthBarBackground.destroy();
+
+    //keeps monster in bounds
+    this.physics.add.collider(this.monster, WorldLayer);
+    this.physics.add.collider(this.player, this.monster);
+    this.monster.setCollideWorldBounds(true);
 
     //monster movements
     this.anims.create({
@@ -254,7 +270,7 @@ export class Level1 extends Phaser.Scene {
 
   
  
-  
+
       this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
       this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
       this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
