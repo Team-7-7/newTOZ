@@ -24,11 +24,11 @@ model User {
 }
 
 model Character {
-  id                   Int              @id @default(autoincrement())
+  id                   Int             @id @default(autoincrement())
   user                 User? 
-  name                 String           @db.VarChar(40)
-  gender               String           @db.VarChar(20)
-  character_class      String           @db.VarChar(30)
+  name                 String          @db.VarChar(40)
+  gender               String          @db.VarChar(20)
+  character_class      String          @db.VarChar(30)
   currentHP            Int
   maxHP                Int
   xp                   Int
@@ -40,6 +40,14 @@ model Character {
   right_hand_gear3     Int?
   foot_gear4           Int?
   chest_gear5          Int?
+  backpack1            Int             @default(7) //7 is the empty gear item
+  backpack2            Int             @default(7) 
+  backpack3            Int             @default(7) 
+  backpack4            Int             @default(7) 
+  backpack5            Int             @default(7) 
+  backpack6            Int             @default(7) 
+  backpack7            Int             @default(7) 
+  backpack8            Int             @default(7) 
   base_attack          Int
   base_armor           Int
   base_speed           Int
