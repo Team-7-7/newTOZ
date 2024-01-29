@@ -18,9 +18,7 @@ export class Level1 extends Phaser.Scene {
     this.chest1;
     this.chest2;
     this.cursors;
-    this.monster = {
-      health: 100,
-    };
+    this.monster;
     this.gameOver = false;
   }
 
@@ -54,8 +52,11 @@ export class Level1 extends Phaser.Scene {
           break;
       };
 
-      //this loads the monster spritesheet and JSON together
-      this.load.atlas("skeleton", "assets/levelAssets/skeleton_spritesheet.png", "assets/levelAssets/skeleton_sprites.json");
+      this.load.atlas(
+        "skeleton",
+        "assets/levelAssets/skeleton_spritesheet.png",
+        "assets/levelAssets/skeleton_sprites.json"
+      );
       
       this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
@@ -136,16 +137,20 @@ export class Level1 extends Phaser.Scene {
     this.monster.setSize(60, 54);
     
     //white rectangle that shows monster health
-    this.monster.healthBarBackground = this.add.rectangle(this.monster.x, this.monster.y - 20, 100, 10, 0xffffff);
+    // this.monster.healthBarBackground = this.add.rectangle(this.monster.x, this.monster.y - 20, 100, 10, 0xffffff);
 
-    //green rectangle that shows current monster health
-    this.monster.healthBar= this.add.rectangle(this.monster.x, this.monster.y - 20, 100,10, 0x00ff00);
+    // //green rectangle that shows current monster health
+    // this.monster.healthBar= this.add.rectangle(this.monster.x, this.monster.y - 20, 100,10, 0x00ff00);
 
-    //subtract health from monster
-    this.monster.health -= 10;
+    // //subtract health from monster
+    // this.monster.health -= 10;
 
-    //update the width of the health bar
-    this.monster.healthBar.width = this.monster.health;
+    // //update the width of the health bar
+    // this.monster.healthBar.width = this.monster.health;
+
+    // //monster healthbar position
+    // this.monster.healthBar.x = this.monster.x;
+    // this.monster.healthBar.y = this.monster.y - 20;
 
     //destroy health bar after monster dies
     //this.monster.healthBar.destroy();
@@ -187,15 +192,18 @@ export class Level1 extends Phaser.Scene {
       repeat: -1,
     });
 
-    // this.anime.create({
-    //   key: "SkeletonDeath",
-    //   frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite57", "sprite58", "sprite59", "sprite60", "sprite64" ], }),
-    //   frameRate: 10,
-    //   repeat: -1,
-    // });
+    //tween for the monster movements
+    this.tweens.add({
+      targets: this.monster,
+      x: 450, // side to side
+      // y: 375, // up and down
+      duration: 2000, //tween cycle in milliseconds
+      yoyo: true, // when true monster will go back to start position
+      repeat: -1, // infinite loop
+    });
 
     //play monster animations
-    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDeath', true);
+    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', true);
 
   
       //  Input Events
@@ -276,6 +284,9 @@ export class Level1 extends Phaser.Scene {
 
     // stairs to next level located at 1570, 80
 
+  
+ 
+  
       this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
       this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
       this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
@@ -356,11 +367,7 @@ export class Level1 extends Phaser.Scene {
           console.log('The player is at these coordinates', `x: ${this.player.x}`, `y: ${this.player.y}`);
 
       }
-
-    //monster healthbar position
-    // this.monster.healthBar.x = this.monster.x;
-    // this.monster.healthBar.y = this.monster.y - 20;
-    // this.monster.healthbar.destroy();
+  
   }
-
+  
   };
