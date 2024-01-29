@@ -135,17 +135,17 @@ export class Level1 extends Phaser.Scene {
     this.monster = this.physics.add.sprite(300, 300, "skeleton", "sprite9");
     this.monster.setSize(60, 54);
     
-    //green rectangle that shows current monster health
-    this.monster.healthBar= this.add.rectangle(this.monster.x, this.monster.y - 20, 100,10, 0x00ff00);
-
     //white rectangle that shows monster health
     this.monster.healthBarBackground = this.add.rectangle(this.monster.x, this.monster.y - 20, 100, 10, 0xffffff);
+
+    //green rectangle that shows current monster health
+    this.monster.healthBar= this.add.rectangle(this.monster.x, this.monster.y - 20, 100,10, 0x00ff00);
 
     //subtract health from monster
     this.monster.health -= 10;
 
     //update the width of the health bar
-    //this.monster.healthBar.width = this.monster.health;
+    this.monster.healthBar.width = this.monster.health;
 
     //destroy health bar after monster dies
     //this.monster.healthBar.destroy();
@@ -154,6 +154,7 @@ export class Level1 extends Phaser.Scene {
     //keeps monster in bounds
     this.physics.add.collider(this.monster, WorldLayer);
     this.physics.add.collider(this.player, this.monster);
+    this.monster.setImmovable(true);
     this.monster.setCollideWorldBounds(true);
 
     //monster movements
@@ -186,8 +187,15 @@ export class Level1 extends Phaser.Scene {
       repeat: -1,
     });
 
+    // this.anime.create({
+    //   key: "SkeletonDeath",
+    //   frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite57", "sprite58", "sprite59", "sprite60", "sprite64" ], }),
+    //   frameRate: 10,
+    //   repeat: -1,
+    // });
+
     //play monster animations
-    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', true);
+    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDeath', true);
 
   
       //  Input Events
@@ -267,9 +275,6 @@ export class Level1 extends Phaser.Scene {
 
 
     // stairs to next level located at 1570, 80
-
-  
- 
 
       this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
       this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
@@ -351,7 +356,11 @@ export class Level1 extends Phaser.Scene {
           console.log('The player is at these coordinates', `x: ${this.player.x}`, `y: ${this.player.y}`);
 
       }
-  
+
+    //monster healthbar position
+    // this.monster.healthBar.x = this.monster.x;
+    // this.monster.healthBar.y = this.monster.y - 20;
+    // this.monster.healthbar.destroy();
   }
-  
+
   };
