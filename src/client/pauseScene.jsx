@@ -68,25 +68,23 @@ preload ()
     this.loadedCharacterStats = true;
     this.head_gear1 = state.userCharacter.character.head_gear1;
     this.left_hand_gear2=state.userCharacter.character.left_hand_gear2;
-    // this.right_hand_gear3=state.gear.inventory[0].graphicUrl;
-    this.right_hand_gear3='empty';
-
+    this.right_hand_gear3=state.userCharacter.character.right_hand_gear3;;
     this.foot_gear4 =state.userCharacter.character.foot_gear4;
     this.chest_gear5=state.userCharacter.character.chest_gear5;
-    this.backpack1 =7;
-    this.backpack2 =7;
-    this.backpack3 =7;
-    this.backpack4 =7;
-    this.backpack5 =7;
-    this.backpack6 =7;
-    this.backpack7 =7;
-    this.backpack8 =7;
-    // this.right_hand_gear3=state.userCharacter.character.right_hand_gear3;
-    this.right_hand_gear3=state.gear.inventory[0].graphicUrl;
+    this.backpack1 =state.userCharacter.character.backpack1;
+    this.backpack2 =state.userCharacter.character.backpack2;
+    this.backpack3 =state.userCharacter.character.backpack3;
+    this.backpack4 =state.userCharacter.character.backpack4;
+    this.backpack5 =state.userCharacter.character.backpack5;
+    this.backpack6 =state.userCharacter.character.backpack6;
+    this.backpack7 =state.userCharacter.character.backpack7;
+    this.backpack8 =state.userCharacter.character.backpack8;
+
+
 
     }
 
-
+    console.log('this is state.gear[6]: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl) // test to see gear
 
     switch(state.userCharacter.character.character_class){
         case "warrior":
@@ -113,7 +111,10 @@ preload ()
 
 create ()
 {
+    const state = store.getState() // this brings in the state from redux
+
 console.log ('top of create: in the right hand of the character is: ', this.right_hand_gear3);
+// console.log('this is state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl);
 
     eventsCenter.on('updateGold', (moreGold)=> {
         console.log('updateGold event triggered with amount:', moreGold);
@@ -125,7 +126,7 @@ console.log ('top of create: in the right hand of the character is: ', this.righ
     eventsCenter.on('lootedItem', (item)=>{
         console.log('in the pause Scene, the looted item is a ', item);
         if(item === 'lootsword'){
-                    this.right_hand_gear3 = 'sword';
+                    this.right_hand_gear3 = 1;
         }
         console.log ('in the right hand of the character is: ', this.right_hand_gear3);
 
@@ -151,21 +152,21 @@ console.log ('top of create: in the right hand of the character is: ', this.righ
     this.add.text(850, 425, this.characterLevel, { font: "30px p-script", fill: "#7e4035" });
     this.add.text(850, 480, this.characterGold, { font: "30px p-script", fill: "#7e4035" });
 
-    this.add.sprite(941,479, this.head_gear1); // head
-    this.add.sprite(852,638, this.left_hand_gear2); // left hand
-    this.add.sprite(1054,626, this.right_hand_gear3); // right hand
-    this.add.sprite(943,729, this.foot_gear4); // feet
-    this.add.sprite(943,654, this.chest_gear5); // chest
+    this.add.sprite(941,479, state.gear.allPossibleGear[this.head_gear1].graphicUrl); // head
+    this.add.sprite(852,638, state.gear.allPossibleGear[this.left_hand_gear2].graphicUrl); // left hand
+    this.add.sprite(1054,626, state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl); // right hand
+    this.add.sprite(943,729, state.gear.allPossibleGear[this.foot_gear4].graphicUrl); // feet
+    this.add.sprite(943,654, state.gear.allPossibleGear[this.chest_gear5].graphicUrl); // chest
 
-    this.add.sprite(557,688, this.backpack1); // backpack 1
-    this.add.sprite(611,688, this.backpack2); // backpack 2
-    this.add.sprite(662,688, this.backpack3); // backpack 3
-    this.add.sprite(709,688, this.backpack4); // backpack 4
+    this.add.sprite(557,688, state.gear.allPossibleGear[this.backpack1].graphicUrl); // backpack 1
+    this.add.sprite(611,688, state.gear.allPossibleGear[this.backpack2].graphicUrl); // backpack 2
+    this.add.sprite(662,688, state.gear.allPossibleGear[this.backpack3].graphicUrl); // backpack 3
+    this.add.sprite(709,688, state.gear.allPossibleGear[this.backpack4].graphicUrl); // backpack 4
 
-    this.add.sprite(557,742, this.backpack5); // backpack 5
-    this.add.sprite(611,742, this.backpack6); // backpack 6
-    this.add.sprite(662,742, this.backpack7); // backpack 7
-    this.add.sprite(709,742, this.backpack8); // backpack 8
+    this.add.sprite(557,742, state.gear.allPossibleGear[this.backpack5].graphicUrl); // backpack 5
+    this.add.sprite(611,742, state.gear.allPossibleGear[this.backpack6].graphicUrl); // backpack 6
+    this.add.sprite(662,742, state.gear.allPossibleGear[this.backpack7].graphicUrl); // backpack 7
+    this.add.sprite(709,742, state.gear.allPossibleGear[this.backpack8].graphicUrl); // backpack 8
 
 
 
