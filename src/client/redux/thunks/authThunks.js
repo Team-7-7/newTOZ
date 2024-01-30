@@ -71,14 +71,12 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
 export const getMeThunk = () => async (dispatch) => {
     try{
       let token = localStorage.getItem("TOKEN")
-      console.log("I am in the getMeThunk and have this token; ", token)
-      token = token.slice(1,-1);
+      token = token.slice(1,-1); //get's rid of the quotes on either side of the token string!
       const { data: userRecord } = await axios.get("/api/user/me", {
         headers: {
           Authorization: "Bearer " + token,
         },
       });
-      console.log(userRecord)
       //wipe state slate upon token-login//
       dispatch(removeUser())
       dispatch(removeUserCharacter())
