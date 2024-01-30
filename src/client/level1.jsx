@@ -132,32 +132,13 @@ export class Level1 extends Phaser.Scene {
     //monster and its settings
     this.monster = this.physics.add.sprite(300, 300, "skeleton", "sprite9");
     this.monster.setSize(60, 54);
-    
-    //white rectangle that shows monster health
-    // this.monster.healthBarBackground = this.add.rectangle(this.monster.x, this.monster.y - 20, 100, 10, 0xffffff);
-
-    // //green rectangle that shows current monster health
-    // this.monster.healthBar= this.add.rectangle(this.monster.x, this.monster.y - 20, 100,10, 0x00ff00);
-
-    // //subtract health from monster
-    // this.monster.health -= 10;
-
-    // //update the width of the health bar
-    // this.monster.healthBar.width = this.monster.health;
-
-    // //monster healthbar position
-    // this.monster.healthBar.x = this.monster.x;
-    // this.monster.healthBar.y = this.monster.y - 20;
-
-    //destroy health bar after monster dies
-    //this.monster.healthBar.destroy();
-    //this.monster.healthBarBackground.destroy();
 
     //keeps monster in bounds
     this.physics.add.collider(this.monster, WorldLayer);
     this.physics.add.collider(this.player, this.monster);
     this.monster.setImmovable(true);
     this.monster.setCollideWorldBounds(true);
+    this.monster.body.onCollide = (true);
 
     //monster movements
     this.anims.create({
@@ -171,14 +152,14 @@ export class Level1 extends Phaser.Scene {
       key: "SkeletonLeft",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8" ], }),
       frameRate: 10,
-      repeat: -1,
+      repeat: 0,
     });
     
     this.anims.create({
       key: "SkeletonRight",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16", "sprite17", "sprite18" ], }),
       frameRate: 10,
-      repeat: -1,
+      repeat: 0,
     });
     
 
@@ -186,7 +167,7 @@ export class Level1 extends Phaser.Scene {
       key: "SkeletonAttack",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite40", "sprite41", "sprite43", "sprite49", "sprite50", "sprite51", "sprite52" ], }),
       frameRate: 10,
-      repeat: -1,
+      repeat: 0,
     });
 
     this.anims.create({
@@ -196,29 +177,8 @@ export class Level1 extends Phaser.Scene {
       repeat: 0,
     });
 
-    // //tween for the monster movements
-    // let tween = this.tweens.add({
-    //   targets: this.monster,
-    //   x: rightboundary, // side to side
-    //   duration: 4000, //tween cycle in milliseconds
-    //   yoyo: true, // when true monster will go back to start position
-    //   repeat: -1, // infinite loop
-    // });
-
-    // //tween for the monster movements to left boundary
-    // tween.setCallback('onYoyo', () => {
-    //   console.log('onYoyo');
-    //   this.monster.flipX = true; //flips the sprite left face
-    // }, []);
-    // //tween for the monster movements to right boundary
-    // tween.setCallback('onRepeat', () => {
-    //   console.log('onRepeat');
-    //   this.monster.flipX = false; //flips the sprite right face
-    // }, []);
-
-    // play monster animations
-    // this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-
+   // play monster animations
+    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
   
       //  Input Events
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -310,9 +270,6 @@ export class Level1 extends Phaser.Scene {
 
     // stairs to next level located at 1570, 80
 
-  
- 
-  
       this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
       this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
       this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
@@ -379,34 +336,33 @@ export class Level1 extends Phaser.Scene {
       this.scene.launch("PAUSE");
     }
 
-    this.physics.world.enable(this.monster);
-    // Monster movement
-    if (this.monster.x < this.player.x) {
-      //Right
-      this.monster.body.velocity.x = 100;
-      this.monster.anims.play("SkeletonRight", true);
-      this.monster.flipX = false;
-      this.monster.repeatX = 0;
-    } else if (this.monster.x > this.player.x) {
-      //Left
-      this.monster.body.velocity.x = -100;
-      this.monster.anims.play("SkeletonLeft", true);
-      this.monster.flipX = true;
-      this.monster.repeatX = 0;
-    } else if (this.monster.y < this.player.y) {
-      // Up
-      this.monster.body.velocity.y = 100;
-      this.monster.anims.play(true);
-    } else if (this.monster.y > this.player.y) {
-      //Down
-      this.monster.body.velocity.y = -100;
-      this.monster.anims.play(true);
-    } else {
-      this.monster.body.velocity.x = 0;
-      this.monster.anims.play("SkeletonIdle", true);
-    }
-    // Monster attack
-    if ( Phaser.Math.Distance.Between( this.monster.x, this.monster.y, this.player.x, this.player.y) < 50
+    //Monster movement
+    // if (this.monster.x < this.player.x) {
+    //   //Right
+    //   this.monster.body.velocity.x = 100;
+    //   this.monster.anims.play("SkeletonRight", true);
+    //   this.monster.flipX = false;
+    //   this.monster.repeatX = 0;
+    // } else if (this.monster.x > this.player.x) {
+    //   //Left
+    //   this.monster.body.velocity.x = -100;
+    //   this.monster.anims.play("SkeletonLeft", true);
+    //   this.monster.flipX = true;
+    //   this.monster.repeatX = 0;
+    // } else if (this.monster.y < this.player.y) {
+    //   // Up
+    //   this.monster.body.velocity.y = 100;
+    //   this.monster.anims.play(true);
+    // } else if (this.monster.y > this.player.y) {
+    //   //Down
+    //   this.monster.body.velocity.y = -100;
+    //   this.monster.anims.play(true);
+    // } else {
+    //   this.monster.body.velocity.x = 0;
+    //   this.monster.anims.play("SkeletonIdle", true);
+    // }
+    //Monster attack
+    if ( Phaser.Math.Distance.Between(this.monster.x, this.monster.y, this.player.x, this.player.y) < 75
     ) { this.monster.body.velocity.x = 0; // Stop the monster
         this.monster.anims.play("SkeletonAttack", true); // Play the attack animation
     }
