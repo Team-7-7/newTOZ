@@ -15,7 +15,7 @@ const gears = [
     armor_bonus: 0,
     attack_bonus: 0,
     speed_bonus: 0,
-    graphicUrl: "assets/levelAssets/swordIcon25x48.png",
+    graphicUrl: "swordSlot",
     price: 100,
   },
   {
