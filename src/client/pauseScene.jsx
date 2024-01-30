@@ -68,6 +68,9 @@ preload ()
     this.loadedCharacterStats = true;
     this.head_gear1 = state.userCharacter.character.head_gear1;
     this.left_hand_gear2=state.userCharacter.character.left_hand_gear2;
+    // this.right_hand_gear3=state.gear.inventory[0].graphicUrl;
+    this.right_hand_gear3='empty';
+
     this.foot_gear4 =state.userCharacter.character.foot_gear4;
     this.chest_gear5=state.userCharacter.character.chest_gear5;
     this.backpack1 =7;
@@ -102,6 +105,8 @@ preload ()
     this.load.spritesheet('quitButton', 'assets/pauseAssets/quitButton110x60.png', { frameWidth: 110, frameHeight: 60 });
     this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
     this.load.spritesheet('empty','assets/levelAssets/emptySlot50x50.png', {frameWidth: 50, frameHeight: 50}) ;
+    this.load.spritesheet('swordSlot', 'assets/pauseAssets/swordSlot50x50.png', { frameWidth: 50, frameHeight: 50 });
+
 
 
 }
@@ -118,9 +123,9 @@ console.log ('top of create: in the right hand of the character is: ', this.righ
     }, this);
 
     eventsCenter.on('lootedItem', (item)=>{
-        console.log('in the pause Scene, the lootem item is a ', item);
-        if(item = 'sword'){
-                    this.right_hand_gear3 = 1;
+        console.log('in the pause Scene, the looted item is a ', item);
+        if(item === 'lootsword'){
+                    this.right_hand_gear3 = 'sword';
         }
         console.log ('in the right hand of the character is: ', this.right_hand_gear3);
 
@@ -145,7 +150,27 @@ console.log ('top of create: in the right hand of the character is: ', this.righ
     this.add.text(850, 370, this.characterXp, { font: "30px p-script", fill: "#7e4035" });
     this.add.text(850, 425, this.characterLevel, { font: "30px p-script", fill: "#7e4035" });
     this.add.text(850, 480, this.characterGold, { font: "30px p-script", fill: "#7e4035" });
-    this.add.sprite(1054,626, this.right_hand_gear3);
+
+    this.add.sprite(941,479, this.head_gear1); // head
+    this.add.sprite(852,638, this.left_hand_gear2); // left hand
+    this.add.sprite(1054,626, this.right_hand_gear3); // right hand
+    this.add.sprite(943,729, this.foot_gear4); // feet
+    this.add.sprite(943,654, this.chest_gear5); // chest
+
+    this.add.sprite(557,688, this.backpack1); // backpack 1
+    this.add.sprite(611,688, this.backpack2); // backpack 2
+    this.add.sprite(662,688, this.backpack3); // backpack 3
+    this.add.sprite(709,688, this.backpack4); // backpack 4
+
+    this.add.sprite(557,742, this.backpack5); // backpack 5
+    this.add.sprite(611,742, this.backpack6); // backpack 6
+    this.add.sprite(662,742, this.backpack7); // backpack 7
+    this.add.sprite(709,742, this.backpack8); // backpack 8
+
+
+
+
+
     // if(this.right_hand_gear3 === 1){
     //     this.add.sprite(1054,626, sword);
     
