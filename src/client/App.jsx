@@ -16,12 +16,15 @@ import CharacterSelection from './CharacterSelection';
 
 import { useDispatch } from 'react-redux';
 import { preloadGear } from './redux/thunks/gearThunks';
+import { getMeThunk } from './redux/thunks/authThunks';
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(preloadGear());
+    const token = localStorage.getItem("TOKEN")
+    if (token) dispatch(getMeThunk());
   }, [dispatch]);
 
   return (
