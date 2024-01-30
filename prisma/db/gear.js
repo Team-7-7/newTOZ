@@ -15,7 +15,7 @@ const gears = [
     armor_bonus: 0,
     attack_bonus: 0,
     speed_bonus: 0,
-    graphicUrl: "swordSlot",
+    graphicUrl: "sword",
     price: 100,
   },
   {
@@ -31,7 +31,7 @@ const gears = [
     armor_bonus: 2,
     attack_bonus: 0,
     speed_bonus: 0,
-    graphicUrl: "",
+    graphicUrl: "swordSlot",
     price: 30,
   },
   {

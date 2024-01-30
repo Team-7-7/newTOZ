@@ -7,6 +7,7 @@ import {Load} from "./loading_menu/LoadingScene.jsx"
 import {Menu} from './loading_menu/MenuScene';
 import {PauseScene} from './pauseScene';
 import {LoginScene} from './loading_menu/Login_Phaser.jsx';
+import {TitleScene} from './loading_menu/TitleScene.jsx';
 import { CST } from './loading_menu/CST.jsx';
 import WebFont from 'webfontloader';
 
@@ -20,13 +21,14 @@ const PhaserGame = () => {
     dom: {
       createContainer: true
   },
+  pixelArt: true,  // Enable pixel art mode
     physics: {
         default: 'arcade',
         arcade: {
             debug: true
         }
     },
-    scene:[ LoginScene, Load, Menu, Level1, Level2, PauseScene]
+    scene:[ TitleScene, LoginScene, Load, Menu, Level1, Level2, PauseScene]
     // scene:[ Load, Menu, Level1, PauseScene]
   
 
