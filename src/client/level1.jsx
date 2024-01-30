@@ -5,6 +5,7 @@ import { CST } from "./loading_menu/CST.jsx";
 import eventsCenter from "./EventsCenter.jsx"; // this allows communication between scenes
 
 import { PauseScene } from "./pauseScene.jsx";
+import { Level2 } from "./level2.jsx";
 
 
 import { store } from "./store"; // brings in redux store
@@ -20,6 +21,7 @@ export class Level1 extends Phaser.Scene {
     this.cursors;
     this.monster;
     this.gameOver = false;
+    this.door;
   }
 
   init() {}
@@ -57,7 +59,8 @@ export class Level1 extends Phaser.Scene {
       this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 });
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
       this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
- 
+      this.load.spritesheet('door','assets/levelAssets/door50x100.png', {frameWidth: 50, frameHeight: 100}) ;
+
   }
   
   create ()
@@ -310,6 +313,19 @@ export class Level1 extends Phaser.Scene {
 
     // stairs to next level located at 1570, 80
 
+      // this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
+      this.door = this.physics.add.staticSprite(1570,75, 'door', 1); // dev location
+
+      this.physics.add.collider(this.player, this.door, () => {
+        //go to level 2
+        console.log ('touching the door');
+        // this.scene.run('Level2');
+        // this.scene.sleep(CST.SCENES.LEVEL1);
+        this.scene.start(CST.SCENES.LEVEL2);
+
+
+
+      }, null, this)
   
  
   
