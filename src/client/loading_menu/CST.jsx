@@ -1,6 +1,7 @@
 //CST.jsx
 export const CST = {
     SCENES: {
+       TITLE: "TITLE", 
        LOGIN: "LOGIN",
        MENU: "MENU", 
        LOAD: "LOAD",
