@@ -52,17 +52,12 @@ export class Level1 extends Phaser.Scene {
           break;
       };
 
-      this.load.atlas(
-        "skeleton",
-        "assets/levelAssets/skeleton_spritesheet.png",
-        "assets/levelAssets/skeleton_sprites.json"
-      );
+      this.load.atlas( "skeleton", "assets/levelAssets/skeleton_spritesheet.png", "assets/levelAssets/skeleton_sprites.json");
       
       this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 });
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
       this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
-
-      
+ 
   }
   
   create ()
@@ -194,18 +189,35 @@ export class Level1 extends Phaser.Scene {
       repeat: -1,
     });
 
-    //tween for the monster movements
-    this.tweens.add({
-      targets: this.monster,
-      x: 450, // side to side
-      // y: 375, // up and down
-      duration: 2000, //tween cycle in milliseconds
-      yoyo: true, // when true monster will go back to start position
-      repeat: -1, // infinite loop
+    this.anims.create({
+      key: "SkeletonDie",
+      frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite57", "sprite58", "sprite59", "sprite60", "sprite64" ], }),
+      frameRate: 10,
+      repeat: 0,
     });
 
-    //play monster animations
-    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', true);
+    // //tween for the monster movements
+    // let tween = this.tweens.add({
+    //   targets: this.monster,
+    //   x: rightboundary, // side to side
+    //   duration: 4000, //tween cycle in milliseconds
+    //   yoyo: true, // when true monster will go back to start position
+    //   repeat: -1, // infinite loop
+    // });
+
+    // //tween for the monster movements to left boundary
+    // tween.setCallback('onYoyo', () => {
+    //   console.log('onYoyo');
+    //   this.monster.flipX = true; //flips the sprite left face
+    // }, []);
+    // //tween for the monster movements to right boundary
+    // tween.setCallback('onRepeat', () => {
+    //   console.log('onRepeat');
+    //   this.monster.flipX = false; //flips the sprite right face
+    // }, []);
+
+    // play monster animations
+    // this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
 
   
       //  Input Events
@@ -366,22 +378,45 @@ export class Level1 extends Phaser.Scene {
       this.scene.pause("LEVEL1");
       this.scene.launch("PAUSE");
     }
-      //monster movement
-    if (this.monster.body.velocity.x < 0) {
-      this.monster.anims.play('SkeletonLeft', true);
 
-    } else if (this.monster.body.velocity.x > 0) {
-      this.monster.anims.play('SkeletonRight', true);
-
-    } else { this.monster.anims.play('SkeletonIdle', true);
-      }
-
-      if (this.keys.l.isDown)
-      {
-          console.log('The player is at these coordinates', `x: ${this.player.x}`, `y: ${this.player.y}`);
-
-      }
-  
+    this.physics.world.enable(this.monster);
+    // Monster movement
+    if (this.monster.x < this.player.x) {
+      //Right
+      this.monster.body.velocity.x = 100;
+      this.monster.anims.play("SkeletonRight", true);
+      this.monster.flipX = false;
+      this.monster.repeatX = 0;
+    } else if (this.monster.x > this.player.x) {
+      //Left
+      this.monster.body.velocity.x = -100;
+      this.monster.anims.play("SkeletonLeft", true);
+      this.monster.flipX = true;
+      this.monster.repeatX = 0;
+    } else if (this.monster.y < this.player.y) {
+      // Up
+      this.monster.body.velocity.y = 100;
+      this.monster.anims.play(true);
+    } else if (this.monster.y > this.player.y) {
+      //Down
+      this.monster.body.velocity.y = -100;
+      this.monster.anims.play(true);
+    } else {
+      this.monster.body.velocity.x = 0;
+      this.monster.anims.play("SkeletonIdle", true);
+    }
+    // Monster attack
+    if ( Phaser.Math.Distance.Between( this.monster.x, this.monster.y, this.player.x, this.player.y) < 50
+    ) { this.monster.body.velocity.x = 0; // Stop the monster
+        this.monster.anims.play("SkeletonAttack", true); // Play the attack animation
+    }
+    if (this.keys.l.isDown) {
+      console.log(
+        "The player is at these coordinates",
+        `x: ${this.player.x}`,
+        `y: ${this.player.y}`
+      );
+    }
   }
   
   };
