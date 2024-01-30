@@ -66,3 +66,27 @@ export const loginThunk = (username, password, navigate) => async (dispatch, get
     console.error(error);
 }
 };
+
+
+export const getMeThunk = () => async (dispatch) => {
+    try{
+      let token = localStorage.getItem("TOKEN")
+      token = token.slice(1,-1); //get's rid of the quotes on either side of the token string!
+      const { data: userRecord } = await axios.get("/api/user/me", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      //wipe state slate upon token-login//
+      dispatch(removeUser())
+      dispatch(removeUserCharacter())
+      dispatch(removeAllGear())
+      //set data in redux state
+      dispatch(setToken(token));
+      dispatch(setUser(userRecord)); 
+      const { data: characterRecord } = await axios.get(`/api/character/${userRecord.character_id}`);
+      dispatch(setUserCharacter(characterRecord));
+      //no longer need inventory list, now using character record backpack items in DB
+    }
+    catch (error) { console.error(error) }
+  };
