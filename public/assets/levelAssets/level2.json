@@ -42,7 +42,7 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":36,
          "id":2,
-         "name":"floor",
+         "name":"floorLayer",
          "opacity":1,
          "properties":[
             {
@@ -172,11 +172,11 @@
         {
          "columns":9,
          "firstgid":1,
-         "image": "..\/newOLD level 1\/tileset32x32.png",
+         "image": "..\/assets\/levelAssets\/OLDtileset32x32.png",
          "imageheight":300,
          "imagewidth":300,
          "margin":0,
-         "name":"tileset32x32",
+         "name":"OLDtileset32x32",
          "spacing":0,
          "tilecount":81,
          "tileheight":32,
