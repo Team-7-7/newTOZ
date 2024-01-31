@@ -1,32 +1,31 @@
-// level1.jsx
+// level2.jsx
 
 import { CST } from "./loading_menu/CST.jsx";
 
 import eventsCenter from "./EventsCenter.jsx"; // this allows communication between scenes
 
 import { PauseScene } from "./pauseScene.jsx";
-import { Level2 } from "./level2.jsx";
+// import { Level2 } from "./level2.jsx";
 
 
 import { store } from "./store"; // brings in redux store
 
-export class Level1 extends Phaser.Scene {
+export class Level2 extends Phaser.Scene {
   constructor() {
     super({
-      key: CST.SCENES.LEVEL1,
+      key: CST.SCENES.LEVEL2,
     });
     this.player;
     this.chest1;
     this.chest2;
     this.cursors;
     this.monster;
-    this.monster1;
-    this.monster2;
     this.gameOver = false;
     this.door;
   }
 
-  init() {}
+  init() {
+  }
 
   preload ()
   {
@@ -35,9 +34,9 @@ export class Level1 extends Phaser.Scene {
     console.log(state, "in preload")
     console.log('this is the character class: ', state.userCharacter.character.character_class)
 
-      this.load.image('floor', '/assets/levelAssets/floor.png');
-      this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
-      this.load.tilemapTiledJSON('map', '/assets/levelAssets/level1.json');
+      this.load.image('floor2', '/assets/levelAssets/floor.png');
+      this.load.image('tiles2', '/assets/levelAssets/25x25Tiles.png');
+      this.load.tilemapTiledJSON('map2', '/assets/levelAssets/level2.json');
   
   
       // the three classes sprites load here
@@ -74,10 +73,11 @@ export class Level1 extends Phaser.Scene {
     this.add.image(800, 600, "floor");
 
     // loads the map and makes the walls solid
-    const map = this.make.tilemap({ key: "map" });
-    const tileset = map.addTilesetImage("25x25Tiles", "tiles");
-    const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
+    const map2 = this.make.tilemap({ key: "map2" });
+    const tileset2 = map2.addTilesetImage("25x25Tiles", "tiles2");
+    const WorldLayer = map2.createLayer("WorldLayer", tileset2, 0, 0);
     WorldLayer.setCollisionByProperty({ collides: true });
+
 
     // The player and its settings
     this.player = this.physics.add.sprite(90, 90, "playerSprite");
@@ -135,9 +135,7 @@ export class Level1 extends Phaser.Scene {
     });
 
     //monster and its settings
-    this.monster = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
-    this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
-    this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
+    this.monster = this.physics.add.sprite(300, 300, "skeleton", "sprite9");
     this.monster.setSize(60, 54);
 
     //keeps monster in bounds
@@ -151,7 +149,7 @@ export class Level1 extends Phaser.Scene {
     this.anims.create({
       key: "SkeletonIdle",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite10", "sprite19", "sprite20", "sprite30", "sprite36" ], }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: -1,
     });
     
@@ -186,8 +184,6 @@ export class Level1 extends Phaser.Scene {
 
    // play monster animations
     this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster1.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster2.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
   
       //  Input Events
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -280,20 +276,15 @@ export class Level1 extends Phaser.Scene {
     // stairs to next level located at 1570, 80
 
 
-      this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
-      // this.door = this.physics.add.staticSprite(1570,75, 'door', 1); 
+      // this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
+      this.door = this.physics.add.staticSprite(1570,75, 'door', 1); // dev location
 
       this.physics.add.collider(this.player, this.door, () => {
         //go to level 2
         console.log ('touching the door');
         // this.scene.run('Level2');
         // this.scene.sleep(CST.SCENES.LEVEL1);
-        WorldLayer.destroy();
-
-        this.scene.start(CST.SCENES.LEVEL2);
-        this.scene.destroy(Level1);
-
-
+        this.scene.start(CST.SCENES.MENU);
 
 
 
