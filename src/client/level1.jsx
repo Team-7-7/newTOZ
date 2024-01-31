@@ -33,7 +33,7 @@ export class Level1 extends Phaser.Scene {
     
     const state = store.getState() // this brings in the state from redux
     console.log(state, "in preload")
-    console.log('this is the character class: ', state.userCharacter.character.character_class)
+    //console.log('this is the character class: ', state.userCharacter.character.character_class)
 
       this.load.image('floor', '/assets/levelAssets/floor.png');
       this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
@@ -367,36 +367,34 @@ export class Level1 extends Phaser.Scene {
       this.scene.launch("PAUSE");
     }
 
-    //Monster movement
-    // if (this.monster.x < this.player.x) {
-    //   //Right
-    //   this.monster.body.velocity.x = 100;
-    //   this.monster.anims.play("SkeletonRight", true);
-    //   this.monster.flipX = false;
-    //   this.monster.repeatX = 0;
-    // } else if (this.monster.x > this.player.x) {
-    //   //Left
-    //   this.monster.body.velocity.x = -100;
-    //   this.monster.anims.play("SkeletonLeft", true);
-    //   this.monster.flipX = true;
-    //   this.monster.repeatX = 0;
-    // } else if (this.monster.y < this.player.y) {
-    //   // Up
-    //   this.monster.body.velocity.y = 100;
-    //   this.monster.anims.play(true);
-    // } else if (this.monster.y > this.player.y) {
-    //   //Down
-    //   this.monster.body.velocity.y = -100;
-    //   this.monster.anims.play(true);
-    // } else {
-    //   this.monster.body.velocity.x = 0;
-    //   this.monster.anims.play("SkeletonIdle", true);
-    // }
-    //Monster attack
-    if ( Phaser.Math.Distance.Between(this.monster.x, this.monster.y, this.player.x, this.player.y) < 75
-    ) { this.monster.body.velocity.x = 0; // Stop the monster
-        this.monster.anims.play("SkeletonAttack", true); // Play the attack animation
+    //Seek AI movement
+let directionX = this.player.x - this.monster.x;
+let directionY = this.player.y - this.monster.y;
+
+//direction to unit vector
+let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+
+// Check if the distance is less than a certain value
+let followDistance = 150;
+if (magnitude < followDistance) {
+  directionX /= magnitude;
+  directionY /= magnitude;
+
+  //monsters velocity
+  let speed = 50;
+  this.monster.body.velocity.x = directionX * speed;
+  this.monster.body.velocity.y = directionY * speed;
+
+  //Monster attack
+  if ( Phaser.Math.Distance.Between(this.monster.x, this.monster.y, this.player.x, this.player.y) < 75
+  ) { 
+    this.monster.body.velocity.x = 0; // Stop the monster
+    this.monster.anims.play("SkeletonAttack", true);
     }
+} else { // If the player is too far, stop the monster
+  this.monster.body.velocity.x = 0;
+  this.monster.body.velocity.y = 0;
+}
     if (this.keys.l.isDown) {
       console.log(
         "The player is at these coordinates",
@@ -405,5 +403,4 @@ export class Level1 extends Phaser.Scene {
       );
     }
   }
-  
-  };
+};
