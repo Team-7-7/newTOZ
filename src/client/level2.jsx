@@ -32,8 +32,8 @@ export class Level2 extends Phaser.Scene {
     console.log('this is the character class: ', state.userCharacter.character.character_class)
 
       
-      this.load.image('tiles', '/assets/levelAssets/tileset32x32.png');
-      this.load.tilemapTiledJSON('map', '/assets/levelAssets/level2.json');
+      this.load.image('tiles2', '/assets/levelAssets/tileset32x32.png');
+      this.load.tilemapTiledJSON('map2', '/assets/levelAssets/level2.json');
   
   
       // the three classes sprites load here
@@ -71,10 +71,10 @@ export class Level2 extends Phaser.Scene {
     
 
     // loads the map and makes the walls solid
-    const map = this.make.tilemap({ key: "map" });
-    const tileset = map.addTilesetImage("tielset32x32", "tiles");
-    const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
-    WorldLayer.setCollisionByProperty({ collides: true });
+    const map2 = this.make.tilemap({ key: "map2" });
+    const tileset2 = map2.addTilesetImage("tileset32x32", "tiles2");
+    const WorldLayer2 = map2.createLayer("WorldLayer2", tileset2, 0, 0);
+    WorldLayer2.setCollisionByProperty({ collides: true });
 
     // The player and its settings
     this.player = this.physics.add.sprite(90, 90, "playerSprite");
@@ -82,7 +82,7 @@ export class Level2 extends Phaser.Scene {
 
     // keep the player on the map
     this.player.setCollideWorldBounds(true);
-    this.physics.add.collider(this.player, WorldLayer);
+    this.physics.add.collider(this.player, WorldLayer2);
 
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
@@ -137,7 +137,7 @@ export class Level2 extends Phaser.Scene {
 
     // //keeps monster in bounds
     // this.monster.setColliderWorldBounds(true);
-    // this.physics.add.collider(this.monster, WorldLayer);
+    // this.physics.add.collider(this.monster, WorldLayer2);
 
     //monster movements
     this.anims.create({

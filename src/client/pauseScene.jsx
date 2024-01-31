@@ -104,6 +104,8 @@ preload ()
     this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
     this.load.spritesheet('empty','assets/levelAssets/emptySlot50x50.png', {frameWidth: 50, frameHeight: 50}) ;
     this.load.spritesheet('swordSlot', 'assets/pauseAssets/swordSlot50x50.png', { frameWidth: 50, frameHeight: 50 });
+    this.load.spritesheet('gear', 'assets/gear50x50.png', { frameWidth: 50, frameHeight: 50 });
+
 
 
 
