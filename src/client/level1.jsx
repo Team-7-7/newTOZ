@@ -20,6 +20,8 @@ export class Level1 extends Phaser.Scene {
     this.chest2;
     this.cursors;
     this.monster;
+    this.monster1;
+    this.monster2;
     this.gameOver = false;
     this.door;
   }
@@ -133,7 +135,9 @@ export class Level1 extends Phaser.Scene {
     });
 
     //monster and its settings
-    this.monster = this.physics.add.sprite(300, 300, "skeleton", "sprite9");
+    this.monster = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
+    this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
+    this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
     this.monster.setSize(60, 54);
 
     //keeps monster in bounds
@@ -147,7 +151,7 @@ export class Level1 extends Phaser.Scene {
     this.anims.create({
       key: "SkeletonIdle",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite10", "sprite19", "sprite20", "sprite30", "sprite36" ], }),
-      frameRate: 10,
+      frameRate: 5,
       repeat: -1,
     });
     
@@ -182,6 +186,8 @@ export class Level1 extends Phaser.Scene {
 
    // play monster animations
     this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
+    this.monster1.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
+    this.monster2.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
   
       //  Input Events
       this.cursors = this.input.keyboard.createCursorKeys();
