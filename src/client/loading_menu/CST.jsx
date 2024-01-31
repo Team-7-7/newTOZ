@@ -3,6 +3,7 @@ export const CST = {
     SCENES: {
        TITLE: "TITLE", 
        LOGIN: "LOGIN",
+       REGISTRATION: "REGISTRATION",
        MENU: "MENU", 
        LOAD: "LOAD",
        LEVEL1: "LEVEL1",
