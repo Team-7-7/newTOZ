@@ -24,6 +24,7 @@ export class Level1 extends Phaser.Scene {
     this.monster2;
     this.gameOver = false;
     this.door;
+    this.collisionCalled = false;
   }
 
   init() {}
@@ -202,20 +203,25 @@ export class Level1 extends Phaser.Scene {
     
        });
   
-       this.collectItem = (item, lootItem) => {
+       this.collectItem = (item, lootItem, collectedAlready) => {
         console.log('collecting item function');
         item.destroy();        //item is removed from the scene
 
         //item is added to inventory
-        if(lootItem === 'lootGold'){
-          const amountOfGold=1+ Math.floor(Math.random()*5);
-          console.log('Character Gold should be increasing by ', amountOfGold);
+        const delay = 2000;
+        if (!collectedAlready){
+        this.time.delayedCall(delay, ()=> {
+            if(lootItem === 'lootGold'){
+              const amountOfGold=1+ Math.floor(Math.random()*5);
+              console.log('Character Gold should be increasing by ', amountOfGold);
 
-          eventsCenter.emit('updateGold', amountOfGold);
+              eventsCenter.emit('updateGold', amountOfGold);
 
-        }else {
-          console.log('the item picked up is a ', lootItem);
-          eventsCenter.emit('lootedItem', lootItem);
+            }else {
+              console.log('the item picked up is a ', lootItem);
+              eventsCenter.emit('lootedItem', lootItem);
+            }
+          }, null, this)
         }
       };
 
@@ -232,11 +238,20 @@ export class Level1 extends Phaser.Scene {
         //add code here for loot
             // const gold = this.physics.add.sprite(370,60,'goldCoin');
             const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
+            // let collisionCalled = false;
 
-            gold.setSize(22,22);
+            // gold.setSize(22,22);
             this.physics.add.collider(this.player, gold, () => {
-                    this.collectItem(gold, 'lootGold');
-            }, null, this);
+              if (!this.collisionCalled) {
+              // const delay = 2000;
+              // this.time.delayedCall(delay, ()=> {
+                this.collectItem(gold, 'lootGold', this.collisionCalled);
+                console.log('this is the timed collection');
+                // gold.body.enable = true;
+                  // }, null, this);
+                  this.collisionCalled = true;
+                }
+              }, null, this)
           };
       };   
 
