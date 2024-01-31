@@ -5,26 +5,21 @@ import { CST } from "./loading_menu/CST.jsx";
 import eventsCenter from "./EventsCenter.jsx"; // this allows communication between scenes
 
 import { PauseScene } from "./pauseScene.jsx";
-import { Level2 } from "./level2.jsx";
 
 
-import { store } from "./store"; // brings in redux store
+import { store } from "./store.js"; // brings in redux store
 
-export class Level1 extends Phaser.Scene {
+export class Level20 extends Phaser.Scene {
   constructor() {
     super({
-      key: CST.SCENES.LEVEL1,
+      key: CST.SCENES.LEVEL2,
     });
     this.player;
     this.chest1;
     this.chest2;
     this.cursors;
     this.monster;
-    this.monster1;
-    this.monster2;
     this.gameOver = false;
-    this.door;
-    this.collisionCalled = false;
   }
 
   init() {}
@@ -34,49 +29,48 @@ export class Level1 extends Phaser.Scene {
     
     const state = store.getState() // this brings in the state from redux
     console.log(state, "in preload")
-    //console.log('this is the character class: ', state.userCharacter.character.character_class)
+    console.log('this is the character class: ', state.userCharacter.character.character_class)
 
-      this.load.image('floor', '/assets/levelAssets/floor.png');
-      this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
-      this.load.tilemapTiledJSON('map', '/assets/levelAssets/level1.json');
+      
+      this.load.image('tiles', '/assets/levelAssets/tileset32x32.png');
+      this.load.text('level2', '/assets/levelAssets/level2.json');
   
   
       // the three classes sprites load here
       switch(state.userCharacter.character.character_class){
       case "warrior":
-          console.log('loading the warrior');
           this.load.spritesheet('playerSprite', 'assets/levelAssets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
           break;
       case "mage":
-          console.log('loading the mage');
           this.load.spritesheet('playerSprite', 'assets/levelAssets/mage78x60.png', { frameWidth: 78, frameHeight: 60 });
           break;
       case "rogue":
-          console.log('loading the rogue');
           this.load.spritesheet('playerSprite', 'assets/levelAssets/rogue78x60.png', { frameWidth: 78, frameHeight: 60 });
           break;
       };
 
-      this.load.atlas( "skeleton", "assets/levelAssets/skeleton_spritesheet.png", "assets/levelAssets/skeleton_sprites.json");
+      this.load.atlas(
+        "skeleton",
+        "assets/levelAssets/skeleton_spritesheet.png",
+        "assets/levelAssets/skeleton_sprites.json"
+      );
       
-      this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 });
-      this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
-      this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
-      this.load.spritesheet('door','assets/levelAssets/door50x100.png', {frameWidth: 50, frameHeight: 100}) ;
-
+      this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 })
+      this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40})
+      
   }
   
   create ()
   {
 
     this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
-
-    //  A simple background for our game
-    this.add.image(800, 600, "floor");
+    this.levelData = JSON.parse(this.cache.text.get('level2'));
+  
+    console.log(this.levelData, "level data")
 
     // loads the map and makes the walls solid
     const map = this.make.tilemap({ key: "map" });
-    const tileset = map.addTilesetImage("25x25Tiles", "tiles");
+    const tileset = map.addTilesetImage("tielset32x32", "tiles");
     const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
     WorldLayer.setCollisionByProperty({ collides: true });
 
@@ -136,23 +130,18 @@ export class Level1 extends Phaser.Scene {
     });
 
     //monster and its settings
-    this.monster = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
-    this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
-    this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
+    this.monster = this.physics.add.sprite(300, 300, "skeleton", "sprite9");
     this.monster.setSize(60, 54);
 
-    //keeps monster in bounds
-    this.physics.add.collider(this.monster, WorldLayer);
-    this.physics.add.collider(this.player, this.monster);
-    this.monster.setImmovable(true);
-    this.monster.setCollideWorldBounds(true);
-    this.monster.body.onCollide = (true);
+    // //keeps monster in bounds
+    // this.monster.setColliderWorldBounds(true);
+    // this.physics.add.collider(this.monster, WorldLayer);
 
     //monster movements
     this.anims.create({
       key: "SkeletonIdle",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite10", "sprite19", "sprite20", "sprite30", "sprite36" ], }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: -1,
     });
     
@@ -160,14 +149,14 @@ export class Level1 extends Phaser.Scene {
       key: "SkeletonLeft",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8" ], }),
       frameRate: 10,
-      repeat: 0,
+      repeat: -1,
     });
     
     this.anims.create({
       key: "SkeletonRight",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16", "sprite17", "sprite18" ], }),
       frameRate: 10,
-      repeat: 0,
+      repeat: -1,
     });
     
 
@@ -175,20 +164,12 @@ export class Level1 extends Phaser.Scene {
       key: "SkeletonAttack",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite40", "sprite41", "sprite43", "sprite49", "sprite50", "sprite51", "sprite52" ], }),
       frameRate: 10,
-      repeat: 0,
+      repeat: -1,
     });
 
-    this.anims.create({
-      key: "SkeletonDie",
-      frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite57", "sprite58", "sprite59", "sprite60", "sprite64" ], }),
-      frameRate: 10,
-      repeat: 0,
-    });
+    //play monster animations
+    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', true);
 
-   // play monster animations
-    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster1.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster2.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
   
       //  Input Events
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -203,26 +184,18 @@ export class Level1 extends Phaser.Scene {
     
        });
   
-       this.collectItem = (item, lootItem, collectedAlready) => {
+       this.collectItem = (item) => {
         console.log('collecting item function');
         item.destroy();        //item is removed from the scene
 
         //item is added to inventory
-        const delay = 2000;
-        if (!collectedAlready){
-        this.time.delayedCall(delay, ()=> {
-            if(lootItem === 'lootGold'){
-              const amountOfGold=1+ Math.floor(Math.random()*5);
-              console.log('Character Gold should be increasing by ', amountOfGold);
+          const amountOfGold=1+ Math.floor(Math.random()*5);
+          console.log('Character Gold should be increasing by ', amountOfGold);
 
-              eventsCenter.emit('updateGold', amountOfGold);
-
-            }else {
-              console.log('the item picked up is a ', lootItem);
-              eventsCenter.emit('lootedItem', lootItem);
-            }
-          }, null, this)
-        }
+          eventsCenter.emit('updateGold', amountOfGold);
+          eventsCenter.emit('Test');
+          console.log('emit should have been sent');
+        
       };
 
        //chests
@@ -238,20 +211,11 @@ export class Level1 extends Phaser.Scene {
         //add code here for loot
             // const gold = this.physics.add.sprite(370,60,'goldCoin');
             const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
-            // let collisionCalled = false;
 
-            // gold.setSize(22,22);
+            gold.setSize(22,22);
             this.physics.add.collider(this.player, gold, () => {
-              if (!this.collisionCalled) {
-              // const delay = 2000;
-              // this.time.delayedCall(delay, ()=> {
-                this.collectItem(gold, 'lootGold', this.collisionCalled);
-                console.log('this is the timed collection');
-                // gold.body.enable = true;
-                  // }, null, this);
-                  this.collisionCalled = true;
-                }
-              }, null, this)
+                    this.collectItem(gold);
+            }, null, this);
           };
       };   
 
@@ -270,16 +234,7 @@ export class Level1 extends Phaser.Scene {
           gold.setSize(22,22);
           this.physics.add.collider(this.player, gold, () => {
                   console.log('Player collided with gold coin');
-                  this.collectItem(gold, 'lootGold');
-                }, null, this);
-          // sword code here        
-          const sword = this.physics.add.sprite(xlocation-20, ylocation-20,'sword'); 
-          sword.setSize(20,30);
-          this.physics.add.collider(this.player, sword, () => {
-            console.log('Player collided with sword');
-            this.collectItem(sword, 'lootsword');
-          
-
+                  this.collectItem(gold);
           }, null, this);
         };
     };   
@@ -294,28 +249,9 @@ export class Level1 extends Phaser.Scene {
 
     // stairs to next level located at 1570, 80
 
-
-      this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
-      // this.door = this.physics.add.staticSprite(1570,75, 'door', 1); 
-
-      this.physics.add.collider(this.player, this.door, () => {
-        //go to level 2
-        console.log ('touching the door');
-        // this.scene.run('Level2');
-        // this.scene.sleep(CST.SCENES.LEVEL1);
-        WorldLayer.destroy();
-
-        this.scene.start(CST.SCENES.LEVEL2);
-        this.scene.destroy(Level1);
-
-
-
-
-
-      }, null, this)
   
  
-
+  
       this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
       this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
       this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
@@ -329,7 +265,7 @@ export class Level1 extends Phaser.Scene {
     this.cameras.main.setZoom(1); // 1 is the default zoom level
     // Set boundaries for the camera
     //   this.cameras.main.setBounds(0, 0, 1600, 1200);k
-    this.cameras.main.setBounds(-500, -500, 2300, 2100);
+    this.cameras.main.setBounds(-200, -200, 2000, 1600);
 
     eventsCenter.on(
       "gameOver",
@@ -381,41 +317,22 @@ export class Level1 extends Phaser.Scene {
       this.scene.pause("LEVEL1");
       this.scene.launch("PAUSE");
     }
+      //monster movement
+    if (this.monster.body.velocity.x < 0) {
+      this.monster.anims.play('SkeletonLeft', true);
 
-    //Seek AI movement
-let directionX = this.player.x - this.monster.x;
-let directionY = this.player.y - this.monster.y;
+    } else if (this.monster.body.velocity.x > 0) {
+      this.monster.anims.play('SkeletonRight', true);
 
-//direction to unit vector
-let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+    } else { this.monster.anims.play('SkeletonIdle', true);
+      }
 
-// Check if the distance is less than a certain value
-let followDistance = 150;
-if (magnitude < followDistance) {
-  directionX /= magnitude;
-  directionY /= magnitude;
+      if (this.keys.l.isDown)
+      {
+          console.log('The player is at these coordinates', `x: ${this.player.x}`, `y: ${this.player.y}`);
 
-  //monsters velocity
-  let speed = 50;
-  this.monster.body.velocity.x = directionX * speed;
-  this.monster.body.velocity.y = directionY * speed;
-
-  //Monster attack
-  if ( Phaser.Math.Distance.Between(this.monster.x, this.monster.y, this.player.x, this.player.y) < 75
-  ) { 
-    this.monster.body.velocity.x = 0; // Stop the monster
-    this.monster.anims.play("SkeletonAttack", true);
-    }
-} else { // If the player is too far, stop the monster
-  this.monster.body.velocity.x = 0;
-  this.monster.body.velocity.y = 0;
-}
-    if (this.keys.l.isDown) {
-      console.log(
-        "The player is at these coordinates",
-        `x: ${this.player.x}`,
-        `y: ${this.player.y}`
-      );
-    }
+      }
+  
   }
-};
+  
+  };
