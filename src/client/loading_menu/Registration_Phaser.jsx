@@ -29,7 +29,7 @@ export class RegistrationScene extends Phaser.Scene {
 
 
   create() {
-    const state = store.getState() 
+    const state = store.getState()
     let bg1 = this.add.image(400, 300, "castle");
     let scaleX = this.scale.width / bg1.width;
     let scaleY = this.scale.height / bg1.height;
@@ -44,28 +44,30 @@ export class RegistrationScene extends Phaser.Scene {
     element.node.style.perspective = '800px';
 
     // RADIO BOX and IMAGE SWITCHER
-    this.characterImage = this.add.image(this.scale.width / 1.5, this.scale.height / 2 , 'warrior');
+  
+    this.characterImage = this.add.image(this.scale.width / 1.5, this.scale.height / 2, 'warrior');
     this.characterImage.setScale(8);
 
     this.classTitle = this.add.text(this.scale.width / 1.5, this.scale.height / 4, 'Warrior', {
       color: 'white',
       fontFamily: 'p-script',
       fontSize: '60px',
-      backgroundColor: 'rgba(18, 22, 255, 0.8)',
+      backgroundColor: 'rgba(176,61,51, .9)',
       wordWrap: { width: this.scale.width / 2 },
     });
 
-    this.classDescription = this.add.text(this.scale.width / 1.5, this.scale.height * 10/13, 'Select your Character Class', {
+    this.classDescription = this.add.text(this.scale.width / 1.5, this.scale.height * 10 / 13, 'Select your Character Class', {
       color: 'white',
       fontFamily: 'p-script',
       fontSize: '26px',
-      backgroundColor: 'rgba(18, 22, 255, 0.8)',
-      wordWrap: { width: this.scale.width / 2},
+      backgroundColor: 'rgba(176,61,51, .9)',
+      // wordWrap: { width: this.scale.width / 2 },
     });
 
     // Adjust origin to center the text
     this.classDescription.setOrigin(0.5);
     this.classTitle.setOrigin(0.5);
+
 
     // Add event listener to radio buttons
     const classRadioButtons = document.getElementsByName('classes');
@@ -76,7 +78,7 @@ export class RegistrationScene extends Phaser.Scene {
         switch (radio.value) {
           case '1':
             // Set image for warrior
-            this.characterImage.setTexture('warrior'); 
+            this.characterImage.setTexture('warrior');
             this.classTitle.setText('Warrior');
             const charInfo = state.userCharacter.characterClasses[1];
             const descriptionText = `
@@ -89,15 +91,29 @@ export class RegistrationScene extends Phaser.Scene {
             break;
           case '2':
             // Set image for mage
-            this.characterImage.setTexture('mage'); 
+            this.characterImage.setTexture('mage');
             this.classTitle.setText('Mage')
-            this.classDescription.setText('Mage: A wise and magical mage.'); // Update description
+            const charInfo2 = state.userCharacter.characterClasses[2];
+            const descriptionText2 = `
+              ${charInfo2.description}
+              Base Attack: ${charInfo2.beginning_attack}
+              Base Armor: ${charInfo2.beginning_armor}
+              Base Speed: ${charInfo2.beginning_speed}
+            `;
+            this.classDescription.setText(descriptionText2);
             break;
           case '3':
             // Set image for rogue
             this.characterImage.setTexture('rogue');
             this.classTitle.setText('Rogue')
-            this.classDescription.setText('Rogue: A stealthy and cunning rogue.'); // Update description
+            const charInfo3 = state.userCharacter.characterClasses[3];
+            const descriptionText3 = `
+              ${charInfo3.description}
+              Base Attack: ${charInfo3.beginning_attack}
+              Base Armor: ${charInfo3.beginning_armor}
+              Base Speed: ${charInfo3.beginning_speed}
+            `;
+            this.classDescription.setText(descriptionText3);
             break;
           default:
             break;
