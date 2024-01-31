@@ -89,13 +89,12 @@ export class TitleScene extends Phaser.Scene {
       registerButton.setScale(4)
 
       loginButton.on('pointerup', () => {
-        // Handle login button click
         this.scene.start('LOGIN');
       });
 
       registerButton.on('pointerup', () => {
-        // Handle register button click
         console.log('Register button clicked');
+        this.scene.start('REGISTRATION');
       });
 
     }

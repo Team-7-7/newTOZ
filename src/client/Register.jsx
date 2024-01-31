@@ -22,7 +22,7 @@ const Register = () => {
         password,
         email,
       })
-      localStorage.setItem("TOKEN", token.token)
+      localStorage.setItem("TOKEN", JSON.stringify(token.token))
       dispatch(setToken(token.token))
       
       const userId = token.id

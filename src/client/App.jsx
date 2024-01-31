@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
-import axios from 'axios';
 import About from './About';
 import Admin from './Admin';
 import Footer from './Footer';

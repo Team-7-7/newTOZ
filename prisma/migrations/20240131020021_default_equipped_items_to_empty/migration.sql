@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Character" ALTER COLUMN "head_gear1" SET DEFAULT 7,
+ALTER COLUMN "left_hand_gear2" SET DEFAULT 7,
+ALTER COLUMN "right_hand_gear3" SET DEFAULT 7,
+ALTER COLUMN "foot_gear4" SET DEFAULT 7,
+ALTER COLUMN "chest_gear5" SET DEFAULT 7;

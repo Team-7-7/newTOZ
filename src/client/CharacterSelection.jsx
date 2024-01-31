@@ -89,7 +89,7 @@ const CharacterSelection = () => {
 
     console.log('done!')
     // navigate('/game')
-    if (updateUserWithCharacterId) {navigate('/game')}
+    if (updateUserWithCharacterId) {navigate('/')}
     else window.alert("Registration Failed")
 
   

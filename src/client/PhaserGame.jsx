@@ -8,6 +8,7 @@ import {Menu} from './loading_menu/MenuScene';
 import {PauseScene} from './pauseScene';
 import {LoginScene} from './loading_menu/Login_Phaser.jsx';
 import {TitleScene} from './loading_menu/TitleScene.jsx';
+import { RegistrationScene } from './loading_menu/Registration_Phaser.jsx';
 import { CST } from './loading_menu/CST.jsx';
 import WebFont from 'webfontloader';
 
@@ -17,19 +18,18 @@ const PhaserGame = () => {
     parent:'//cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.js',
     width: 1600,
     height: 1200,
-    // line required fr use of dom elements
+    // line required for use of dom elements
     dom: {
       createContainer: true
   },
-  pixelArt: true,  // Enable pixel art mode
+  pixelArt: true,  // Keeps pixels crisp and un-smoothed for that 8-bit look!
     physics: {
         default: 'arcade',
         arcade: {
             debug: true
         }
     },
-    scene:[ TitleScene, LoginScene, Load, Menu, Level1, Level2, PauseScene]
-    // scene:[ Load, Menu, Level1, PauseScene]
+    scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2, PauseScene]
   
 
     };

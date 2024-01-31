@@ -114,8 +114,8 @@ export class LoginScene extends Phaser.Scene {
 
 
 
-                            console.log(CST.SCENES.LOAD)
-                            this.scene.start(CST.SCENES.MENU)
+                            // console.log(CST.SCENES.LOAD)
+                            // this.scene.start(CST.SCENES.MENU)
 
                         } catch (err) {
                             console.log(err)
@@ -150,6 +150,10 @@ export class LoginScene extends Phaser.Scene {
                     } else {
                         text.setText(` ${inputUsername.value}! You need to register!`);
                     }
+
+                    this.time.delayedCall(3000, () => {
+                        this.scene.start(CST.SCENES.MENU);
+                      });
                 }
                 else {
                     //  Flash the prompt
