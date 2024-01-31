@@ -21,10 +21,15 @@ export class RegistrationScene extends Phaser.Scene {
   preload() {
     this.load.image("castle", "/assets/castle.png")
     this.load.html("nameform", "/assets/text/registrationform.html")
-    //put in the character assets here
+    this.load.image('warrior', '/assets/titlePage/warrior.png');
+    this.load.image('mage', '/assets/titlePage/mage.png');
+    this.load.image('rogue', '/assets/titlePage/rogue.png');
+
   }
 
+
   create() {
+    const state = store.getState() 
     let bg1 = this.add.image(400, 300, "castle");
     let scaleX = this.scale.width / bg1.width;
     let scaleY = this.scale.height / bg1.height;
@@ -33,12 +38,77 @@ export class RegistrationScene extends Phaser.Scene {
     bg1.setPosition(this.scale.width / 2, this.scale.height / 2);
 
 
-    const text = this.add.text(20, 20, 'Time is of the essence, registerto save the princess', { color: 'white', fontFamily: 'p-script', fontSize: '32px' })
+    const text = this.add.text(20, 20, 'Time is of the essence, register to save the princess', { color: 'white', fontFamily: 'p-script', fontSize: '32px' })
 
     const element = this.add.dom(400, 600).createFromCache('nameform');
     element.node.style.perspective = '800px';
-    element.addListener('click');
 
+    // RADIO BOX and IMAGE SWITCHER
+    this.characterImage = this.add.image(this.scale.width / 1.5, this.scale.height / 2 , 'warrior');
+    this.characterImage.setScale(8);
+
+    this.classTitle = this.add.text(this.scale.width / 1.5, this.scale.height / 4, 'Warrior', {
+      color: 'white',
+      fontFamily: 'p-script',
+      fontSize: '60px',
+      backgroundColor: 'rgba(18, 22, 255, 0.8)',
+      wordWrap: { width: this.scale.width / 2 },
+    });
+
+    this.classDescription = this.add.text(this.scale.width / 1.5, this.scale.height * 10/13, 'Select your Character Class', {
+      color: 'white',
+      fontFamily: 'p-script',
+      fontSize: '26px',
+      backgroundColor: 'rgba(18, 22, 255, 0.8)',
+      wordWrap: { width: this.scale.width / 2},
+    });
+
+    // Adjust origin to center the text
+    this.classDescription.setOrigin(0.5);
+    this.classTitle.setOrigin(0.5);
+
+    // Add event listener to radio buttons
+    const classRadioButtons = document.getElementsByName('classes');
+
+    classRadioButtons.forEach((radio) => {
+      radio.addEventListener('change', () => {
+        // Update image and text based on the selected class
+        switch (radio.value) {
+          case '1':
+            // Set image for warrior
+            this.characterImage.setTexture('warrior'); 
+            this.classTitle.setText('Warrior');
+            const charInfo = state.userCharacter.characterClasses[1];
+            const descriptionText = `
+              ${charInfo.description}
+              Base Attack: ${charInfo.beginning_attack}
+              Base Armor: ${charInfo.beginning_armor}
+              Base Speed: ${charInfo.beginning_speed}
+            `;
+            this.classDescription.setText(descriptionText);
+            break;
+          case '2':
+            // Set image for mage
+            this.characterImage.setTexture('mage'); 
+            this.classTitle.setText('Mage')
+            this.classDescription.setText('Mage: A wise and magical mage.'); // Update description
+            break;
+          case '3':
+            // Set image for rogue
+            this.characterImage.setTexture('rogue');
+            this.classTitle.setText('Rogue')
+            this.classDescription.setText('Rogue: A stealthy and cunning rogue.'); // Update description
+            break;
+          default:
+            break;
+        }
+      });
+    });
+
+
+    // END RADIO BOX and IMAGE SWITCHER
+
+    element.addListener('click');
     element.on('click', (event) => {
 
       if (event.target.name === 'loginButton') {
@@ -116,14 +186,14 @@ export class RegistrationScene extends Phaser.Scene {
             }
           });
 
-          
+
           //  Populate the text with whatever they typed in as the username!
-            text.setText(` Hurry ${inputUsername.value}! The princess is in danger!`);
-     
+          text.setText(` Hurry ${inputUsername.value}! The princess is in danger!`);
+
           this.time.delayedCall(3000, () => {
             this.scene.start(CST.SCENES.MENU);
           });
-        
+
         }
         else {
           //  Flash the prompt
@@ -147,7 +217,7 @@ export class RegistrationScene extends Phaser.Scene {
           });
         }
 
-        
+
       }
     });
     //this.scene.start(CST.SCENES.LOAD);
