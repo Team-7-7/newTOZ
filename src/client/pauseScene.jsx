@@ -38,9 +38,7 @@ export class PauseScene extends Phaser.Scene {
     this.backpack7 =7;
     this.backpack8 =7;
     
-    // this.playButton;
-    // this.saveButton;
-    // this.quitButton;
+
   }
   
 
@@ -68,7 +66,7 @@ preload ()
     this.loadedCharacterStats = true;
     this.head_gear1 = state.userCharacter.character.head_gear1;
     this.left_hand_gear2=state.userCharacter.character.left_hand_gear2;
-    this.right_hand_gear3=state.userCharacter.character.right_hand_gear3;;
+    this.right_hand_gear3=state.userCharacter.character.right_hand_gear3;
     this.foot_gear4 =state.userCharacter.character.foot_gear4;
     this.chest_gear5=state.userCharacter.character.chest_gear5;
     this.backpack1 =state.userCharacter.character.backpack1;
@@ -84,7 +82,6 @@ preload ()
 
     }
 
-    console.log('this is state.gear[6]: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl) // test to see gear
 
     switch(state.userCharacter.character.character_class){
         case "warrior":
@@ -154,29 +151,465 @@ console.log ('top of create: in the right hand of the character is: ', this.righ
     this.add.text(850, 425, this.characterLevel, { font: "30px p-script", fill: "#7e4035" });
     this.add.text(850, 480, this.characterGold, { font: "30px p-script", fill: "#7e4035" });
 
-    this.add.sprite(941,479, state.gear.allPossibleGear[this.head_gear1].graphicUrl); // head
-    this.add.sprite(852,638, state.gear.allPossibleGear[this.left_hand_gear2].graphicUrl); // left hand
-    this.add.sprite(1054,626, state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl); // right hand
-    this.add.sprite(943,729, state.gear.allPossibleGear[this.foot_gear4].graphicUrl); // feet
-    this.add.sprite(943,654, state.gear.allPossibleGear[this.chest_gear5].graphicUrl); // chest
+    const clickHead = this.add.sprite(941,479, 'gear' , this.head_gear1 -1).setInteractive(); // head
+    const clickLhand = this.add.sprite(852,638, 'gear',this.left_hand_gear2 -1).setInteractive(); // left hand
 
-    this.add.sprite(557,688, state.gear.allPossibleGear[this.backpack1].graphicUrl); // backpack 1
-    this.add.sprite(611,688, state.gear.allPossibleGear[this.backpack2].graphicUrl); // backpack 2
-    this.add.sprite(662,688, state.gear.allPossibleGear[this.backpack3].graphicUrl); // backpack 3
-    this.add.sprite(709,688, state.gear.allPossibleGear[this.backpack4].graphicUrl); // backpack 4
+    const clickRhand = this.add.sprite(1054,626, 'gear',this.right_hand_gear3-1).setInteractive(); // right hand
 
-    this.add.sprite(557,742, state.gear.allPossibleGear[this.backpack5].graphicUrl); // backpack 5
-    this.add.sprite(611,742, state.gear.allPossibleGear[this.backpack6].graphicUrl); // backpack 6
-    this.add.sprite(662,742, state.gear.allPossibleGear[this.backpack7].graphicUrl); // backpack 7
-    this.add.sprite(709,742, state.gear.allPossibleGear[this.backpack8].graphicUrl); // backpack 8
+    const clickFeet = this.add.sprite(943,729, 'gear' , this.foot_gear4 -1).setInteractive(); // feet
+    const clickChest = this.add.sprite(943,654, 'gear', this.chest_gear5 -1).setInteractive(); // chest
+
+    const clickBP1 = this.add.sprite(557,688, 'gear', this.backpack1 -1).setInteractive(); // backpack 1
+    const clickBP2 = this.add.sprite(611,688, 'gear', this.backpack2 -1).setInteractive(); // backpack 2
+    const clickBP3 = this.add.sprite(662,688, 'gear', this.backpack3 -1).setInteractive(); // backpack 3
+    const clickBP4 = this.add.sprite(709,688, 'gear', this.backpack4 -1).setInteractive(); // backpack 4
+
+    const clickBP5 = this.add.sprite(557,742, 'gear', this.backpack5 -1).setInteractive(); // backpack 5
+    const clickBP6 = this.add.sprite(611,742, 'gear', this.backpack6 -1).setInteractive(); // backpack 6
+    const clickBP7 = this.add.sprite(662,742, 'gear', this.backpack7 -1).setInteractive(); // backpack 7
+    const clickBP8 = this.add.sprite(709,742, 'gear', this.backpack8 -1).setInteractive(); // backpack 8
+
+
+const updateStats = () =>{
+
+    console.log('updating the Stats');
+
+    let attackSum = state.gear.allPossibleGear[this.head_gear1].attack + state.gear.allPossibleGear[this.left_hand_gear2].attack + state.gear.allPossibleGear[this.right_hand_gear3].attack + state.gear.allPossibleGear[this.foot_gear4].attack + state.gear.allPossibleGear[this.chest_gear5].attack ;
+    let healthSum = state.gear.allPossibleGear[this.head_gear1].health_bonus + state.gear.allPossibleGear[this.left_hand_gear2].health_bonus + state.gear.allPossibleGear[this.right_hand_gear3].health_bonus + state.gear.allPossibleGear[this.foot_gear4].health_bonus + state.gear.allPossibleGear[this.chest_gear5].health_bonus;
+    let armorSum = state.gear.allPossibleGear[this.head_gear1].armor_bonus + state.gear.allPossibleGear[this.left_hand_gear2].armor_bonus + state.gear.allPossibleGear[this.right_hand_gear3].armor_bonus + state.gear.allPossibleGear[this.foot_gear4].armor_bonus + state.gear.allPossibleGear[this.chest_gear5].armor_bonus;
+    let speedSum = state.gear.allPossibleGear[this.head_gear1].speed_bonus + state.gear.allPossibleGear[this.left_hand_gear2].speed_bonus + state.gear.allPossibleGear[this.right_hand_gear3].speed_bonus + state.gear.allPossibleGear[this.foot_gear4].speed_bonus + state.gear.allPossibleGear[this.chest_gear5].speed_bonus;
+
+
+
+    this.characterHealth = state.userCharacter.character.currentHP;
+    this.characterMaxHealth = state.userCharacter.character.maxHP + healthSum;
+    this.characterArmor = state.userCharacter.character.base_armor +armorSum;
+    this.characterAttack = state.userCharacter.character.base_attack + attackSum;
+    this.characterSpeed = state.userCharacter.character.base_speed + speedSum;
+    this.characterXp = state.userCharacter.character.xp;
+    this.characterLevel = state.userCharacter.character.level;
+    this.characterGold = state.userCharacter.character.gold;
+
+
+
+
+    // state.gear.allPossibleGear(this.head_gear1.gear1).attack // should add 10
+
+    // this.head_gear1 = state.userCharacter.character.head_gear1;
+    // this.left_hand_gear2=state.userCharacter.character.left_hand_gear2;
+    // this.right_hand_gear3=state.userCharacter.character.right_hand_gear3;
+    // this.foot_gear4 =state.userCharacter.character.foot_gear4;
+    // this.chest_gear5=
+
+    // health_bonus: 10,
+    // armor_bonus: 0,
+    // attack_bonus: 0,
+    // speed_bonus: 0,
+}
 
 
 
 
 
-    // if(this.right_hand_gear3 === 1){
-    //     this.add.sprite(1054,626, sword);
-    
+const equipItem = (originalLocation, targetLocation) =>{
+   let temp = null;
+    switch (originalLocation){
+            case "BP1":
+                switch (targetLocation){
+                    case 1:
+                        temp = this.head_gear1;
+                        this.head_gear1 = this.backpack1;
+                        this.backpack1 = temp;
+                        break;
+                    case 2:
+                        temp = this.left_hand_gear2;
+                        this.left_hand_gear2 = this.backpack1;
+                        this.backpack1 = temp;
+                        break;
+                    case 3:
+                        temp = this.right_hand_gear3;
+                        this.right_hand_gear3 = this.backpack1;
+                        this.backpack1 = temp;
+                        break;
+                    case 4:
+                        temp = this.foot_gear4;
+                        this.foot_gear4 = this.backpack1;
+                        this.backpack1 = temp;
+                        break;
+                    case 5:
+                        temp = this.chest_gear5;
+                        this.chest_gear5 = this.backpack1;
+                        this.backpack1 = temp;
+                        break;
+                    default:
+                        console.log('it did not get moved');
+                        break;
+                }break;
+            case "BP2":
+                switch (targetLocation){
+                    case 1:
+                        temp = this.head_gear1;
+                        this.head_gear1 = this.backpack2;
+                        this.backpack2 = temp;
+                        break;
+                    case 2:
+                        temp = this.left_hand_gear2;
+                        this.left_hand_gear2 = this.backpack2;
+                        this.backpack2 = temp;
+                        break;
+                    case 3:
+                        temp = this.right_hand_gear3;
+                        this.right_hand_gear3 = this.backpack2;
+                        this.backpack2 = temp;
+                        break;
+                    case 4:
+                        temp = this.foot_gear4;
+                        this.foot_gear4 = this.backpack2;
+                        this.backpack2 = temp;
+                        break;
+                    case 5:
+                        temp = this.chest_gear5;
+                        this.chest_gear5 = this.backpack2;
+                        this.backpack2 = temp;
+                        break;
+                    default:
+                        console.log('it did not get moved');
+                        break;
+                }break;
+            case "BP3":
+            switch (targetLocation){
+                case 1:
+                    temp = this.head_gear1;
+                    this.head_gear1 = this.backpack3;
+                    this.backpack3 = temp;
+                    break;
+                case 2:
+                    temp = this.left_hand_gear2;
+                    this.left_hand_gear2 = this.backpack3;
+                    this.backpack3 = temp;
+                    break;
+                case 3:
+                    temp = this.right_hand_gear3;
+                    this.right_hand_gear3 = this.backpack3;
+                    this.backpack3 = temp;
+                    break;
+                case 4:
+                    temp = this.foot_gear4;
+                    this.foot_gear4 = this.backpack3;
+                    this.backpack3 = temp;
+                    break;
+                case 5:
+                    temp = this.chest_gear5;
+                    this.chest_gear5 = this.backpack3;
+                    this.backpack3 = temp;
+                    break;
+                default:
+                    console.log('it did not get moved');
+                    break;
+            }break;
+            case "BP4":
+            switch (targetLocation){
+                case 1:
+                    temp = this.head_gear1;
+                    this.head_gear1 = this.backpack4;
+                    this.backpack4 = temp;
+                    break;
+                case 2:
+                    temp = this.left_hand_gear2;
+                    this.left_hand_gear2 = this.backpack4;
+                    this.backpack4 = temp;
+                    break;
+                case 3:
+                    temp = this.right_hand_gear3;
+                    this.right_hand_gear3 = this.backpack4;
+                    this.backpack4 = temp;
+                    break;
+                case 4:
+                    temp = this.foot_gear4;
+                    this.foot_gear4 = this.backpack4;
+                    this.backpack4 = temp;
+                    break;
+                case 5:
+                    temp = this.chest_gear5;
+                    this.chest_gear5 = this.backpack4;
+                    this.backpack4 = temp;
+                    break;
+                default:
+                    console.log('it did not get moved');
+                    break;
+            } break;
+            case "BP5":
+                switch (targetLocation){
+                    case 1:
+                        temp = this.head_gear1;
+                        this.head_gear1 = this.backpack5;
+                        this.backpack5 = temp;
+                        break;
+                    case 2:
+                        temp = this.left_hand_gear2;
+                        this.left_hand_gear2 = this.backpack5;
+                        this.backpack5 = temp;
+                        break;
+                    case 3:
+                        temp = this.right_hand_gear3;
+                        this.right_hand_gear3 = this.backpack5;
+                        this.backpack5 = temp;
+                        break;
+                    case 4:
+                        temp = this.foot_gear4;
+                        this.foot_gear4 = this.backpack5;
+                        this.backpack5 = temp;
+                        break;
+                    case 5:
+                        temp = this.chest_gear5;
+                        this.chest_gear5 = this.backpack5;
+                        this.backpack5 = temp;
+                        break;
+                    default:
+                        console.log('it did not get moved');
+                        break;
+                }break;
+            case "BP6":
+                switch (targetLocation){
+                    case 1:
+                        temp = this.head_gear1;
+                        this.head_gear1 = this.backpack6;
+                        this.backpack6 = temp;
+                        break;
+                    case 2:
+                        temp = this.left_hand_gear2;
+                        this.left_hand_gear2 = this.backpack6;
+                        this.backpack6 = temp;
+                        break;
+                    case 3:
+                        temp = this.right_hand_gear3;
+                        this.right_hand_gear3 = this.backpack6;
+                        this.backpack6 = temp;
+                        break;
+                    case 4:
+                        temp = this.foot_gear4;
+                        this.foot_gear4 = this.backpack6;
+                        this.backpack6 = temp;
+                        break;
+                    case 5:
+                        temp = this.chest_gear5;
+                        this.chest_gear5 = this.backpack6;
+                        this.backpack6 = temp;
+                        break;
+                    default:
+                        console.log('it did not get moved');
+                        break;
+                }break;
+            case "BP7":
+            switch (targetLocation){
+                case 1:
+                    temp = this.head_gear1;
+                    this.head_gear1 = this.backpack7;
+                    this.backpack7 = temp;
+                    break;
+                case 2:
+                    temp = this.left_hand_gear2;
+                    this.left_hand_gear2 = this.backpack7;
+                    this.backpack7 = temp;
+                    break;
+                case 3:
+                    temp = this.right_hand_gear3;
+                    this.right_hand_gear3 = this.backpack7;
+                    this.backpack7 = temp;
+                    break;
+                case 4:
+                    temp = this.foot_gear4;
+                    this.foot_gear4 = this.backpack7;
+                    this.backpack7 = temp;
+                    break;
+                case 5:
+                    temp = this.chest_gear5;
+                    this.chest_gear5 = this.backpack7;
+                    this.backpack7 = temp;
+                    break;
+                default:
+                    console.log('it did not get moved');
+                    break;
+            }break;
+            case "BP8":
+            switch (targetLocation){
+                case 1:
+                    temp = this.head_gear1;
+                    this.head_gear1 = this.backpack8;
+                    this.backpack8 = temp;
+                    break;
+                case 2:
+                    temp = this.left_hand_gear2;
+                    this.left_hand_gear2 = this.backpack8;
+                    this.backpack8 = temp;
+                    break;
+                case 3:
+                    temp = this.right_hand_gear3;
+                    this.right_hand_gear3 = this.backpack8;
+                    this.backpack8 = temp;
+                    break;
+                case 4:
+                    temp = this.foot_gear4;
+                    this.foot_gear4 = this.backpack8;
+                    this.backpack8 = temp;
+                    break;
+                case 5:
+                    temp = this.chest_gear5;
+                    this.chest_gear5 = this.backpack8;
+                    this.backpack8 = temp;
+                    break;
+                default:
+                    console.log('it did not get moved');
+                    break;
+            }break;
+        }
+        updateStats();
+        this.scene.restart();
+    }
+
+clickHead.on('pointerdown', (event) => {
+    console.log('you clicked on the item on the head');
+    console.log('on the head is: ', this.head_gear1);
+    if (this.backpack1 === 7){
+        equipItem('BP1', 1)
+    } else if(this.backpack2 === 7){
+        equipItem('BP2', 1)
+    } else if(this.backpack3 === 7){
+        equipItem('BP3', 1) 
+    } else if(this.backpack4 === 7){
+        equipItem('BP4', 1) 
+    } else if(this.backpack5 === 7){
+        equipItem('BP5', 1) 
+    } else if(this.backpack6 === 7){
+        equipItem('BP6', 1)
+    } else if(this.backpack7 === 7){
+        equipItem('BP7', 1)
+    } else if(this.backpack8 === 7){
+        equipItem('BP8', 1)
+    }
+    });
+
+
+clickLhand.on('pointerdown', (event) => {
+    console.log('you clicked on the item in the left hand');
+    console.log('in the left hand is: ', this.left_hand_gear2);
+    if (this.backpack1 === 7){
+        equipItem('BP1', 2)
+    } else if(this.backpack2 === 7){
+        equipItem('BP2', 2)
+    } else if(this.backpack3 === 7){
+        equipItem('BP3', 2) 
+    } else if(this.backpack4 === 7){
+        equipItem('BP4', 2) 
+    } else if(this.backpack5 === 7){
+        equipItem('BP5', 2) 
+    } else if(this.backpack6 === 7){
+        equipItem('BP6', 2)
+    } else if(this.backpack7 === 7){
+        equipItem('BP7', 2)
+    } else if(this.backpack8 === 7){
+        equipItem('BP8', 2)
+    }
+});
+
+clickRhand.on('pointerdown', (event) => {
+    console.log('you clicked on the item in the right hand');
+    console.log('in the right hand is: ', this.right_hand_gear3);
+    if (this.backpack1 === 7){
+        equipItem('BP1', 3)
+    } else if(this.backpack2 === 7){
+        equipItem('BP2', 3)
+    } else if(this.backpack3 === 7){
+        equipItem('BP3', 3) 
+    } else if(this.backpack4 === 7){
+        equipItem('BP4', 3) 
+    } else if(this.backpack5 === 7){
+        equipItem('BP5', 3) 
+    } else if(this.backpack6 === 7){
+        equipItem('BP6', 3)
+    } else if(this.backpack7 === 7){
+        equipItem('BP7', 3)
+    } else if(this.backpack8 === 7){
+        equipItem('BP8', 3)
+    }
+});
+
+clickFeet.on('pointerdown', (event) => {
+    console.log('you clicked on the item on the feet');
+    console.log('on the feet is: ', this.foot_gear4);
+    if (this.backpack1 === 7){
+        equipItem('BP1', 4)
+    } else if(this.backpack2 === 7){
+        equipItem('BP2', 4)
+    } else if(this.backpack3 === 7){
+        equipItem('BP3', 4) 
+    } else if(this.backpack4 === 7){
+        equipItem('BP4', 4) 
+    } else if(this.backpack5 === 7){
+        equipItem('BP5', 4) 
+    } else if(this.backpack6 === 7){
+        equipItem('BP6', 4)
+    } else if(this.backpack7 === 7){
+        equipItem('BP7', 4)
+    } else if(this.backpack8 === 7){
+        equipItem('BP8', 4)
+    }
+});
+
+clickChest.on('pointerdown', (event) => {
+    console.log('you clicked on the item in the chest');
+    console.log('on the chest is: ', this.chest_gear5);
+    if (this.backpack1 === 7){
+        equipItem('BP1', 5)
+    } else if(this.backpack2 === 7){
+        equipItem('BP2', 5)
+    } else if(this.backpack3 === 7){
+        equipItem('BP3', 5) 
+    } else if(this.backpack4 === 7){
+        equipItem('BP4', 5) 
+    } else if(this.backpack5 === 7){
+        equipItem('BP5', 5) 
+    } else if(this.backpack6 === 7){
+        equipItem('BP6', 5)
+    } else if(this.backpack7 === 7){
+        equipItem('BP7', 5)
+    } else if(this.backpack8 === 7){
+        equipItem('BP8', 5)
+    }
+});
+
+clickBP1.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 1');
+    equipItem('BP1',state.gear.allPossibleGear[this.backpack1].equip_location );
+});
+clickBP2.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 2');
+    equipItem('BP2',state.gear.allPossibleGear[this.backpack2].equip_location );
+});
+clickBP3.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 3');
+    equipItem('BP3',state.gear.allPossibleGear[this.backpack3].equip_location );
+});
+clickBP4.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 4');
+    equipItem('BP4',state.gear.allPossibleGear[this.backpack4].equip_location );
+});
+clickBP5.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 5');
+    equipItem('BP5',state.gear.allPossibleGear[this.backpack5].equip_location );
+});
+clickBP6.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 6');
+    equipItem('BP6',state.gear.allPossibleGear[this.backpack6].equip_location );
+});
+clickBP7.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 7');
+    equipItem('BP7',state.gear.allPossibleGear[this.backpack7].equip_location );
+});
+clickBP8.on('pointerdown', (event) => {
+    console.log('you clicked on the item in Back Pack 8');
+    equipItem('BP8',state.gear.allPossibleGear[this.backpack8].equip_location );
+});
 
 
 
