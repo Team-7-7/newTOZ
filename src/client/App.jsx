@@ -14,7 +14,7 @@ import Register from './Register';
 import CharacterSelection from './CharacterSelection';
 
 import { useDispatch } from 'react-redux';
-import { preloadGear } from './redux/thunks/gearThunks';
+import { preloadGear, preloadCharacterClasses } from './redux/thunks/gearThunks';
 import { getMeThunk } from './redux/thunks/authThunks';
 
 const App = () => {
@@ -22,6 +22,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(preloadGear());
+    dispatch(preloadCharacterClasses());
     const token = localStorage.getItem("TOKEN")
     if (token) dispatch(getMeThunk());
   }, [dispatch]);
