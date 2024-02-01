@@ -186,17 +186,7 @@ export class Level2 extends Phaser.Scene {
    });
     
 
-    this.cursors = this.input.keyboard.createCursorKeys();
-    this.keys = this.input.keyboard.addKeys({
-      w: Phaser.Input.Keyboard.KeyCodes.W,
-      a: Phaser.Input.Keyboard.KeyCodes.A,
-      s: Phaser.Input.Keyboard.KeyCodes.S,
-      d: Phaser.Input.Keyboard.KeyCodes.D,
-      k: Phaser.Input.Keyboard.KeyCodes.K,
-      p: Phaser.Input.Keyboard.KeyCodes.P,
-      l: Phaser.Input.Keyboard.KeyCodes.L,
-    });
-
+ 
     //camera controls, follows player and zooms in
     this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     this.cameras.main.setZoom(1); // 1 is the default zoom level
