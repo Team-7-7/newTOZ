@@ -246,35 +246,24 @@ export class Level2 extends Phaser.Scene {
         this.scene.launch("PAUSE");
       }
 
-
+      if (this.keys.k.isDown) {
+        this.player.anims.play("attackLeft", true);
+        //   this.player.on('animationupdate-attackRight', function (animation, frame) {
+        //     console.log(frame.frame.name);
+      }
+      if (this.keys.p.isDown) {
+        console.log("p is pressed, pausing game");
+        this.scene.pause("LEVEL1");
+        this.scene.launch("PAUSE");
+      }
+    
+  
      
       
   } 
 
-  selectLayer(layer) {
-    // You can use map.setLayer(...) or map.layer. Either can be set using a layer name, layer
-    // index, StaticTilemapLayer/DynamicTilemapLayer.
-    this.map.setLayer(layer);
-
-    this.floorLayer.alpha = 0.5;
-    this.worldLayer.alpha = 0.5;
-    this.wallmounts.alpha = 0.5;
-
-    layer.alpha = 1;
-}
-
+  
 
 };
 
-    if (this.keys.k.isDown) {
-      this.player.anims.play("attackLeft", true);
-      //   this.player.on('animationupdate-attackRight', function (animation, frame) {
-      //     console.log(frame.frame.name);
-    }
-    if (this.keys.p.isDown) {
-      console.log("p is pressed, pausing game");
-      this.scene.pause("LEVEL1");
-      this.scene.launch("PAUSE");
-    }
-  
-
+   
