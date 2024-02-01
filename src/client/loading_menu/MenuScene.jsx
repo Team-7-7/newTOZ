@@ -50,12 +50,48 @@ export class Menu extends Phaser.Scene {
         text.setOrigin(0.5);
 
 
-        this.input.keyboard.on('keydown-ENTER', () => {
-            this.scene.start(CST.SCENES.LEVEL1);
-        })
+
+    const wipeMask = this.add.graphics();
+    wipeMask.fillStyle(0x000000); // Set the color of the wipe mask
+    wipeMask.fillRect(0, 0, this.scale.width, this.scale.height); // Create a rectangle covering the whole screen
+
+    this.tweens.add({
+        targets: wipeMask,
+        alpha: 0, // Fade out the wipe mask
+        duration: 1000, // Set the duration of the tween in milliseconds
+        onComplete: () => {
+            wipeMask.destroy(); // Remove the wipe mask
+        }
+    });
+
+
+
+    this.input.keyboard.on('keydown-ENTER', () => {
+        // Start the wipe tween when Enter is pressed
+        this.tweens.add({
+            targets: wipeMask,
+            duration: 500,
+            alpha: { value: 1, ease: 'Linear' },
+            onComplete: () => {
+                wipeMask.destroy();
+                this.scene.start(CST.SCENES.LEVEL1);
+            }
+        });
+    });
+
+
         this.input.on('pointerup', () => {
-            this.scene.start(CST.SCENES.LEVEL1);
+            this.tweens.add({
+            targets: wipeMask,
+            duration: 500,
+            alpha: { value: 0, ease: 'Linear' },
+            onComplete: () => {
+                wipeMask.destroy();
+                this.scene.start(CST.SCENES.LEVEL1);
+            }
+        });
         })
+
         //G will be a shortcut to GAMEOVER scene
         this.input.keyboard.on('keydown-G', () => {
             this.scene.start(CST.SCENES.LEVEL1);
