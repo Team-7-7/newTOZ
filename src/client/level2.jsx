@@ -97,6 +97,7 @@ export class Level2 extends Phaser.Scene {
     this.floorLayer.setCollisionByProperty({ collides: false });
     this.worldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
     this.worldLayer.setCollisionByProperty({ collides: true });
+<<<<<<< Updated upstream
     if (this.worldLayer) {
       this.worldLayer.setCollisionByProperty({ collides: true });
     } else {
@@ -104,10 +105,16 @@ export class Level2 extends Phaser.Scene {
     }
 
     this.wallmounts = this.map.createLayer("wallmounts", tileset, 0, 0);
+=======
+    
+     
+    this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
+>>>>>>> Stashed changes
     this.wallmounts.setCollisionByProperty({ collides: false });
 
     this.player = this.physics.add.sprite(90, 90, "playerSprite");
 
+<<<<<<< Updated upstream
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
       key: "left",
@@ -154,6 +161,89 @@ export class Level2 extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
+=======
+    // this.selectLayer(this.floorLayer);
+    // this.selectLayer(this.worldLayer);
+    this.physics.add.collider(this.player, this.worldLayer);
+
+    // this.input.keyboard.on('keydown-ONE', event => {
+    //     this.selectLayer(this.worldLayer);
+    // });
+    
+    // this.input.keyboard.on('keydown-TWO', event => {
+    //     this.selectLayer(this.floorLayer);
+    // });
+    
+    // this.input.keyboard.on('keydown-THREE', event => {
+    //     this.selectLayer(this.wallmounts);
+    // });
+    
+    // this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+
+
+
+ //  Our player animations, turning, walking left and walking right.
+ this.anims.create({
+    key: "left",
+    frames: this.anims.generateFrameNumbers("playerSprite", {
+      start: 9,
+      end: 12,
+    }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "turn",
+    frames: [{ key: "playerSprite", frame: 1 }],
+
+    frameRate: -1,
+  });
+
+  this.anims.create({
+    key: "right",
+    frames: this.anims.generateFrameNumbers("playerSprite", {
+      start: 2,
+      end: 5,
+    }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "attackRight",
+    frames: this.anims.generateFrameNumbers("playerSprite", {
+      start: 14,
+      end: 19,
+    }),
+    frameRate: 10,
+    repeat: -1,
+  });
+  this.anims.create({
+    key: "attackLeft",
+    frames: this.anims.generateFrameNumbers("playerSprite", {
+      start: 20,
+      end: 25,
+    }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+
+  this.cursors = this.input.keyboard.createCursorKeys();
+  this.keys = this.input.keyboard.addKeys({
+    w: Phaser.Input.Keyboard.KeyCodes.W,
+    a: Phaser.Input.Keyboard.KeyCodes.A,
+    s: Phaser.Input.Keyboard.KeyCodes.S,
+    d: Phaser.Input.Keyboard.KeyCodes.D,
+    k: Phaser.Input.Keyboard.KeyCodes.K,
+    p: Phaser.Input.Keyboard.KeyCodes.P,
+    l: Phaser.Input.Keyboard.KeyCodes.L,
+
+   });
+    
+>>>>>>> Stashed changes
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
@@ -172,6 +262,7 @@ export class Level2 extends Phaser.Scene {
     // Set boundaries for the camera
     //   this.cameras.main.setBounds(0, 0, 1600, 1200);k
     this.cameras.main.setBounds(-500, -500, 2300, 2100);
+<<<<<<< Updated upstream
   }
   update() {
     if (this.gameOver) {
@@ -202,6 +293,70 @@ export class Level2 extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
+=======
+}
+  update(){
+    
+    if (this.gameOver) {
+        return;
+      }
+  
+      if (this.keys.a.isDown || this.cursors.left.isDown) {
+        this.player.setVelocityX(-160);
+  
+        this.player.anims.play("left", true);
+      } else if (this.keys.d.isDown || this.cursors.right.isDown) {
+        this.player.setVelocityX(160);
+  
+        this.player.anims.play("right", true);
+      } else {
+        this.player.setVelocityX(0);
+  
+        this.player.anims.play("turn", true);
+      }
+      if (this.keys.w.isDown || this.cursors.up.isDown) {
+        this.player.setVelocityY(-160);
+  
+        this.player.anims.play("left", true);
+      } else if (this.keys.s.isDown || this.cursors.down.isDown) {
+        this.player.setVelocityY(160);
+  
+        this.player.anims.play("right", true);
+      } else {
+        this.player.setVelocityY(0);
+      }
+  
+      if (this.keys.k.isDown) {
+        this.player.anims.play("attackLeft", true);
+        //   this.player.on('animationupdate-attackRight', function (animation, frame) {
+        //     console.log(frame.frame.name);
+      }
+      if (this.keys.p.isDown) {
+        console.log("p is pressed, pausing game");
+        this.scene.pause("LEVEL1");
+        this.scene.launch("PAUSE");
+      }
+
+
+     
+      
+  } 
+
+  selectLayer(layer) {
+    // You can use map.setLayer(...) or map.layer. Either can be set using a layer name, layer
+    // index, StaticTilemapLayer/DynamicTilemapLayer.
+    this.map.setLayer(layer);
+
+    this.floorLayer.alpha = 0.5;
+    this.worldLayer.alpha = 0.5;
+    this.wallmounts.alpha = 0.5;
+
+    layer.alpha = 1;
+}
+
+
+};
+>>>>>>> Stashed changes
 
     if (this.keys.k.isDown) {
       this.player.anims.play("attackLeft", true);
