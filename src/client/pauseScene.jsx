@@ -112,7 +112,6 @@ create ()
 {
     const state = store.getState() // this brings in the state from redux
 
-console.log ('top of create: in the right hand of the character is: ', this.right_hand_gear3);
 // console.log('this is state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl);
 
     eventsCenter.on('updateGold', (moreGold)=> {
@@ -127,8 +126,6 @@ console.log ('top of create: in the right hand of the character is: ', this.righ
         if(item === 'lootsword'){
                     this.right_hand_gear3 = 1;
         }
-        console.log ('in the right hand of the character is: ', this.right_hand_gear3);
-
     })
 
 
@@ -153,9 +150,7 @@ console.log ('top of create: in the right hand of the character is: ', this.righ
 
     const clickHead = this.add.sprite(941,479, 'gear' , this.head_gear1 -1).setInteractive(); // head
     const clickLhand = this.add.sprite(852,638, 'gear',this.left_hand_gear2 -1).setInteractive(); // left hand
-
     const clickRhand = this.add.sprite(1054,626, 'gear',this.right_hand_gear3-1).setInteractive(); // right hand
-
     const clickFeet = this.add.sprite(943,729, 'gear' , this.foot_gear4 -1).setInteractive(); // feet
     const clickChest = this.add.sprite(943,654, 'gear', this.chest_gear5 -1).setInteractive(); // chest
 
@@ -190,21 +185,12 @@ const updateStats = () =>{
     this.characterLevel = state.userCharacter.character.level;
     this.characterGold = state.userCharacter.character.gold;
 
+    // **************** emit new stats to current level **************************
 
+    eventsCenter.emit('updateStats',  this.characterHealth, this.characterMaxHealth,this.characterArmor,this.characterAttack,this.characterSpeed);
+    // eventsCenter.emit('updateStats', 1);
+    console.log('in the pause screen updating stats');
 
-
-    // state.gear.allPossibleGear(this.head_gear1.gear1).attack // should add 10
-
-    // this.head_gear1 = state.userCharacter.character.head_gear1;
-    // this.left_hand_gear2=state.userCharacter.character.left_hand_gear2;
-    // this.right_hand_gear3=state.userCharacter.character.right_hand_gear3;
-    // this.foot_gear4 =state.userCharacter.character.foot_gear4;
-    // this.chest_gear5=
-
-    // health_bonus: 10,
-    // armor_bonus: 0,
-    // attack_bonus: 0,
-    // speed_bonus: 0,
 }
 
 

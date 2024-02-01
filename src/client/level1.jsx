@@ -25,6 +25,13 @@ export class Level1 extends Phaser.Scene {
     this.gameOver = false;
     this.door;
     this.collisionCalled = false;
+
+    //character stats to be loaded from pause screen
+    this.characterHealth = 1;
+    this.characterMaxHealth = 1;
+    this.characterArmor = 1;
+    this.characterAttack = 1;
+    this.characterSpeed = 1;
   }
 
   init() {}
@@ -71,6 +78,9 @@ export class Level1 extends Phaser.Scene {
 
     this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
+    this.scene.launch("PAUSE"); // starts the pause screen and loads stats
+
+
     //  A simple background for our game
     this.add.image(800, 600, "floor");
 
@@ -87,6 +97,26 @@ export class Level1 extends Phaser.Scene {
     // keep the player on the map
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, WorldLayer);
+
+
+    // **************** Loading player stats ************************
+
+    // eventsCenter.on('updateStats', 'health', 'maxHealth','armor','attack','speed') => {
+    eventsCenter.on('updateStats', (health, maxHealth,armor,attack,speed) => {
+      console.log('on main screen updating stats ');
+      this.characterHealth = health;
+      this.characterMaxHealth = maxHealth;
+      this.characterArmor = armor;
+      this.characterAttack = attack;
+      this.characterSpeed = speed;
+      console.log('character speed is: ', this.characterSpeed);
+
+
+  }, this);
+
+
+
+
 
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
@@ -200,28 +230,19 @@ export class Level1 extends Phaser.Scene {
         k: Phaser.Input.Keyboard.KeyCodes.K,
         p: Phaser.Input.Keyboard.KeyCodes.P,
         l: Phaser.Input.Keyboard.KeyCodes.L,
-    
        });
   
        this.collectItem = (item, lootItem, collectedAlready) => {
-        console.log('collecting item function');
         item.destroy();        //item is removed from the scene
 
         //item is added to inventory
-        const delay = 2000;
-        if (!collectedAlready){
-        this.time.delayedCall(delay, ()=> {
-            if(lootItem === 'lootGold'){
-              const amountOfGold=1+ Math.floor(Math.random()*5);
-              console.log('Character Gold should be increasing by ', amountOfGold);
-
-              eventsCenter.emit('updateGold', amountOfGold);
-
-            }else {
-              console.log('the item picked up is a ', lootItem);
-              eventsCenter.emit('lootedItem', lootItem);
-            }
-          }, null, this)
+        if(lootItem === 'lootGold'){
+          const amountOfGold=1+ Math.floor(Math.random()*5);
+          console.log('Character Gold should be increasing by ', amountOfGold);
+          eventsCenter.emit('updateGold', amountOfGold);
+        }else {
+          console.log('the item picked up is a ', lootItem);
+          eventsCenter.emit('lootedItem', lootItem);
         }
       };
 
@@ -233,24 +254,14 @@ export class Level1 extends Phaser.Scene {
           chest.setFrame(1);
           const xlocation=chest.x+30;
           const ylocation=chest.y+30;
-          console.log('xlocation is: ', xlocation);
 
         //add code here for loot
             // const gold = this.physics.add.sprite(370,60,'goldCoin');
             const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
-            // let collisionCalled = false;
-
             // gold.setSize(22,22);
             this.physics.add.collider(this.player, gold, () => {
-              if (!this.collisionCalled) {
-              // const delay = 2000;
-              // this.time.delayedCall(delay, ()=> {
                 this.collectItem(gold, 'lootGold', this.collisionCalled);
-                console.log('this is the timed collection');
-                // gold.body.enable = true;
-                  // }, null, this);
                   this.collisionCalled = true;
-                }
               }, null, this)
           };
       };   
@@ -261,10 +272,8 @@ export class Level1 extends Phaser.Scene {
         chest.setFrame(1);
         const xlocation=chest.x-30;
         const ylocation=chest.y-30;
-        console.log('xlocation is: ', xlocation);
 
       //add code here for loot
-          // const gold = this.physics.add.sprite(370,60,'goldCoin');
           const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
 
           gold.setSize(22,22);
@@ -274,12 +283,9 @@ export class Level1 extends Phaser.Scene {
                 }, null, this);
           // sword code here        
           const sword = this.physics.add.sprite(xlocation-20, ylocation-20,'sword'); 
-          sword.setSize(20,30);
+          // sword.setSize(20,30);
           this.physics.add.collider(this.player, sword, () => {
-            console.log('Player collided with sword');
             this.collectItem(sword, 'lootsword');
-          
-
           }, null, this);
         };
     };   
@@ -371,7 +377,6 @@ export class Level1 extends Phaser.Scene {
       //     console.log(frame.frame.name);
     }
     if (this.keys.p.isDown) {
-      console.log("p is pressed, pausing game");
       this.scene.pause("LEVEL1");
       this.scene.launch("PAUSE");
     }
