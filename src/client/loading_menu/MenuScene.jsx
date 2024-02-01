@@ -56,7 +56,8 @@ export class Menu extends Phaser.Scene {
         this.input.on('pointerup', () => {
             this.scene.start(CST.SCENES.LEVEL1);
         })
-        this.input.keyboard.on('keydown-g', () => {
+        //G will be a shortcut to GAMEOVER scene
+        this.input.keyboard.on('keydown-G', () => {
             this.scene.start(CST.SCENES.LEVEL1);
         })
     }
