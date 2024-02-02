@@ -1,4 +1,4 @@
-// level1.jsx
+// level2.jsx
 
 import { CST } from "./loading_menu/CST.jsx";
 
@@ -107,6 +107,21 @@ export class Level2 extends Phaser.Scene {
     // this.selectLayer(this.floorLayer);
     // this.selectLayer(this.worldLayer);
     this.physics.add.collider(this.player, this.worldLayer);
+
+    // **************** Loading player stats ************************
+
+    // eventsCenter.on('updateStats', 'health', 'maxHealth','armor','attack','speed') => {
+      eventsCenter.on('updateStats', (health, maxHealth,armor,attack,speed) => {
+        console.log('on main screen updating stats ');
+        this.characterHealth = health;
+        this.characterMaxHealth = maxHealth;
+        this.characterArmor = armor;
+        this.characterAttack = attack;
+        this.characterSpeed = speed;
+        console.log('character speed is: ', this.characterSpeed);
+  
+  
+    }, this);
 
     // this.input.keyboard.on('keydown-ONE', event => {
     //     this.selectLayer(this.worldLayer);
@@ -232,7 +247,7 @@ export class Level2 extends Phaser.Scene {
       }
       if (this.keys.p.isDown) {
         console.log("p is pressed, pausing game");
-        this.scene.pause("LEVEL1");
+        this.scene.pause("LEVEL2");
         this.scene.launch("PAUSE");
       }
 
@@ -243,7 +258,7 @@ export class Level2 extends Phaser.Scene {
       }
       if (this.keys.p.isDown) {
         console.log("p is pressed, pausing game");
-        this.scene.pause("LEVEL1");
+        this.scene.pause("LEVEL2");
         this.scene.launch("PAUSE");
       }
     
