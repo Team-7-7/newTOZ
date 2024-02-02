@@ -32,6 +32,7 @@ export class Level1 extends Phaser.Scene {
     this.characterArmor = 1;
     this.characterAttack = 1;
     this.characterSpeed = 1;
+
   }
 
   init() {}
@@ -70,6 +71,7 @@ export class Level1 extends Phaser.Scene {
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
       this.load.spritesheet('sword','assets/levelAssets/swordIcon25x48.png', {frameWidth: 25, frameHeight: 48}) ;
       this.load.spritesheet('door','assets/levelAssets/door50x100.png', {frameWidth: 50, frameHeight: 100}) ;
+      this.load.spritesheet('gear', 'assets/gear50x50.png', { frameWidth: 50, frameHeight: 50 });
 
   }
   
@@ -232,43 +234,81 @@ export class Level1 extends Phaser.Scene {
         l: Phaser.Input.Keyboard.KeyCodes.L,
        });
   
-       this.collectItem = (item, lootItem, collectedAlready) => {
-        item.destroy();        //item is removed from the scene
 
+      this.collectItem = (item, lootItem, gearNumber) => {
+
+        item.destroy();        //item is removed from the scene
         //item is added to inventory
         if(lootItem === 'lootGold'){
           const amountOfGold=1+ Math.floor(Math.random()*5);
           console.log('Character Gold should be increasing by ', amountOfGold);
+          console.log('transmitting from level1 to the pause screen the gold');
           eventsCenter.emit('updateGold', amountOfGold);
-        }else {
-          console.log('the item picked up is a ', lootItem);
-          eventsCenter.emit('lootedItem', lootItem);
+
+        }else if (lootItem === 'lootGear') {
+          console.log('the item picked up is a ', item);
+          console.log('transmitting from level1 to the pause screen the item');
+          eventsCenter.emit('lootedItem', gearNumber);
         }
       };
 
        //chests
        // chest functions broken into two functions to avoid unwanted collisions (gold in walls, etc) 
-      const openChestTopRight = (chest) => {
-        //if you want the loot to be above or to the right of the chest
-          if (this.keys.k.isDown){  // this line requires attack button to open chest
+      
+      
+       const openChestTopRight = (chest) => {
+
           chest.setFrame(1);
           const xlocation=chest.x+30;
           const ylocation=chest.y+30;
 
         //add code here for loot
-            // const gold = this.physics.add.sprite(370,60,'goldCoin');
             const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
-            // gold.setSize(22,22);
             this.physics.add.collider(this.player, gold, () => {
-                this.collectItem(gold, 'lootGold', this.collisionCalled);
-                  this.collisionCalled = true;
+                this.collectItem(gold, 'lootGold');
               }, null, this)
-          };
+
+        // gear loot code here        
+            function getRandomInt(max) {
+              return Math.floor(Math.random() * max);
+            }
+
+            const randomLootNumber = getRandomInt(10)+1;
+
+            console.log('random loot number is: ', randomLootNumber);
+            if (randomLootNumber>6){ // ******************************* there are 6 possible loot items in the gear database *****
+              // no extra loot found
+            }else{
+              // randomLoot = randomLootNumber;
+              const gearLoot = this.physics.add.sprite(xlocation+20, ylocation+20, 'gear' , randomLootNumber-1);
+
+              this.physics.add.collider(this.player, gearLoot, () => {
+                this.collectItem(gearLoot, 'lootGear', randomLootNumber);
+              
+              }, null, this);          
+            };
+
+          // ************** add code to disable the chest here *******************
+          switch(chest){
+            case this.chest1: chest1Collider.destroy();
+              break;
+            case this.chest2: chest2Collider.destroy();
+              break;
+            case this.chest3: chest3Collider.destroy();
+              break;
+            case this.chest4: chest4Collider.destroy();
+              break;
+            case this.chest5: chest5Collider.destroy();
+              break;
+            case this.chest6: chest6Collider.destroy();
+              break;
+            case this.chest7: chest7Collider.destroy();
+              break;
+          }
       };   
 
       const openChestBottomLeft = (chest) => {
-        //if you want the loot to be below or to the left of the chest
-        if (this.keys.k.isDown){  // this line requires attack button to open chest
+       
         chest.setFrame(1);
         const xlocation=chest.x-30;
         const ylocation=chest.y-30;
@@ -276,18 +316,46 @@ export class Level1 extends Phaser.Scene {
       //add code here for loot
           const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
 
-          gold.setSize(22,22);
           this.physics.add.collider(this.player, gold, () => {
                   console.log('Player collided with gold coin');
                   this.collectItem(gold, 'lootGold');
                 }, null, this);
-          // sword code here        
-          const sword = this.physics.add.sprite(xlocation-20, ylocation-20,'sword'); 
-          // sword.setSize(20,30);
-          this.physics.add.collider(this.player, sword, () => {
-            this.collectItem(sword, 'lootsword');
-          }, null, this);
-        };
+
+          // gear loot code here        
+          function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+          }
+          
+          const randomLootNumber = getRandomInt(10)+1;
+
+          console.log('random loot number is: ', randomLootNumber);
+          if (randomLootNumber>6){ // ******************************* there are 6 possible loot items in the gear database *****
+            // no extra loot found
+          }else{
+            // randomLoot = randomLootNumber;
+            const gearLoot = this.physics.add.sprite(xlocation-20, ylocation-20, 'gear' , randomLootNumber-1);
+
+            this.physics.add.collider(this.player, gearLoot, () => {
+            this.collectItem(gearLoot, 'lootGear', randomLootNumber);
+             
+            }, null, this);          
+          };
+          switch(chest){
+            case this.chest1: chest1Collider.destroy();
+              break;
+            case this.chest2: chest2Collider.destroy();
+              break;
+            case this.chest3: chest3Collider.destroy();
+              break;
+            case this.chest4: chest4Collider.destroy();
+              break;
+            case this.chest5: chest5Collider.destroy();
+              break;
+            case this.chest6: chest6Collider.destroy();
+              break;
+            case this.chest7: chest7Collider.destroy();
+              break;
+          }
     };   
 
       this.chest1 = this.physics.add.staticSprite(300, 40, 'chest', 2);
@@ -297,12 +365,18 @@ export class Level1 extends Phaser.Scene {
       this.chest5 = this.physics.add.staticSprite(790, 966, 'chest', 2);
       this.chest6 = this.physics.add.staticSprite(1345, 565, 'chest', 2);
 
+      const chest1Collider = this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
+      const chest2Collider = this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
+      const chest3Collider = this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
+      const chest4Collider = this.physics.add.collider(this.player, this.chest4, ()=>openChestBottomLeft(this.chest4));
+      const chest5Collider = this.physics.add.collider(this.player, this.chest5, ()=>openChestBottomLeft(this.chest5));
+      const chest6Collider = this.physics.add.collider(this.player, this.chest6, ()=>openChestBottomLeft(this.chest6));
 
     // stairs to next level located at 1570, 80
 
 
-      this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
-      // this.door = this.physics.add.staticSprite(1570,75, 'door', 1); 
+      // this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
+      this.door = this.physics.add.staticSprite(1570,75, 'door', 1); 
 
       this.physics.add.collider(this.player, this.door, () => {
         //go to level 2
@@ -316,12 +390,7 @@ export class Level1 extends Phaser.Scene {
 
       }, null, this)
   
-      this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
-      this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
-      this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
-      this.physics.add.collider(this.player, this.chest4, ()=>openChestBottomLeft(this.chest4));
-      this.physics.add.collider(this.player, this.chest5, ()=>openChestBottomLeft(this.chest5));
-      this.physics.add.collider(this.player, this.chest6, ()=>openChestBottomLeft(this.chest6));
+
 
       
     //camera controls, follows player and zooms in
@@ -347,11 +416,13 @@ export class Level1 extends Phaser.Scene {
     }
 
     if (this.keys.a.isDown || this.cursors.left.isDown) {
-      this.player.setVelocityX(-160);
+      // this.player.setVelocityX(-160);
+      this.player.setVelocityX(-10* this.characterSpeed);
+
 
       this.player.anims.play("left", true);
     } else if (this.keys.d.isDown || this.cursors.right.isDown) {
-      this.player.setVelocityX(160);
+      this.player.setVelocityX(10* this.characterSpeed);
 
       this.player.anims.play("right", true);
     } else {
@@ -360,11 +431,11 @@ export class Level1 extends Phaser.Scene {
       this.player.anims.play("turn", true);
     }
     if (this.keys.w.isDown || this.cursors.up.isDown) {
-      this.player.setVelocityY(-160);
+      this.player.setVelocityY(-10* this.characterSpeed);
 
       this.player.anims.play("left", true);
     } else if (this.keys.s.isDown || this.cursors.down.isDown) {
-      this.player.setVelocityY(160);
+      this.player.setVelocityY(10* this.characterSpeed);
 
       this.player.anims.play("right", true);
     } else {
@@ -374,7 +445,6 @@ export class Level1 extends Phaser.Scene {
     if (this.keys.k.isDown) {
       this.player.anims.play("attackLeft", true);
       //   this.player.on('animationupdate-attackRight', function (animation, frame) {
-      //     console.log(frame.frame.name);
     }
     if (this.keys.p.isDown) {
       this.scene.pause("LEVEL1");
