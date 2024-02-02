@@ -22,6 +22,10 @@ export class GameOver extends Phaser.Scene {
     bg1.setScale(scale);
     bg1.setPosition(this.scale.width / 2, this.scale.height / 2);
 
+  // Add the HealthBarScene to the scene
+  this.scene.launch(CST.SCENES.HEALTH, true);
+
+
     // Game over text setup
     const text = this.add.text(
       this.scale.width / 2,

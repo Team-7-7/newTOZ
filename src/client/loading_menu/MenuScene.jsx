@@ -63,37 +63,26 @@ export class Menu extends Phaser.Scene {
 
 
 
-    const wipeMask = this.add.graphics();
-    wipeMask.fillStyle(0x000000); // Set the color of the wipe mask
-    wipeMask.fillRect(0, 0, this.scale.width, this.scale.height); // Create a rectangle covering the whole screen
+        const wipeMask = this.add.graphics();
+        wipeMask.fillStyle(0x000000); // Set the color of the wipe mask
+        wipeMask.fillRect(0, 0, this.scale.width, this.scale.height); // Create a rectangle covering the whole screen
 
-    this.tweens.add({
-        targets: wipeMask,
-        alpha: 0, // Fade out the wipe mask
-        duration: 1000, // Set the duration of the tween in milliseconds
-        onComplete: () => {
-            wipeMask.destroy(); // Remove the wipe mask
-        }
-    });
-
-
-
-    this.input.keyboard.on('keydown-ENTER', () => {
-        // Start the wipe tween when Enter is pressed
         this.tweens.add({
             targets: wipeMask,
-            duration: 500,
-            alpha: { value: 1, ease: 'Linear' },
+            alpha: 0, // Fade out the wipe mask
+            duration: 1000, // Set the duration of the tween in milliseconds
             onComplete: () => {
                this.menu.stop();
                 wipeMask.destroy();
                 this.scene.start(CST.SCENES.LEVEL1);
+
             }
         });
-    });
 
 
-        this.input.on('pointerup', () => {
+
+        this.input.keyboard.on('keydown-ENTER', () => {
+            // Start the wipe tween when Enter is pressed
             this.tweens.add({
             targets: wipeMask,
             duration: 500,
@@ -103,12 +92,30 @@ export class Menu extends Phaser.Scene {
                 this.menu.stop();
                 this.scene.start(CST.SCENES.LEVEL1);
             }
+
         });
+
+
+        this.input.on('pointerup', () => {
+            this.tweens.add({
+                targets: wipeMask,
+                duration: 500,
+                alpha: { value: 0, ease: 'Linear' },
+                onComplete: () => {
+                    wipeMask.destroy();
+                    this.scene.start(CST.SCENES.LEVEL1);
+                }
+            });
         })
 
-        //G will be a shortcut to GAMEOVER scene
+        //G is a shortcut to GAMEOVER scene
         this.input.keyboard.on('keydown-G', () => {
             this.scene.start(CST.SCENES.GAMEOVER);
+        })
+
+        //H is a shortcut to HEALTHBAR overlay
+        this.input.keyboard.on('keydown-H', () => {
+            this.scene.start(CST.SCENES.HEALTH);
         })
     }
 }

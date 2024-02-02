@@ -35,9 +35,7 @@ export class Level1 extends Phaser.Scene {
 
   }
 
-  init() {
-    this.isWalking = false;
-  }
+  init() {}
 
   preload ()
   {
@@ -84,34 +82,14 @@ export class Level1 extends Phaser.Scene {
   
   create ()
   {
-    this.isSound1PlayedLast = true;
-    this.lastSoundTimestamp = 0; 
-    
-
-    this.swoosh = this.sound.add('swoosh', {
-      volume:0.8
-    });
-
-
-    this.zurpalen = this.sound.add('zurpalen', {
-      volume:0.8,
-      loop:true
-    });
-
-    this.walkingSound = this.sound.add('walking', {
-      volume:0.5,
-      loop:true
-    });
-    this.walkingSound2 = this.sound.add('walking2', {
-      volume:0.5,
-      loop:true
-    })
-
-    this.zurpalen.play();
 
     this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
     this.scene.launch("PAUSE"); // starts the pause screen and loads stats
+
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
 
 
     //  A simple background for our game
@@ -143,11 +121,25 @@ export class Level1 extends Phaser.Scene {
       this.characterAttack = attack;
       this.characterSpeed = speed;
       console.log('character speed is: ', this.characterSpeed);
-
-
   }, this);
 
-
+// ********************* dropping gear ********************************
+    eventsCenter.on('droppingGear', (droppedGearNumber)=>{
+      console.log ('dropped gear number is: ', droppedGearNumber);
+      let xdroplocation = getRandomInt(50)+50;
+        if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
+        xdroplocation += this.player.x;
+      let ydroplocation = getRandomInt(50)+50;
+        if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
+        ydroplocation += this.player.y;
+        console.log('player location is: ', this.player.x, ' ', this.player.y);
+        console.log('x and y are: ', xdroplocation, ' ', ydroplocation);
+      let droppedGear = this.physics.add.sprite(xdroplocation, ydroplocation, 'gear' , droppedGearNumber-1);
+      this.physics.add.collider(this.player, droppedGear, () => {
+        this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
+      }, null, this); 
+      //maybe add a timer here to make the item disappear after a short time
+    },this)
 
 
 
@@ -300,10 +292,6 @@ export class Level1 extends Phaser.Scene {
               }, null, this)
 
         // gear loot code here        
-            function getRandomInt(max) {
-              return Math.floor(Math.random() * max);
-            }
-
             const randomLootNumber = getRandomInt(10)+1;
 
             console.log('random loot number is: ', randomLootNumber);
@@ -353,10 +341,7 @@ export class Level1 extends Phaser.Scene {
                 }, null, this);
 
           // gear loot code here        
-          function getRandomInt(max) {
-            return Math.floor(Math.random() * max);
-          }
-          
+
           const randomLootNumber = getRandomInt(10)+1;
 
           console.log('random loot number is: ', randomLootNumber);
@@ -417,6 +402,7 @@ export class Level1 extends Phaser.Scene {
         WorldLayer.destroy();
         eventsCenter.emit('levelChange', 2);
         this.zurpalen.stop();
+
         this.scene.start(CST.SCENES.LEVEL2);
         this.scene.destroy(Level1);
 
@@ -448,9 +434,9 @@ export class Level1 extends Phaser.Scene {
     }
 
     if (this.keys.a.isDown || this.cursors.left.isDown) {
-
       // this.player.setVelocityX(-160);
       this.player.setVelocityX(-10* this.characterSpeed);
+
 
       this.player.anims.play("left", true);
     } else if (this.keys.d.isDown || this.cursors.right.isDown) {
@@ -459,7 +445,7 @@ export class Level1 extends Phaser.Scene {
       this.player.anims.play("right", true);
     } else {
       this.player.setVelocityX(0);
-      
+
       this.player.anims.play("turn", true);
     }
     if (this.keys.w.isDown || this.cursors.up.isDown) {
@@ -546,9 +532,6 @@ export class Level1 extends Phaser.Scene {
    }
    
    
-    
-
-
 
     this.physics.add.overlap(this.player, this.monster, () => {
       // Decrease the player's health
@@ -560,8 +543,14 @@ export class Level1 extends Phaser.Scene {
       // Apply a damage effect, like flashing the player sprite
       this.player.setTint(0xff0000); // Set the player sprite to red
       // Use a timer to remove the tint after a short delay
-      this.time.delayedCall(200, () => {
-        this.player.clearTint(); // Remove the tint
+      this.timeDamage = this.time.addEvent({
+        delay: 500,                // delay in ms
+        callback: () => {
+          this.timeDamage = true;
+          this.player.clearTint(); // Remove the tint
+        },
+        callbackScope: this,
+        loop: false
       });
     }, null, this);
 
@@ -591,15 +580,6 @@ export class Level1 extends Phaser.Scene {
           monster.damage = 10;
           monster.body.velocity.x = 0;
           monster.anims.play("SkeletonAttack", true);
-
-          // Decrease the player's health
-          this.player.health -= monster.damage;
-
-          // Check if the player's health is 0 or less
-          if (this.player.health <= 0) {
-            // End the game or do something else
-          }
-
         }
       } else {
         // If the player is too far, stop the monster
@@ -615,22 +595,5 @@ export class Level1 extends Phaser.Scene {
         `y: ${this.player.y}`
       );
     }
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  };
+}
