@@ -116,6 +116,7 @@ preload ()
 create ()
 {
     const state = store.getState() // this brings in the state from redux
+    this.input.mouse.disableContextMenu();  // makes the right mouse button usable in the game
 
 // console.log('this is state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl);
 
@@ -125,7 +126,7 @@ create ()
         this.characterGold +=moreGold;
         this.characterXp += Math.round(moreGold/2);
         this.timerGold = true;
-        this.timerGold = this.time.delayedCall(500, () => {this.timerGold = false;}, [], this);  
+        this.timerGold = this.time.delayedCall(100, () => {this.timerGold = false;}, [], this);  
         };
     }, this);
 
@@ -157,7 +158,7 @@ create ()
             console.log('i am over burdened');
         }
         this.timerGear = true;
-        this.timerGear = this.time.delayedCall(500, () => {this.timerGear = false;}, [], this);  
+        this.timerGear = this.time.delayedCall(100, () => {this.timerGear = false;}, [], this);  
     }
     })
 
@@ -603,33 +604,78 @@ clickChest.on('pointerdown', (event) => {
     }
 });
 
+const dropGear = (location) =>{
+    console.log('in the dropGear function on pause screen. location is: ', location);
+    eventsCenter.emit('droppingGear',location);
+
+    location = 7; // this makes the slot empty
+}
+
 clickBP1.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack1);
+        this.backpack1 = 7;
+        this.scene.restart();
+    }else{
     equipItem('BP1',state.gear.allPossibleGear[this.backpack1].equip_location );
-});
+}});
 clickBP2.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack2);
+        this.backpack2 = 7;
+        this.scene.restart();
+    }else{
     equipItem('BP2',state.gear.allPossibleGear[this.backpack2].equip_location );
-});
+}});
 clickBP3.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack3);
+        this.backpack3 = 7;
+        this.scene.restart();
+    }else{
     equipItem('BP3',state.gear.allPossibleGear[this.backpack3].equip_location );
-});
+}});
 clickBP4.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack4);
+        this.backpack4 = 7;
+        this.scene.restart();
+    }else{
     equipItem('BP4',state.gear.allPossibleGear[this.backpack4].equip_location );
-});
+}});
 clickBP5.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack5);
+        this.backpack5 = 7;
+        this.scene.restart();
+    }else{
     equipItem('BP5',state.gear.allPossibleGear[this.backpack5].equip_location );
-});
+}});
 clickBP6.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack6);
+        this.backpack6 = 7;
+        this.scene.restart();
+    }else{
     equipItem('BP6',state.gear.allPossibleGear[this.backpack6].equip_location );
-});
+}});
 clickBP7.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack7);
+        this.backpack7 = 7;
+        this.scene.restart();
+    }else{
     console.log('you clicked on the item in Back Pack 7');
     equipItem('BP7',state.gear.allPossibleGear[this.backpack7].equip_location );
-});
+}});
 clickBP8.on('pointerdown', (event) => {
+    if (event.rightButtonDown()) {
+        dropGear(this.backpack8);
+        this.backpack8 = 7;
+        this.scene.restart();
+    }else{
     equipItem('BP8',state.gear.allPossibleGear[this.backpack8].equip_location );
-});
-
-
+}});
 
 
     //  Input Events

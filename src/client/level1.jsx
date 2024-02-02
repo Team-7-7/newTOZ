@@ -82,6 +82,10 @@ export class Level1 extends Phaser.Scene {
 
     this.scene.launch("PAUSE"); // starts the pause screen and loads stats
 
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
 
     //  A simple background for our game
     this.add.image(800, 600, "floor");
@@ -112,11 +116,25 @@ export class Level1 extends Phaser.Scene {
       this.characterAttack = attack;
       this.characterSpeed = speed;
       console.log('character speed is: ', this.characterSpeed);
-
-
   }, this);
 
-
+// ********************* dropping gear ********************************
+    eventsCenter.on('droppingGear', (droppedGearNumber)=>{
+      console.log ('dropped gear number is: ', droppedGearNumber);
+      let xdroplocation = getRandomInt(50)+50;
+        if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
+        xdroplocation += this.player.x;
+      let ydroplocation = getRandomInt(50)+50;
+        if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
+        ydroplocation += this.player.y;
+        console.log('player location is: ', this.player.x, ' ', this.player.y);
+        console.log('x and y are: ', xdroplocation, ' ', ydroplocation);
+      let droppedGear = this.physics.add.sprite(xdroplocation, ydroplocation, 'gear' , droppedGearNumber-1);
+      this.physics.add.collider(this.player, droppedGear, () => {
+        this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
+      }, null, this); 
+      //maybe add a timer here to make the item disappear after a short time
+    },this)
 
 
 
@@ -269,10 +287,6 @@ export class Level1 extends Phaser.Scene {
               }, null, this)
 
         // gear loot code here        
-            function getRandomInt(max) {
-              return Math.floor(Math.random() * max);
-            }
-
             const randomLootNumber = getRandomInt(10)+1;
 
             console.log('random loot number is: ', randomLootNumber);
@@ -322,10 +336,7 @@ export class Level1 extends Phaser.Scene {
                 }, null, this);
 
           // gear loot code here        
-          function getRandomInt(max) {
-            return Math.floor(Math.random() * max);
-          }
-          
+
           const randomLootNumber = getRandomInt(10)+1;
 
           console.log('random loot number is: ', randomLootNumber);
