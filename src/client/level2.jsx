@@ -23,6 +23,7 @@ export class Level2 extends Phaser.Scene {
 
   init() {
     console.log("level2");
+    isWalking: false;
   }
 
   preload() {
@@ -61,6 +62,8 @@ export class Level2 extends Phaser.Scene {
           { frameWidth: 78, frameHeight: 60 }
         );
         break;
+
+        
     }
 
     this.load.atlas(
@@ -85,9 +88,53 @@ export class Level2 extends Phaser.Scene {
       frameWidth: 50,
       frameHeight: 100,
     });
+
+
+
+
+    this.load.audio('walking', 'assets/audio/soundeffects/steps1.mp3')
+    this.load.audio('walking2', 'assets/audio/soundeffects/steps2.mp3')
+    this.load.audio('zurpalen', 'assets/audio/soundeffects/zurpalen.mp3')
+    this.load.audio('swoosh', 'assets/audio/soundeffects/swoosh.mp3')
+ 
+ 
+ 
   }
 
   create() {
+    //location for chests
+    //x: 463 y: 256
+    //x: 136 y: 254
+    //x: 78  y: 948
+    //x: 996 y: 259
+    
+    
+    this.isSound1PlayedLast = true;
+    this.lastSoundTimestamp = 0; 
+
+    this.swoosh = this.sound.add('swoosh', {
+      volume:0.8
+    });
+
+
+
+    
+    this.zurpalen = this.sound.add('zurpalen', {
+      volume:0.8,
+      loop:true
+    });
+
+    this.walkingSound = this.sound.add('walking', {
+      volume:0.5,
+      loop:true
+    });
+    this.walkingSound2 = this.sound.add('walking2', {
+      volume:0.5,
+      loop:true
+    })
+
+    this.zurpalen.play();
+    
     this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
     this.map = this.make.tilemap({ key: "map2" });
@@ -247,9 +294,88 @@ export class Level2 extends Phaser.Scene {
         this.scene.launch("PAUSE");
       }
     
-  
+      if (this.keys.l.isDown) {
+        console.log(
+          "The player is at these coordinates",
+          `x: ${this.player.x}`,
+          `y: ${this.player.y}`
+        );
+      }
      
       
+
+
+      //code alternates walking sound effects to avoid overlap
+    if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+        console.log('Playing walkingSound');
+        this.walkingSound.play();
+      } else {
+        console.log('Playing walkingSound2');
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if((this.keys.d.isDown || this.cursors.right.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+        console.log('Playing walkingSound');
+        this.walkingSound.play();
+      } else {
+        console.log('Playing walkingSound2');
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if((this.keys.w.isDown || this.cursors.up.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+        console.log('Playing walkingSound');
+        this.walkingSound.play();
+      } else {
+        console.log('Playing walkingSound2');
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if((this.keys.s.isDown || this.cursors.down.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+        console.log('Playing walkingSound');
+        this.walkingSound.play();
+      } else {
+        console.log('Playing walkingSound2');
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if(this.keys.a.isDown || this.keys.d.isDown || this.keys.w.isDown || this.keys.s.isDown || this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown){
+      this.isMoving = true;
+    } else {
+      this.isMoving = false;
+      setTimeout(() => {
+        if(this.player.body.velocity.y === 0 && !this.isMoving){
+          
+          this.walkingSound.stop();
+          this.walkingSound2.stop();
+        }
+      }); 
+    }
+
+    if(this.keys.k.isDown){
+      this.swoosh.play();
+     }
+
+
+
+
+
+
+
+
+
+
   } 
 
   
