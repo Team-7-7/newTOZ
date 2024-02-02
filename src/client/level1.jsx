@@ -41,10 +41,8 @@ export class Level1 extends Phaser.Scene {
 // ############################## PRELOAD ################################################  
   preload ()
   {
-    
     const state = store.getState() // this brings in the state from redux
     console.log(state, "in preload")
-    //console.log('this is the character class: ', state.userCharacter.character.character_class)
 
       this.load.image('floor', '/assets/levelAssets/floor.png');
       this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
@@ -118,9 +116,8 @@ export class Level1 extends Phaser.Scene {
 this.isSound1PlayedLast = true;
     this.lastSoundTimestamp = 0; 
     
-
     this.swoosh = this.sound.add('swoosh', {
-      volume:0.8
+      volume:0.2
     });
 
     this.zurpalen = this.sound.add('zurpalen', {
