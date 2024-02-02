@@ -1,5 +1,5 @@
 // GameOver.jsx
-import { CST } from "../loading_menu/CST.jsx";
+import { CST } from "./loading_menu/CST.jsx";
 
 export class GameOver extends Phaser.Scene {
   constructor() {
