@@ -92,6 +92,7 @@ export class Menu extends Phaser.Scene {
             });
         })
 
+        //DEV KEYDOWNS below//
         //G is a shortcut to GAMEOVER scene
         this.input.keyboard.on('keydown-G', () => {
             this.scene.start(CST.SCENES.GAMEOVER);
@@ -101,5 +102,16 @@ export class Menu extends Phaser.Scene {
         this.input.keyboard.on('keydown-H', () => {
             this.scene.start(CST.SCENES.HEALTH);
         })
+
+         //Z is a shortcut to the meet ZARPULEN scene
+         this.input.keyboard.on('keydown-Z', () => {
+            this.scene.start(CST.SCENES.ZARPULEN);
+        })
+
+        //F is a shortcut to the FINALE/WIN GAME scene
+        this.input.keyboard.on('keydown-F', () => {
+            this.scene.start(CST.SCENES.FINALE);
+        })
+
     }
 }

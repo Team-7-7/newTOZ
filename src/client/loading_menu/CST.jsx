@@ -10,7 +10,8 @@ export const CST = {
        LEVEL2: "LEVEL2",
        PAUSE: "PAUSE",
        GAMEOVER: "GAMEOVER",
-       HEALTH: "HEALTH"
-
+       HEALTH: "HEALTH",
+       ZARPULEN: "ZARPULEN",
+       FINALE: "FINALE"
     }
 }
