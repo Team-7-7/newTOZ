@@ -451,6 +451,22 @@ export class Level1 extends Phaser.Scene {
       this.scene.launch("PAUSE");
     }
 
+
+    this.physics.add.overlap(this.player, this.monster, () => {
+      // Decrease the player's health
+      this.characterHealth -= this.monster.damage;
+      // Check if the player's health is 0 or less
+      if (this.characterHealth <= 0) {
+        console.log ('player is dead');
+      }
+      // Apply a damage effect, like flashing the player sprite
+      this.player.setTint(0xff0000); // Set the player sprite to red
+      // Use a timer to remove the tint after a short delay
+      this.time.delayedCall(200, () => {
+        this.player.clearTint(); // Remove the tint
+      });
+    }, null, this);
+
     let followDistance = 150;
     let speed = 50;
     let monsters = [this.monster, this.monster1, this.monster2];
@@ -474,8 +490,18 @@ export class Level1 extends Phaser.Scene {
         // Monster attack
         if ( Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y) < 75
         ) { 
+          monster.damage = 10;
           monster.body.velocity.x = 0;
           monster.anims.play("SkeletonAttack", true);
+
+          // Decrease the player's health
+          this.player.health -= monster.damage;
+
+          // Check if the player's health is 0 or less
+          if (this.player.health <= 0) {
+            // End the game or do something else
+          }
+
         }
       } else {
         // If the player is too far, stop the monster
