@@ -23,6 +23,10 @@ export class Level1 extends Phaser.Scene {
     this.monster;
     this.monster1;
     this.monster2;
+    this.monster3;
+    this.monster4;
+    this.monster5;
+    this.monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5];
     this.gameOver = false;
     this.door;
     this.collisionCalled = false;
@@ -210,11 +214,14 @@ this.isSound1PlayedLast = true;
     this.monster = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
     this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
     this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
+    this.monster3= this.physics.add.sprite(67, 838, "skeleton" , "sprite9");
+    this.monster4= this.physics.add.sprite(1474, 219, "skeleton" , "sprite9");
+    this.monster5= this.physics.add.sprite(1474, 974, "skeleton" , "sprite9");
     this.monster.setSize(60, 54);
 
     //keeps monster in bounds
-    this.physics.add.collider(this.monster, WorldLayer);
-    this.physics.add.collider(this.player, this.monster);
+    this.physics.add.collider(this.monsters, WorldLayer);
+    this.physics.add.collider(this.player, this.monsters);
     this.monster.setImmovable(true);
     this.monster.setCollideWorldBounds(true);
     this.monster.body.onCollide = (true);
@@ -527,7 +534,7 @@ this.isSound1PlayedLast = true;
       this.timeDamage = this.time.addEvent({
         delay: 500,                // delay in ms
         callback: () => {
-          this.timeDamage = true;
+          this.timeDamage = false;
           this.player.clearTint(); // Remove the tint
         },
         callbackScope: this,
