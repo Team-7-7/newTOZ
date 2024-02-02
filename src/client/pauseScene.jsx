@@ -40,7 +40,8 @@ export class PauseScene extends Phaser.Scene {
     this.ground = 7;
     this.timerGold = false;
     this.timerGear = false;
-    
+    this.updateStatsOnce = false;
+
 
   }
   /*  *************************************************************************
@@ -700,7 +701,12 @@ clickBP8.on('pointerdown', (event) => {
 
     }, this);
 
+    
 
+    if(!this.updateStatsOnce){
+        updateStats();
+        this.updateStatsOnce=true;
+    }
 };
 
 update ()
