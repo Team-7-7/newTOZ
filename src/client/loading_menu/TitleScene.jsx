@@ -19,9 +19,17 @@ export class TitleScene extends Phaser.Scene {
     this.load.image("play", "/assets/titlePage/play.png")
     this.load.image("register", "/assets/titlePage/register.png")
     this.load.image("toz_title", "/assets/titlePage/tower_of_zurpalen_lg.png")
+    
+    this.load.audio("menu", 'assets/audio/soundeffects/menu.mp3')
   }
 
   create() {
+
+
+
+
+
+
     let bg1 = this.add.image(400, 300, "castle");
     let scaleX = this.scale.width / bg1.width;
     let scaleY = this.scale.height / bg1.height;

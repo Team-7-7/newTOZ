@@ -72,7 +72,7 @@ export class Menu extends Phaser.Scene {
             alpha: 0, // Fade out the wipe mask
             duration: 1000, // Set the duration of the tween in milliseconds
             onComplete: () => {
-                this.menu.stop();
+               
                 wipeMask.destroy();
             }
         });
@@ -101,6 +101,7 @@ export class Menu extends Phaser.Scene {
                 alpha: { value: 0, ease: 'Linear' },
                 onComplete: () => {
                     wipeMask.destroy();
+                   this.menu.stop();
                     this.scene.start(CST.SCENES.LEVEL1);
                 }
             });

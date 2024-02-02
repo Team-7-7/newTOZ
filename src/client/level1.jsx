@@ -399,6 +399,8 @@ this.isSound1PlayedLast = true;
         WorldLayer.destroy();
         eventsCenter.emit('levelChange', 2);
         this.zurpalen.stop();
+        this.walkingSound.stop();
+        this.walkingSound2.stop();
         this.scene.start(CST.SCENES.LEVEL2);
         this.scene.destroy(Level1);
       }, null, this)
