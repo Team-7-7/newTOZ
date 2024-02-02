@@ -384,6 +384,7 @@ export class Level1 extends Phaser.Scene {
         // this.scene.run('Level2');
         // this.scene.sleep(CST.SCENES.LEVEL1);
         WorldLayer.destroy();
+        eventsCenter.emit('levelChange', 2);
 
         this.scene.start(CST.SCENES.LEVEL2);
         this.scene.destroy(Level1);

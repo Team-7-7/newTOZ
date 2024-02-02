@@ -41,18 +41,11 @@ export class PauseScene extends Phaser.Scene {
     this.timerGold = false;
     this.timerGear = false;
     this.updateStatsOnce = false;
+    this.currentLevel = 1;
 
 
   }
-  /*  *************************************************************************
 
-  the emitter is coming through twice.
-  set up 2 timer variables one for gold, one for gear
-  allow the first emit to come through, but then a timer starts to set the variable back to true after 2 seconds
-  after the first collect, the variable is set to false
-  if then statement to check the variable
-  
-  *****************************************************************************/
 
 init(){
 
@@ -129,7 +122,6 @@ create ()
     eventsCenter.on('updateGold', (moreGold)=> {
 
         if(!this.timerGold){
-        console.log('updateGold event triggered with amount:', moreGold);
         this.characterGold +=moreGold;
         this.characterXp += Math.round(moreGold/2);
         this.timerGold = true;
@@ -142,7 +134,6 @@ create ()
 
     eventsCenter.on('lootedItem', (item)=>{
         if(!this.timerGear){
-        console.log('in the pause Scene, the looted item is a ', item);
         //***********************  code here for putting in backpack */
         this.ground = item;
         console.log('this is the this.ground: ', this.ground);
@@ -175,6 +166,10 @@ create ()
     eventsCenter.on('Test', ()=>{
         console.log('Test Emitter is working');
     }, this);
+
+    eventsCenter.on('levelChange',  (levelUpdate) =>{
+        this.currentLevel = levelUpdate;
+    })
             
 
     //  A background for our pause Screen
@@ -216,8 +211,6 @@ const updateStats = () =>{
     let armorSum = state.gear.allPossibleGear[this.head_gear1].armor_bonus + state.gear.allPossibleGear[this.left_hand_gear2].armor_bonus + state.gear.allPossibleGear[this.right_hand_gear3].armor_bonus + state.gear.allPossibleGear[this.foot_gear4].armor_bonus + state.gear.allPossibleGear[this.chest_gear5].armor_bonus;
     let speedSum = state.gear.allPossibleGear[this.head_gear1].speed_bonus + state.gear.allPossibleGear[this.left_hand_gear2].speed_bonus + state.gear.allPossibleGear[this.right_hand_gear3].speed_bonus + state.gear.allPossibleGear[this.foot_gear4].speed_bonus + state.gear.allPossibleGear[this.chest_gear5].speed_bonus;
 
-
-
     this.characterHealth = state.userCharacter.character.currentHP;
     this.characterMaxHealth = state.userCharacter.character.maxHP + healthSum;
     this.characterArmor = state.userCharacter.character.base_armor +armorSum;
@@ -228,10 +221,7 @@ const updateStats = () =>{
     this.characterGold = state.userCharacter.character.gold;
 
     // **************** emit new stats to current level **************************
-
     eventsCenter.emit('updateStats',  this.characterHealth, this.characterMaxHealth,this.characterArmor,this.characterAttack,this.characterSpeed);
-    // eventsCenter.emit('updateStats', 1);
-    console.log('in the pause screen updating stats');
 
 }
 
@@ -241,7 +231,7 @@ const updateStats = () =>{
 
 const equipItem = (originalLocation, targetLocation) =>{
    let temp = null;
-   console.log('in the equipItem function. originalLocation and targetLocation',originalLocation, ' ', targetLocation);
+//    console.log('in the equipItem function. originalLocation and targetLocation',originalLocation, ' ', targetLocation);
     switch (originalLocation){
             case "BP1":
                 switch (targetLocation){
@@ -271,7 +261,6 @@ const equipItem = (originalLocation, targetLocation) =>{
                         this.backpack1 = temp;
                         break;
                     default: // pick up from ground
-                        console.log ('pickup up from ground and putting in bp1');
                         temp = this.ground;
                         this.ground = this.backpack1;
                         this.backpack1 = temp;
@@ -514,8 +503,6 @@ const equipItem = (originalLocation, targetLocation) =>{
     }
 
 clickHead.on('pointerdown', (event) => {
-    console.log('you clicked on the item on the head');
-    console.log('on the head is: ', this.head_gear1);
     if (this.backpack1 === 7){
         equipItem('BP1', 1)
     } else if(this.backpack2 === 7){
@@ -537,8 +524,6 @@ clickHead.on('pointerdown', (event) => {
 
 
 clickLhand.on('pointerdown', (event) => {
-    console.log('you clicked on the item in the left hand');
-    console.log('in the left hand is: ', this.left_hand_gear2);
     if (this.backpack1 === 7){
         equipItem('BP1', 2)
     } else if(this.backpack2 === 7){
@@ -559,8 +544,6 @@ clickLhand.on('pointerdown', (event) => {
 });
 
 clickRhand.on('pointerdown', (event) => {
-    console.log('you clicked on the item in the right hand');
-    console.log('in the right hand is: ', this.right_hand_gear3);
     if (this.backpack1 === 7){
         equipItem('BP1', 3)
     } else if(this.backpack2 === 7){
@@ -581,8 +564,6 @@ clickRhand.on('pointerdown', (event) => {
 });
 
 clickFeet.on('pointerdown', (event) => {
-    console.log('you clicked on the item on the feet');
-    console.log('on the feet is: ', this.foot_gear4);
     if (this.backpack1 === 7){
         equipItem('BP1', 4)
     } else if(this.backpack2 === 7){
@@ -603,8 +584,6 @@ clickFeet.on('pointerdown', (event) => {
 });
 
 clickChest.on('pointerdown', (event) => {
-    console.log('you clicked on the item in the chest');
-    console.log('on the chest is: ', this.chest_gear5);
     if (this.backpack1 === 7){
         equipItem('BP1', 5)
     } else if(this.backpack2 === 7){
@@ -625,27 +604,21 @@ clickChest.on('pointerdown', (event) => {
 });
 
 clickBP1.on('pointerdown', (event) => {
-    console.log('you clicked on the item in Back Pack 1');
     equipItem('BP1',state.gear.allPossibleGear[this.backpack1].equip_location );
 });
 clickBP2.on('pointerdown', (event) => {
-    console.log('you clicked on the item in Back Pack 2');
     equipItem('BP2',state.gear.allPossibleGear[this.backpack2].equip_location );
 });
 clickBP3.on('pointerdown', (event) => {
-    console.log('you clicked on the item in Back Pack 3');
     equipItem('BP3',state.gear.allPossibleGear[this.backpack3].equip_location );
 });
 clickBP4.on('pointerdown', (event) => {
-    console.log('you clicked on the item in Back Pack 4');
     equipItem('BP4',state.gear.allPossibleGear[this.backpack4].equip_location );
 });
 clickBP5.on('pointerdown', (event) => {
-    console.log('you clicked on the item in Back Pack 5');
     equipItem('BP5',state.gear.allPossibleGear[this.backpack5].equip_location );
 });
 clickBP6.on('pointerdown', (event) => {
-    console.log('you clicked on the item in Back Pack 6');
     equipItem('BP6',state.gear.allPossibleGear[this.backpack6].equip_location );
 });
 clickBP7.on('pointerdown', (event) => {
@@ -653,7 +626,6 @@ clickBP7.on('pointerdown', (event) => {
     equipItem('BP7',state.gear.allPossibleGear[this.backpack7].equip_location );
 });
 clickBP8.on('pointerdown', (event) => {
-    console.log('you clicked on the item in Back Pack 8');
     equipItem('BP8',state.gear.allPossibleGear[this.backpack8].equip_location );
 });
 
@@ -668,25 +640,37 @@ clickBP8.on('pointerdown', (event) => {
     //   d: Phaser.Input.Keyboard.KeyCodes.D,
       k: Phaser.Input.Keyboard.KeyCodes.K,
       p: Phaser.Input.Keyboard.KeyCodes.P,
-
-  
-     });
-
+    });
 
     this.input.keyboard.on('keydown-P', function (event) {
-        this.scene.resume("LEVEL1");
+        // this.scene.resume("LEVEL1");
+        switch (this.currentLevel){
+            case 1: this.scene.resume("LEVEL1");
+            break;
+            case 2: this.scene.resume("LEVEL2");
+            break;
+            case 3: this.scene.resume("LEVEL3");
+            break;
+
+          }
         this.scene.stop("PAUSE");
     }, this);
 
-
-
-    // this.playButton = this.physics.add.staticSprite(580,865, 'playButton').setInteractive();
     const playButton = this.add.sprite(580,865, 'playButton').setInteractive();
     const saveButton = this.add.sprite(815,860, 'saveButton').setInteractive();
     const quitButton = this.add.sprite(1018,860, 'quitButton').setInteractive();
 
     playButton.on('pointerup', function(event){
-        this.scene.resume("LEVEL1");
+        switch (this.currentLevel){
+            case 1: this.scene.resume("LEVEL1");
+            break;
+            case 2: this.scene.resume("LEVEL2");
+            break;
+            case 3: this.scene.resume("LEVEL3");
+            break;
+
+          }
+        // this.scene.resume("LEVEL1");
         this.scene.stop("PAUSE");
     }, this);
 
@@ -702,7 +686,7 @@ clickBP8.on('pointerdown', (event) => {
     }, this);
 
     
-
+    // this updates the player stats in the game at the start
     if(!this.updateStatsOnce){
         updateStats();
         this.updateStatsOnce=true;
@@ -742,9 +726,16 @@ update ()
 
     if (this.keys.p.isDown)
     {
-        console.log('p is pressed, resuming game');
           this.scene.pause("PAUSE");
-          this.scene.launch("LEVEL1");
+          switch (this.currentLevel){
+            case 1: this.scene.launch("LEVEL1");
+            break;
+            case 2: this.scene.launch("LEVEL2");
+            break;
+            case 3: this.scene.launch("LEVEL3");
+            break;
+
+          }
     }
 
 }
