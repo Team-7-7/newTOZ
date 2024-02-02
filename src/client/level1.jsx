@@ -35,9 +35,7 @@ export class Level1 extends Phaser.Scene {
 
   }
 
-  init() {
-    this.isWalking = false;
-  }
+  init() {}
 
   preload ()
   {
@@ -84,30 +82,6 @@ export class Level1 extends Phaser.Scene {
   
   create ()
   {
-    this.isSound1PlayedLast = true;
-    this.lastSoundTimestamp = 0; 
-    
-
-    this.swoosh = this.sound.add('swoosh', {
-      volume:0.8
-    });
-
-
-    this.zurpalen = this.sound.add('zurpalen', {
-      volume:0.8,
-      loop:true
-    });
-
-    this.walkingSound = this.sound.add('walking', {
-      volume:0.5,
-      loop:true
-    });
-    this.walkingSound2 = this.sound.add('walking2', {
-      volume:0.5,
-      loop:true
-    })
-
-    this.zurpalen.play();
 
     this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
@@ -415,7 +389,7 @@ export class Level1 extends Phaser.Scene {
         // this.scene.run('Level2');
         // this.scene.sleep(CST.SCENES.LEVEL1);
         WorldLayer.destroy();
-        eventsCenter.emit('levelChange', 2);
+eventsCenter.emit('levelChange', 2);
 
         this.scene.start(CST.SCENES.LEVEL2);
         this.scene.destroy(Level1);
@@ -448,9 +422,9 @@ export class Level1 extends Phaser.Scene {
     }
 
     if (this.keys.a.isDown || this.cursors.left.isDown) {
-
       // this.player.setVelocityX(-160);
       this.player.setVelocityX(-10* this.characterSpeed);
+
 
       this.player.anims.play("left", true);
     } else if (this.keys.d.isDown || this.cursors.right.isDown) {
@@ -459,7 +433,7 @@ export class Level1 extends Phaser.Scene {
       this.player.anims.play("right", true);
     } else {
       this.player.setVelocityX(0);
-      
+
       this.player.anims.play("turn", true);
     }
     if (this.keys.w.isDown || this.cursors.up.isDown) {
@@ -483,73 +457,6 @@ export class Level1 extends Phaser.Scene {
       this.scene.launch("PAUSE");
     }
 
-    //code alternates walking sound effects to avoid overlap
-    if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
-        this.walkingSound.play();
-      } else {
-        console.log('Playing walkingSound2');
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if((this.keys.d.isDown || this.cursors.right.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
-        this.walkingSound.play();
-      } else {
-        console.log('Playing walkingSound2');
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if((this.keys.w.isDown || this.cursors.up.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
-        this.walkingSound.play();
-      } else {
-        console.log('Playing walkingSound2');
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if((this.keys.s.isDown || this.cursors.down.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
-        this.walkingSound.play();
-      } else {
-        console.log('Playing walkingSound2');
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if(this.keys.a.isDown || this.keys.d.isDown || this.keys.w.isDown || this.keys.s.isDown || this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown){
-      this.isMoving = true;
-    } else {
-      this.isMoving = false;
-      setTimeout(() => {
-        if(this.player.body.velocity.y === 0 && !this.isMoving){
-          
-          this.walkingSound.stop();
-          this.walkingSound2.stop();
-        }
-      }); 
-    }
-   
-   if(this.keys.k.isDown){
-    this.swoosh.play();
-   }
-   
-   
-    
-
-
-
     this.physics.add.overlap(this.player, this.monster, () => {
       // Decrease the player's health
       this.characterHealth -= this.monster.damage;
@@ -560,8 +467,14 @@ export class Level1 extends Phaser.Scene {
       // Apply a damage effect, like flashing the player sprite
       this.player.setTint(0xff0000); // Set the player sprite to red
       // Use a timer to remove the tint after a short delay
-      this.time.delayedCall(200, () => {
-        this.player.clearTint(); // Remove the tint
+      this.timeDamage = this.time.addEvent({
+        delay: 500,                // delay in ms
+        callback: () => {
+          this.timeDamage = true;
+          this.player.clearTint(); // Remove the tint
+        },
+        callbackScope: this,
+        loop: false
       });
     }, null, this);
 
@@ -591,15 +504,6 @@ export class Level1 extends Phaser.Scene {
           monster.damage = 10;
           monster.body.velocity.x = 0;
           monster.anims.play("SkeletonAttack", true);
-
-          // Decrease the player's health
-          this.player.health -= monster.damage;
-
-          // Check if the player's health is 0 or less
-          if (this.player.health <= 0) {
-            // End the game or do something else
-          }
-
         }
       } else {
         // If the player is too far, stop the monster
@@ -615,22 +519,5 @@ export class Level1 extends Phaser.Scene {
         `y: ${this.player.y}`
       );
     }
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  };
+}
