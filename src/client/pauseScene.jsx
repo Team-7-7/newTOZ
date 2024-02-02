@@ -37,10 +37,21 @@ export class PauseScene extends Phaser.Scene {
     this.backpack6 =7;
     this.backpack7 =7;
     this.backpack8 =7;
+    this.ground = 7;
+    this.timerGold = false;
+    this.timerGear = false;
     
 
   }
+  /*  *************************************************************************
+
+  the emitter is coming through twice.
+  set up 2 timer variables one for gold, one for gear
+  allow the first emit to come through, but then a timer starts to set the variable back to true after 2 seconds
+  after the first collect, the variable is set to false
+  if then statement to check the variable
   
+  *****************************************************************************/
 
 init(){
 
@@ -115,17 +126,47 @@ create ()
 // console.log('this is state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl);
 
     eventsCenter.on('updateGold', (moreGold)=> {
+
+        if(!this.timerGold){
         console.log('updateGold event triggered with amount:', moreGold);
         this.characterGold +=moreGold;
         this.characterXp += Math.round(moreGold/2);
-
+        this.timerGold = true;
+        this.timerGold = this.time.delayedCall(500, () => {this.timerGold = false;}, [], this);  
+        };
     }, this);
 
+    
+  
+
     eventsCenter.on('lootedItem', (item)=>{
+        if(!this.timerGear){
         console.log('in the pause Scene, the looted item is a ', item);
-        if(item === 'lootsword'){
-                    this.right_hand_gear3 = 1;
+        //***********************  code here for putting in backpack */
+        this.ground = item;
+        console.log('this is the this.ground: ', this.ground);
+        if (this.backpack1 === 7){
+            equipItem('BP1', )
+        } else if(this.backpack2 === 7){
+            equipItem('BP2', 6)
+        } else if(this.backpack3 === 7){
+            equipItem('BP3', 6) 
+        } else if(this.backpack4 === 7){
+            equipItem('BP4', 6) 
+        } else if(this.backpack5 === 7){
+            equipItem('BP5', 6) 
+        } else if(this.backpack6 === 7){
+            equipItem('BP6', 6)
+        } else if(this.backpack7 === 7){
+            equipItem('BP7', 6)
+        } else if(this.backpack8 === 7){
+            equipItem('BP8', 6)
+        }else {
+            console.log('i am over burdened');
         }
+        this.timerGear = true;
+        this.timerGear = this.time.delayedCall(500, () => {this.timerGear = false;}, [], this);  
+    }
     })
 
 
@@ -199,6 +240,7 @@ const updateStats = () =>{
 
 const equipItem = (originalLocation, targetLocation) =>{
    let temp = null;
+   console.log('in the equipItem function. originalLocation and targetLocation',originalLocation, ' ', targetLocation);
     switch (originalLocation){
             case "BP1":
                 switch (targetLocation){
@@ -227,8 +269,11 @@ const equipItem = (originalLocation, targetLocation) =>{
                         this.chest_gear5 = this.backpack1;
                         this.backpack1 = temp;
                         break;
-                    default:
-                        console.log('it did not get moved');
+                    default: // pick up from ground
+                        console.log ('pickup up from ground and putting in bp1');
+                        temp = this.ground;
+                        this.ground = this.backpack1;
+                        this.backpack1 = temp;
                         break;
                 }break;
             case "BP2":
@@ -258,9 +303,11 @@ const equipItem = (originalLocation, targetLocation) =>{
                         this.chest_gear5 = this.backpack2;
                         this.backpack2 = temp;
                         break;
-                    default:
-                        console.log('it did not get moved');
-                        break;
+                    default: // pick up from ground
+                        temp = this.ground;
+                        this.ground = this.backpack2;
+                        this.backpack2 = temp;
+                    break;
                 }break;
             case "BP3":
             switch (targetLocation){
@@ -289,8 +336,10 @@ const equipItem = (originalLocation, targetLocation) =>{
                     this.chest_gear5 = this.backpack3;
                     this.backpack3 = temp;
                     break;
-                default:
-                    console.log('it did not get moved');
+                default: // pick up from ground
+                    temp = this.ground;
+                    this.ground = this.backpack3;
+                    this.backpack3 = temp;
                     break;
             }break;
             case "BP4":
@@ -320,8 +369,10 @@ const equipItem = (originalLocation, targetLocation) =>{
                     this.chest_gear5 = this.backpack4;
                     this.backpack4 = temp;
                     break;
-                default:
-                    console.log('it did not get moved');
+                default: // pick up from ground
+                    temp = this.ground;
+                    this.ground = this.backpack4;
+                    this.backpack4 = temp;
                     break;
             } break;
             case "BP5":
@@ -351,8 +402,10 @@ const equipItem = (originalLocation, targetLocation) =>{
                         this.chest_gear5 = this.backpack5;
                         this.backpack5 = temp;
                         break;
-                    default:
-                        console.log('it did not get moved');
+                    default: // pick up from ground
+                        temp = this.ground;
+                        this.ground = this.backpack5;
+                        this.backpack5 = temp;
                         break;
                 }break;
             case "BP6":
@@ -382,8 +435,10 @@ const equipItem = (originalLocation, targetLocation) =>{
                         this.chest_gear5 = this.backpack6;
                         this.backpack6 = temp;
                         break;
-                    default:
-                        console.log('it did not get moved');
+                    default: // pick up from ground
+                        temp = this.ground;
+                        this.ground = this.backpack6;
+                        this.backpack6 = temp;
                         break;
                 }break;
             case "BP7":
@@ -413,8 +468,10 @@ const equipItem = (originalLocation, targetLocation) =>{
                     this.chest_gear5 = this.backpack7;
                     this.backpack7 = temp;
                     break;
-                default:
-                    console.log('it did not get moved');
+                default: // pick up from ground
+                    temp = this.ground;
+                    this.ground = this.backpack7;
+                    this.backpack7 = temp;
                     break;
             }break;
             case "BP8":
@@ -444,8 +501,10 @@ const equipItem = (originalLocation, targetLocation) =>{
                     this.chest_gear5 = this.backpack8;
                     this.backpack8 = temp;
                     break;
-                default:
-                    console.log('it did not get moved');
+                default: // pick up from ground
+                    temp = this.ground;
+                    this.ground = this.backpack8;
+                    this.backpack8 = temp;
                     break;
             }break;
         }
