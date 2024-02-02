@@ -94,7 +94,7 @@ export class Menu extends Phaser.Scene {
 
         //G will be a shortcut to GAMEOVER scene
         this.input.keyboard.on('keydown-G', () => {
-            this.scene.start(CST.SCENES.LEVEL1);
+            this.scene.start(CST.SCENES.GAMEOVER);
         })
     }
 }

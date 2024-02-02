@@ -9,6 +9,7 @@ import {PauseScene} from './pauseScene';
 import {LoginScene} from './loading_menu/Login_Phaser.jsx';
 import {TitleScene} from './loading_menu/TitleScene.jsx';
 import { RegistrationScene } from './loading_menu/Registration_Phaser.jsx';
+import {GameOver} from './GameOver.jsx';
 import { CST } from './loading_menu/CST.jsx';
 import WebFont from 'webfontloader';
 
@@ -30,7 +31,8 @@ const PhaserGame = () => {
             gravity: { y: 0 }
         }
     },
-    scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2]
+
+    scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2, PauseScene, GameOver]
   
 
     };
@@ -46,6 +48,7 @@ const PhaserGame = () => {
           var game = new Phaser.Game(config);
       }
     });
+
 
     return <div id="phaser-game"></div>;
     };

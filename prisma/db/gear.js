@@ -63,7 +63,7 @@ const gears = [
     health_bonus: 0,
     armor_bonus: 3,
     attack_bonus: 0,
-    speed_bonus: 5,
+    speed_bonus: 8,
     graphicUrl: "",
     price: 10,
   },
