@@ -92,7 +92,7 @@ export class Menu extends Phaser.Scene {
                 this.menu.stop();
                 this.scene.start(CST.SCENES.LEVEL1);
             }
-
+        });
         });
 
 
