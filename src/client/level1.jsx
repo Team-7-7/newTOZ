@@ -416,7 +416,7 @@ export class Level1 extends Phaser.Scene {
         // this.scene.sleep(CST.SCENES.LEVEL1);
         WorldLayer.destroy();
         eventsCenter.emit('levelChange', 2);
-
+        this.zurpalen.stop();
         this.scene.start(CST.SCENES.LEVEL2);
         this.scene.destroy(Level1);
 
@@ -486,10 +486,10 @@ export class Level1 extends Phaser.Scene {
     //code alternates walking sound effects to avoid overlap
     if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+       
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+      
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;
@@ -497,10 +497,10 @@ export class Level1 extends Phaser.Scene {
     }
     if((this.keys.d.isDown || this.cursors.right.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+        
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+        
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;
@@ -508,10 +508,10 @@ export class Level1 extends Phaser.Scene {
     }
     if((this.keys.w.isDown || this.cursors.up.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+       
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+        
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;
@@ -519,10 +519,10 @@ export class Level1 extends Phaser.Scene {
     }
     if((this.keys.s.isDown || this.cursors.down.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+        
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+        
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;

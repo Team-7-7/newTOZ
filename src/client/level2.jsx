@@ -323,10 +323,10 @@ export class Level2 extends Phaser.Scene {
       //code alternates walking sound effects to avoid overlap
     if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+        
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+        
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;
@@ -334,10 +334,10 @@ export class Level2 extends Phaser.Scene {
     }
     if((this.keys.d.isDown || this.cursors.right.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+        
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+        
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;
@@ -345,10 +345,10 @@ export class Level2 extends Phaser.Scene {
     }
     if((this.keys.w.isDown || this.cursors.up.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+        
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+        
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;
@@ -356,10 +356,10 @@ export class Level2 extends Phaser.Scene {
     }
     if((this.keys.s.isDown || this.cursors.down.isDown) && this.time.now - this.lastSoundTimestamp > 500){
       if(this.isSound1PlayedLast) {
-        console.log('Playing walkingSound');
+        
         this.walkingSound.play();
       } else {
-        console.log('Playing walkingSound2');
+        
         this.walkingSound2.play();
       }
       this.isSound1PlayedLast = !this.isSound1PlayedLast;
