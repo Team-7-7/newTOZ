@@ -8,7 +8,7 @@ export class HealthBarScene extends Phaser.Scene {
   }
 
   create() {
-    const rectangle = this.add.rectangle(20, 20, 200, 50, 0xff0000);
+    const rectangle = this.add.rectangle(20, 20, 200, 20, 0xff0000);
     rectangle.setOrigin(0, 0);
     // Set up your hearts or health bar display here
     // You can use Phaser.Sprite or Phaser.Image for hearts
