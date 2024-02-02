@@ -19,14 +19,14 @@ export class Menu extends Phaser.Scene {
         this.load.image("manuscript", "/assets/titlePage/manuscript.png")
         this.load.image("nes", "/assets/titlePage/nes_controller.png")
         this.load.image("controls", "/assets/titlePage/controls.png")
-        
+
 
         this.load.audio("menu", 'assets/audio/soundeffects/menu.mp3')
     }
 
 
     create() {
-        
+
         this.menu = this.sound.add("menu", {
             volume: 0.5,
             loop: true
@@ -34,8 +34,8 @@ export class Menu extends Phaser.Scene {
 
 
         this.menu.play();
-        
-        
+
+
         let bg1 = this.add.image(400, 300, "background1");
         let scaleX = this.scale.width / bg1.width;
         let scaleY = this.scale.height / bg1.height;
@@ -72,10 +72,8 @@ export class Menu extends Phaser.Scene {
             alpha: 0, // Fade out the wipe mask
             duration: 1000, // Set the duration of the tween in milliseconds
             onComplete: () => {
-               this.menu.stop();
+                this.menu.stop();
                 wipeMask.destroy();
-                this.scene.start(CST.SCENES.LEVEL1);
-
             }
         });
 
@@ -84,15 +82,15 @@ export class Menu extends Phaser.Scene {
         this.input.keyboard.on('keydown-ENTER', () => {
             // Start the wipe tween when Enter is pressed
             this.tweens.add({
-            targets: wipeMask,
-            duration: 500,
-            alpha: { value: 0, ease: 'Linear' },
-            onComplete: () => {
-                wipeMask.destroy();
-                this.menu.stop();
-                this.scene.start(CST.SCENES.LEVEL1);
-            }
-        });
+                targets: wipeMask,
+                duration: 500,
+                alpha: { value: 0, ease: 'Linear' },
+                onComplete: () => {
+                    wipeMask.destroy();
+                    this.menu.stop();
+                    this.scene.start(CST.SCENES.LEVEL1);
+                }
+            });
         });
 
 
@@ -119,8 +117,8 @@ export class Menu extends Phaser.Scene {
             this.scene.start(CST.SCENES.HEALTH);
         })
 
-         //Z is a shortcut to the meet ZARPULEN scene
-         this.input.keyboard.on('keydown-Z', () => {
+        //Z is a shortcut to the meet ZARPULEN scene
+        this.input.keyboard.on('keydown-Z', () => {
             this.scene.start(CST.SCENES.ZARPULEN);
         })
 
