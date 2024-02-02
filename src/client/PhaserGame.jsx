@@ -11,6 +11,8 @@ import {TitleScene} from './loading_menu/TitleScene.jsx';
 import { RegistrationScene } from './loading_menu/Registration_Phaser.jsx';
 import {GameOver} from './GameOver.jsx';
 import { HealthBarScene } from './hud_scenes/HealthBarScene.jsx';
+import { WinScene } from './final_scenes/WinScene.jsx';
+import { ZarpulenScene } from './final_scenes/ZarpulenScene.jsx';
 import { CST } from './loading_menu/CST.jsx';
 import WebFont from 'webfontloader';
 
@@ -33,7 +35,7 @@ const PhaserGame = () => {
         }
     },
     
-    scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2, PauseScene, GameOver, HealthBarScene]
+    scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2, PauseScene, GameOver, HealthBarScene, WinScene, ZarpulenScene]
 
   
 
