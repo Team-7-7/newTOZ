@@ -31,6 +31,7 @@ const PhaserGame = () => {
             gravity: { y: 0 }
         }
     },
+
     scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2, PauseScene, GameOver]
   
 
