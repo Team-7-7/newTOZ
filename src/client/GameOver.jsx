@@ -1,5 +1,6 @@
 // GameOver.jsx
 import { CST } from "./loading_menu/CST.jsx";
+import { HealthBarScene } from './hud_scenes/HealthBarScene.jsx';
 
 export class GameOver extends Phaser.Scene {
   constructor() {
@@ -21,6 +22,13 @@ export class GameOver extends Phaser.Scene {
     let scale = Math.max(scaleX, scaleY);
     bg1.setScale(scale);
     bg1.setPosition(this.scale.width / 2, this.scale.height / 2);
+
+  // Add the HealthBarScene to the scene
+
+  // this.scene.launch(HEALTH, true);
+  this.scene.launch(CST.SCENES.HEALTH, true);
+
+
 
     // Game over text setup
     const text = this.add.text(
