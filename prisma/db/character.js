@@ -19,7 +19,7 @@ const characters =[
         chest_gear5:5,
         base_attack:10,
         base_armor:10,
-        base_speed:10,
+        base_speed:15,
         magic_points:null,
         isNPC:false,
         location_coordinates:null,
