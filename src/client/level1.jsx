@@ -400,7 +400,8 @@ export class Level1 extends Phaser.Scene {
         // this.scene.run('Level2');
         // this.scene.sleep(CST.SCENES.LEVEL1);
         WorldLayer.destroy();
-eventsCenter.emit('levelChange', 2);
+        eventsCenter.emit('levelChange', 2);
+        this.zurpalen.stop();
 
         this.scene.start(CST.SCENES.LEVEL2);
         this.scene.destroy(Level1);
@@ -467,6 +468,70 @@ eventsCenter.emit('levelChange', 2);
       this.scene.pause("LEVEL1");
       this.scene.launch("PAUSE");
     }
+
+    //code alternates walking sound effects to avoid overlap
+    if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+       
+        this.walkingSound.play();
+      } else {
+      
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if((this.keys.d.isDown || this.cursors.right.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+        
+        this.walkingSound.play();
+      } else {
+        
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if((this.keys.w.isDown || this.cursors.up.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+       
+        this.walkingSound.play();
+      } else {
+        
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if((this.keys.s.isDown || this.cursors.down.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+      if(this.isSound1PlayedLast) {
+        
+        this.walkingSound.play();
+      } else {
+        
+        this.walkingSound2.play();
+      }
+      this.isSound1PlayedLast = !this.isSound1PlayedLast;
+      this.lastSoundTimestamp = this.time.now;
+    }
+    if(this.keys.a.isDown || this.keys.d.isDown || this.keys.w.isDown || this.keys.s.isDown || this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown){
+      this.isMoving = true;
+    } else {
+      this.isMoving = false;
+      setTimeout(() => {
+        if(this.player.body.velocity.y === 0 && !this.isMoving){
+          
+          this.walkingSound.stop();
+          this.walkingSound2.stop();
+        }
+      }); 
+    }
+   
+   if(this.keys.k.isDown){
+    this.swoosh.play();
+   }
+   
+   
 
     this.physics.add.overlap(this.player, this.monster, () => {
       // Decrease the player's health
