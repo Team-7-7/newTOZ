@@ -60,8 +60,8 @@ export class Level1 extends Phaser.Scene {
     console.log(state, "in preload")
 
       this.load.image('floor', '/assets/levelAssets/floor.png');
-      this.load.image('tiles', '/assets/levelAssets/25x25Tiles.png');
-      this.load.tilemapTiledJSON('map', '/assets/levelAssets/level1.json');
+      this.load.image('tiles', '/assets/levelAssets/OLDtileset32x32.png');
+      this.load.tilemapTiledJSON('map', '/assets/levelAssets/NEWlevel1.json');
   
       // the three classes sprites load here
       switch(state.userCharacter.character.character_class){
@@ -115,13 +115,31 @@ export class Level1 extends Phaser.Scene {
     }
 
     //  A simple background for our game
-    this.add.image(800, 600, "floor");
+    // this.add.image(800, 600, "floor");
 
     // loads the map and makes the walls solid
-    const map = this.make.tilemap({ key: "map" });
-    const tileset = map.addTilesetImage("25x25Tiles", "tiles");
-    const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
+    // const map = this.make.tilemap({ key: "map" });
+    // const tileset = map.addTilesetImage("25x25Tiles", "tiles");
+    // const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
+    // WorldLayer.setCollisionByProperty({ collides: true });
+
+
+    this.map = this.make.tilemap({ key: "map" });
+    const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles");
+
+    this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
+    this.floorLayer.setCollisionByProperty({ collides: false });
+    const WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
     WorldLayer.setCollisionByProperty({ collides: true });
+    
+     
+    this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
+    this.wallmounts.setCollisionByProperty({ collides: false });
+
+
+
+
+
 
     //  Input Events
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -166,7 +184,7 @@ this.isSound1PlayedLast = true;
     this.player.setSize(60, 54);
 
     // keep the player on the map
-    this.player.setCollideWorldBounds(true);
+    // this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, WorldLayer);
 
     // eventsCenter.on('updateStats', 'health', 'maxHealth','armor','attack','speed') => {

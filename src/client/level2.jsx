@@ -137,7 +137,24 @@ this.isSound1PlayedLast = true;
 
     this.zurpalen.play();
 
+    
+    this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
+
+    this.map = this.make.tilemap({ key: "map2" });
+    const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles2");
+    
+    this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
+    this.floorLayer.setCollisionByProperty({ collides: false });
+    const WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
+    WorldLayer.setCollisionByProperty({ collides: true });
+    
+     
+    this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
+    this.wallmounts.setCollisionByProperty({ collides: false });
+
+
 // ===================== PLAYER STUFF  ===========================================
+
 
     // The player and its settings
     this.player = this.physics.add.sprite(90, 90, "playerSprite");
