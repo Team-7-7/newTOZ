@@ -139,11 +139,11 @@ export class Level2 extends Phaser.Scene {
 
     this.map = this.make.tilemap({ key: "map2" });
     const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles2");
-
+    
     this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
     this.floorLayer.setCollisionByProperty({ collides: false });
-    this.worldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
-    this.worldLayer.setCollisionByProperty({ collides: true });
+    const WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
+    WorldLayer.setCollisionByProperty({ collides: true });
     
      
     this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
