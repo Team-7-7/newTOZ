@@ -141,7 +141,7 @@ this.isSound1PlayedLast = true;
     this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
     this.map = this.make.tilemap({ key: "map2" });
-    const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles2");
+    // const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles2");
     
     this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
     this.floorLayer.setCollisionByProperty({ collides: false });
@@ -506,5 +506,5 @@ eventsCenter.on(
 
 
 };
-}
+// }
 
