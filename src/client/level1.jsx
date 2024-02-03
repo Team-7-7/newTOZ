@@ -23,6 +23,10 @@ export class Level1 extends Phaser.Scene {
     this.monster;
     this.monster1;
     this.monster2;
+    this.monster3;
+    this.monster4;
+    this.monster5;
+    this.monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5];
     this.gameOver = false;
     this.door;
     this.collisionCalled = false;
@@ -33,18 +37,27 @@ export class Level1 extends Phaser.Scene {
     this.characterArmor = 1;
     this.characterAttack = 1;
     this.characterSpeed = 1;
-
   }
+  
+  //this method takes in the amount the health needs to change for a loss. To increase health the argument would need to paradoxically, be a negative mumber
+  //example:    this.updateCharacterHealth(this.monster.damage*.0001); 
+  updateCharacterHealth(healthChange) {
+    this.characterHealth -= healthChange;
+    if (this.characterHealth <= 0) {   //no more health? go to GAME OVER 
+      this.zurpalen.stop();            //stop the music
+      this.walkingSound.stop();
+      this.walkingSound2.stop();
+      this.scene.start(CST.SCENES.GAMEOVER)};
+    eventsCenter.emit('updateHP', this.characterHealth); // Emit 'updateCharacterHealth' event with the new health value
+  };
 
   init() {}
 
 // ############################## PRELOAD ################################################  
   preload ()
   {
-    
     const state = store.getState() // this brings in the state from redux
     console.log(state, "in preload")
-    //console.log('this is the character class: ', state.userCharacter.character.character_class)
 
       this.load.image('floor', '/assets/levelAssets/floor.png');
       this.load.image('tiles', '/assets/levelAssets/OLDtileset32x32.png');
@@ -88,6 +101,14 @@ export class Level1 extends Phaser.Scene {
 
     this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
     this.scene.launch("PAUSE"); // starts the pause screen and loads stats
+
+    // =========== Health Bar healthbar =========== //
+    this.scene.launch("HEALTH"); // puts up the HUD Health Bar
+    console.log('health', this.characterHealth)
+    eventsCenter.on('updateHP', (newHealth) => {
+      this.characterHealth = newHealth;
+    }, this);
+    // =========== End Health Bar ======== /// 
 
     function getRandomInt(max) {
       return Math.floor(Math.random() * max);
@@ -136,9 +157,8 @@ export class Level1 extends Phaser.Scene {
 this.isSound1PlayedLast = true;
     this.lastSoundTimestamp = 0; 
     
-
     this.swoosh = this.sound.add('swoosh', {
-      volume:0.8
+      volume:0.2
     });
 
     this.zurpalen = this.sound.add('zurpalen', {
@@ -228,11 +248,14 @@ this.isSound1PlayedLast = true;
     this.monster = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
     this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
     this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
+    this.monster3= this.physics.add.sprite(67, 838, "skeleton" , "sprite9");
+    this.monster4= this.physics.add.sprite(1474, 219, "skeleton" , "sprite9");
+    this.monster5= this.physics.add.sprite(1474, 974, "skeleton" , "sprite9");
     this.monster.setSize(60, 54);
 
     //keeps monster in bounds
-    this.physics.add.collider(this.monster, WorldLayer);
-    this.physics.add.collider(this.player, this.monster);
+    this.physics.add.collider(this.monsters, WorldLayer);
+    this.physics.add.collider(this.player, this.monsters);
     this.monster.setImmovable(true);
     this.monster.setCollideWorldBounds(true);
     this.monster.body.onCollide = (true);
@@ -536,7 +559,7 @@ this.isSound1PlayedLast = true;
    // ========================  MONSTER STUFF ============================================
     this.physics.add.overlap(this.player, this.monster, () => {
       // Decrease the player's health
-      this.characterHealth -= this.monster.damage;
+      this.updateCharacterHealth(this.monster.damage*.0001);
       // Check if the player's health is 0 or less
       if (this.characterHealth <= 0) {
         console.log ('player is dead');
@@ -547,7 +570,7 @@ this.isSound1PlayedLast = true;
       this.timeDamage = this.time.addEvent({
         delay: 500,                // delay in ms
         callback: () => {
-          this.timeDamage = true;
+          this.timeDamage = false;
           this.player.clearTint(); // Remove the tint
         },
         callbackScope: this,
