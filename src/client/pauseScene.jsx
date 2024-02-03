@@ -170,6 +170,7 @@ create ()
 
     eventsCenter.on('levelChange',  (levelUpdate) =>{
         this.currentLevel = levelUpdate;
+        this.updateStatsOnce = false;
     })
             
 

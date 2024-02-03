@@ -9,9 +9,8 @@ export class GameOver extends Phaser.Scene {
   }
 
   preload() {
-    // Load assets in the preload method
     this.load.image("background1", "/assets/castle.png");
-    
+    this.load.image("gameover_title", "/assets/titlePage/game_over.png")
   }
 
   create() {
@@ -23,11 +22,35 @@ export class GameOver extends Phaser.Scene {
     bg1.setScale(scale);
     bg1.setPosition(this.scale.width / 2, this.scale.height / 2);
 
+
+
+    // GAME OVER HEADLINE WITH RAINBOW COLORS ////
+    let gameOverTitle = this.add.image(this.scale.width / 2, this.scale.height * 3 / 7, "gameover_title");
+    gameOverTitle.setScale(5); 
+    gameOverTitle.setOrigin(0.5); 
+
+    // Makes the title alternate between rainbow-colors/////////////////////
+    this.tweens.addCounter({
+      from: 0,
+      to: 100,
+      duration: 4000, // speed of the change
+      repeat: -1, // Repeat the animation continuously
+      onUpdate: function (tween) {
+        const value = Math.floor(tween.getValue());
+        const color = Phaser.Display.Color.HSVToRGB(value / 100, 1, 1).color;
+        gameOverTitle.setTint(color);
+      }
+    });
+    ///////////////////////////////////////////////////////////GAME OVER/////
+
+
+
+
     // Game over text setup
     const text = this.add.text(
       this.scale.width / 2,
-      this.scale.height - this.scale.height / 2,
-      "Game over, you have failed. Zurpalen sends the world into eternal darkness.",
+      this.scale.height - this.scale.height / 11,
+      "You have failed. Zurpalen sends the world into eternal darkness. Try again?",
       {
         color: "white",
         fontFamily: "p-script",
