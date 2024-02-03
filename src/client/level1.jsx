@@ -93,15 +93,7 @@ export class Level1 extends Phaser.Scene {
       return Math.floor(Math.random() * max);
     }
 
-    //  A simple background for our game
-    // this.add.image(800, 600, "floor");
-
-    // loads the map and makes the walls solid
-    // const map = this.make.tilemap({ key: "map" });
-    // const tileset = map.addTilesetImage("25x25Tiles", "tiles");
-    // const WorldLayer = map.createLayer("WorldLayer", tileset, 0, 0);
-    // WorldLayer.setCollisionByProperty({ collides: true });
-
+  
 
     this.map = this.make.tilemap({ key: "map" });
     const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles");
@@ -412,16 +404,16 @@ this.isSound1PlayedLast = true;
     // ========================= DOOR  to next level =========================================
 
       // this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
-      this.door = this.physics.add.staticSprite(1570,75, 'door', 1); 
-      this.physics.add.collider(this.player, this.door, () => {
-        WorldLayer.destroy();
-        eventsCenter.emit('levelChange', 2);
-        this.zurpalen.stop();
-        this.walkingSound.stop();
-        this.walkingSound2.stop();
-        this.scene.start(CST.SCENES.LEVEL2);
-        this.scene.destroy(Level1);
-      }, null, this)
+      // this.door = this.physics.add.staticSprite(1570,75, 'door', 1); 
+      // this.physics.add.collider(this.player, this.door, () => {
+      //   WorldLayer.destroy();
+      //   eventsCenter.emit('levelChange', 2);
+      //   this.zurpalen.stop();
+      //   this.walkingSound.stop();
+      //   this.walkingSound2.stop();
+      //   this.scene.start(CST.SCENES.LEVEL2);
+      //   this.scene.destroy(Level1);
+      // }, null, this)
   
     // ======================camera controls, follows player and zooms in ==================================
     this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
@@ -588,5 +580,23 @@ this.isSound1PlayedLast = true;
         monster.body.velocity.y = 0;
       }
     });
+
+    // =====================  LEVEL CHANGE ============================================
+    let threshold = 10;
+
+
+    if (Math.abs(this.player.x - 1505.5) < threshold && Math.abs(this.player.y - 59) < threshold) {
+      
+      eventsCenter.emit('levelChange', 2);
+      this.zurpalen.stop();
+      this.walkingSound.stop();
+      this.walkingSound2.stop();
+      this.scene.start(CST.SCENES.LEVEL2);
+      this.scene.destroy(Level1);
+
+  }
+
+
+
   };
 }

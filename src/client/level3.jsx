@@ -8,10 +8,10 @@ import { PauseScene } from "./pauseScene.jsx";
 
 import { store } from "./store"; // brings in redux store
 
-export class Level2 extends Phaser.Scene {
+export class Level3 extends Phaser.Scene {
   constructor() {
     super({
-      key: CST.SCENES.LEVEL2,
+      key: CST.SCENES.LEVEL3,
     });
     this.player;
     this.chest1;
@@ -22,7 +22,7 @@ export class Level2 extends Phaser.Scene {
   }
 
   init() {
-    console.log("level2");
+    console.log("level3");
     isWalking: false;
   }
 
@@ -34,8 +34,8 @@ export class Level2 extends Phaser.Scene {
       state.userCharacter.character.character_class
     );
 
-    this.load.image("tiles2", "/assets/levelAssets/OLDtileset32x32.png");
-    this.load.tilemapTiledJSON("map2", "/assets/levelAssets/level2.json");
+    this.load.image("tiles3", "/assets/levelAssets/OLDtileset32x32.png");
+    this.load.tilemapTiledJSON("map3", "/assets/levelAssets/level3.json");
 
     switch (state.userCharacter.character.character_class) {
       case "warrior":
@@ -102,11 +102,7 @@ export class Level2 extends Phaser.Scene {
   }
 
   create() {
-    //location for chests
-    //x: 463 y: 256
-    //x: 136 y: 254
-    //x: 78  y: 948
-    //x: 996 y: 259
+    
     
     
     this.isSound1PlayedLast = true;
@@ -137,8 +133,8 @@ export class Level2 extends Phaser.Scene {
     
     this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
-    this.map = this.make.tilemap({ key: "map2" });
-    const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles2");
+    this.map = this.make.tilemap({ key: "map3" });
+    const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles3");
     
     this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
     this.floorLayer.setCollisionByProperty({ collides: false });
@@ -149,7 +145,7 @@ export class Level2 extends Phaser.Scene {
     this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
     this.wallmounts.setCollisionByProperty({ collides: false });
 
-    this.player = this.physics.add.sprite(90, 90, "playerSprite");
+    this.player = this.physics.add.sprite(57, 1104, "playerSprite");
 
     // this.selectLayer(this.floorLayer);
     // this.selectLayer(this.worldLayer);
@@ -170,24 +166,7 @@ export class Level2 extends Phaser.Scene {
   
     }, this);
 
-    // this.input.keyboard.on('keydown-ONE', event => {
-    //     this.selectLayer(this.worldLayer);
-    // });
-    
-    // this.input.keyboard.on('keydown-TWO', event => {
-    //     this.selectLayer(this.floorLayer);
-    // });
-    
-    // this.input.keyboard.on('keydown-THREE', event => {
-    //     this.selectLayer(this.wallmounts);
-    // });
-    
-    // this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
-
-
-
- //  Our player animations, turning, walking left and walking right.
+   
  this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("playerSprite", {
@@ -383,20 +362,6 @@ export class Level2 extends Phaser.Scene {
      }
 
 
- // =====================  LEVEL CHANGE ============================================
- let threshold = 50;
-
-
- if (Math.abs(this.player.x - 1441) < threshold && Math.abs(this.player.y - 62) < threshold) {
-   
-   eventsCenter.emit('levelChange', 3);
-   this.zurpalen.stop();
-   this.walkingSound.stop();
-   this.walkingSound2.stop();
-   this.scene.start(CST.SCENES.LEVEL3);
-   this.scene.destroy(Level2);
-
-}
 
 
 
