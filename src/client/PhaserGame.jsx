@@ -3,6 +3,7 @@
 import Phaser from 'phaser';
 import {Level1} from './level1';
 import {Level2} from './level2';
+import {Level3} from './level3';
 import {Load} from "./loading_menu/LoadingScene.jsx"
 import {Menu} from './loading_menu/MenuScene';
 import {PauseScene} from './pauseScene';
@@ -35,7 +36,7 @@ const PhaserGame = () => {
         }
     },
     
-    scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2, PauseScene, GameOver, HealthBarScene, WinScene, ZarpulenScene]
+    scene:[ TitleScene, LoginScene, RegistrationScene, Load, Menu, Level1, Level2, Level3, PauseScene, GameOver, HealthBarScene, WinScene, ZarpulenScene]
 
   
 

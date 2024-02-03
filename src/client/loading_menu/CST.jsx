@@ -8,6 +8,7 @@ export const CST = {
        LOAD: "LOAD",
        LEVEL1: "LEVEL1",
        LEVEL2: "LEVEL2",
+       LEVEL3: "LEVEL3",
        PAUSE: "PAUSE",
        GAMEOVER: "GAMEOVER",
        HEALTH: "HEALTH",

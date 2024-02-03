@@ -145,13 +145,18 @@ this.isSound1PlayedLast = true;
     
     this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
     this.floorLayer.setCollisionByProperty({ collides: false });
-    const WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
-    WorldLayer.setCollisionByProperty({ collides: true });
+    this.WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
+    this.WorldLayer.setCollisionByProperty({ collides: true });
     
      
     this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
     this.wallmounts.setCollisionByProperty({ collides: false });
 
+
+
+    // this.selectLayer(this.floorLayer);
+    // this.selectLayer(this.worldLayer);
+    // this.physics.add.collider(this.player, this.WorldLayer);  //DUPLICATE?
 
 // ===================== PLAYER STUFF  ===========================================
 
@@ -159,6 +164,7 @@ this.isSound1PlayedLast = true;
     // The player and its settings
     this.player = this.physics.add.sprite(90, 90, "playerSprite");
     this.player.setSize(60, 54);
+
 
     // keep the player on the map
     this.player.setCollideWorldBounds(true);
@@ -467,6 +473,35 @@ eventsCenter.on(
  }
  
  // ========================  MONSTER STUFF ============================================
+
+    if(this.keys.k.isDown){
+      this.swoosh.play();
+     }
+
+
+ // =====================  LEVEL CHANGE ============================================
+ let threshold = 50;
+
+
+ if (Math.abs(this.player.x - 1441) < threshold && Math.abs(this.player.y - 62) < threshold) {
+   
+   eventsCenter.emit('levelChange', 3);
+   this.zurpalen.stop();
+   this.walkingSound.stop();
+   this.walkingSound2.stop();
+   this.scene.start(CST.SCENES.LEVEL3);
+   this.scene.destroy(Level2);
+
+}
+
+
+
+
+
+
+
+
+  } 
 
 
 
