@@ -30,6 +30,7 @@ export class Level1 extends Phaser.Scene {
     this.gameOver = false;
     this.door;
     this.collisionCalled = false;
+    this.timerDamage = false;
 
     //character stats to be loaded from pause screen
     this.characterHealth = 1;
@@ -42,12 +43,14 @@ export class Level1 extends Phaser.Scene {
   //this method takes in the amount the health needs to change for a loss. To increase health the argument would need to paradoxically, be a negative mumber
   //example:    this.updateCharacterHealth(this.monster.damage*.0001); 
   updateCharacterHealth(healthChange) {
+    console.log('healthchange is: ', healthChange);
     this.characterHealth -= healthChange;
     if (this.characterHealth <= 0) {   //no more health? go to GAME OVER 
       this.zurpalen.stop();            //stop the music
       this.walkingSound.stop();
       this.walkingSound2.stop();
       this.scene.start(CST.SCENES.GAMEOVER)};
+      console.log('health is at: ', this.characterHealth);
     eventsCenter.emit('updateHP', this.characterHealth); // Emit 'updateCharacterHealth' event with the new health value
   };
 
@@ -410,19 +413,19 @@ this.isSound1PlayedLast = true;
           }
       };   
 
-      this.chest1 = this.physics.add.staticSprite(300, 40, 'chest', 2);
-      this.chest2 = this.physics.add.staticSprite(1185, 71, 'chest', 2);
-      this.chest3 = this.physics.add.staticSprite(80, 448, 'chest', 2);
+      this.chest1 = this.physics.add.staticSprite(415, 105, 'chest', 2);
+      this.chest2 = this.physics.add.staticSprite(1209, 71, 'chest', 2);
+      this.chest3 = this.physics.add.staticSprite(96, 1113, 'chest', 2);
       this.chest4 = this.physics.add.staticSprite(319, 833, 'chest', 2);
-      this.chest5 = this.physics.add.staticSprite(790, 966, 'chest', 2);
-      this.chest6 = this.physics.add.staticSprite(1345, 565, 'chest', 2);
+      this.chest5 = this.physics.add.staticSprite(731, 1105, 'chest', 2);
+      this.chest6 = this.physics.add.staticSprite(1223, 541, 'chest', 2);
 
       const chest1Collider = this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
       const chest2Collider = this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
       const chest3Collider = this.physics.add.collider(this.player, this.chest3, ()=>openChestBottomLeft(this.chest3));
       const chest4Collider = this.physics.add.collider(this.player, this.chest4, ()=>openChestBottomLeft(this.chest4));
-      const chest5Collider = this.physics.add.collider(this.player, this.chest5, ()=>openChestBottomLeft(this.chest5));
-      const chest6Collider = this.physics.add.collider(this.player, this.chest6, ()=>openChestBottomLeft(this.chest6));
+      const chest5Collider = this.physics.add.collider(this.player, this.chest5, ()=>openChestTopRight(this.chest5));
+      const chest6Collider = this.physics.add.collider(this.player, this.chest6, ()=>openChestTopRight(this.chest6));
 
     // ========================= DOOR  to next level =========================================
 
@@ -551,12 +554,17 @@ this.isSound1PlayedLast = true;
    // ========================  MONSTER STUFF ============================================
     this.physics.add.overlap(this.player, this.monster, () => {
       // Decrease the player's health
-      this.updateCharacterHealth(this.monster.damage*.0001);
-      // Check if the player's health is 0 or less
-      if (this.characterHealth <= 0) {
-        console.log ('player is dead');
-      }
-      // Apply a damage effect, like flashing the player sprite
+    // ************* monster damage code update ******************  
+      if (!this.timerDamage){ // this has the player hit only every half second. uses less memory same effect
+
+        this.updateCharacterHealth(this.monster.damage*.1);
+        console.log('character is hit');
+        this.timerDamage = true;
+        this.timerDamage = this.time.delayedCall(500, () => {this.timerDamage = false;}, [], this);
+        
+
+    // ******************  moving this inside the timed loop minimizes the tinting, player can run away. ****************    
+              // Apply a damage effect, like flashing the player sprite
       this.player.setTint(0xff0000); // Set the player sprite to red
       // Use a timer to remove the tint after a short delay
       this.timeDamage = this.time.addEvent({
@@ -568,6 +576,29 @@ this.isSound1PlayedLast = true;
         callbackScope: this,
         loop: false
       });
+
+      }
+
+      // this.updateCharacterHealth(this.monster.damage*.0001);
+      // console.log('character is hit');
+      // console.log ('monster damage is: ', this.monster.damage);
+      // Check if the player's health is 0 or less
+    // ***************  end of monster damage code update **********************  
+      if (this.characterHealth <= 0) {
+        console.log ('player is dead');
+      }
+      // // Apply a damage effect, like flashing the player sprite
+      // this.player.setTint(0xff0000); // Set the player sprite to red
+      // // Use a timer to remove the tint after a short delay
+      // this.timeDamage = this.time.addEvent({
+      //   delay: 500,                // delay in ms
+      //   callback: () => {
+      //     this.timeDamage = false;
+      //     this.player.clearTint(); // Remove the tint
+      //   },
+      //   callbackScope: this,
+      //   loop: false
+      // });
     }, null, this);
 
     let followDistance = 150;

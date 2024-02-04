@@ -51,7 +51,7 @@ init(){
 
 }
 
-
+// ############################################ PRELOAD ################################################
 preload ()
 {
 
@@ -82,11 +82,7 @@ preload ()
     this.backpack6 =state.userCharacter.character.backpack6;
     this.backpack7 =state.userCharacter.character.backpack7;
     this.backpack8 =state.userCharacter.character.backpack8;
-
-
-
     }
-
 
     switch(state.userCharacter.character.character_class){
         case "warrior":
@@ -107,21 +103,28 @@ preload ()
     this.load.spritesheet('empty','assets/levelAssets/emptySlot50x50.png', {frameWidth: 50, frameHeight: 50}) ;
     this.load.spritesheet('swordSlot', 'assets/pauseAssets/swordSlot50x50.png', { frameWidth: 50, frameHeight: 50 });
     this.load.spritesheet('gear', 'assets/gear50x50.png', { frameWidth: 50, frameHeight: 50 });
-
-
-
-
 }
 
+// ###################################### CREATE ###########################################################
 create ()
 {
     const state = store.getState() // this brings in the state from redux
     this.input.mouse.disableContextMenu();  // makes the right mouse button usable in the game
 
-// console.log('this is state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl);
+    // console.log('this is state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl);
 
+    //  Input Events
+    this.keys = this.input.keyboard.addKeys({
+        //   w: Phaser.Input.Keyboard.KeyCodes.W,
+        //   a: Phaser.Input.Keyboard.KeyCodes.A,
+        //   s: Phaser.Input.Keyboard.KeyCodes.S,
+        //   d: Phaser.Input.Keyboard.KeyCodes.D,
+            k: Phaser.Input.Keyboard.KeyCodes.K,
+            p: Phaser.Input.Keyboard.KeyCodes.P,
+        });
+
+ // ================== EVENTSCENTER LISTENERS ================================   
     eventsCenter.on('updateGold', (moreGold)=> {
-
         if(!this.timerGold){
         this.characterGold +=moreGold;
         this.characterXp += Math.round(moreGold/2);
@@ -129,9 +132,6 @@ create ()
         this.timerGold = this.time.delayedCall(100, () => {this.timerGold = false;}, [], this);  
         };
     }, this);
-
-    
-  
 
     eventsCenter.on('lootedItem', (item)=>{
         if(!this.timerGear){
@@ -162,20 +162,20 @@ create ()
     }
     })
 
-
-    // ***************  this is a test to see if the emitter is working correctly ************************************
-    eventsCenter.on('Test', ()=>{
-        console.log('Test Emitter is working');
-    }, this);
-
     eventsCenter.on('levelChange',  (levelUpdate) =>{
         this.currentLevel = levelUpdate;
         this.updateStatsOnce = false;
     })
+
+    eventsCenter.on('updateHP', (health) => {
+        this.characterHealth = health;
+        console.log ('in the pause scene, characterHealth is: ', this.characterHealth);
+        // updateStats();
+    })
             
 
-    //  A background for our pause Screen
-    this.add.image(800, 600, 'playerPauseScene');
+// ======================= PAUSE SCREEN LAYOUT ====================================================    
+    this.add.image(800, 600, 'playerPauseScene');    //  A background for our pause Screen
 
     this.add.text(630, 380, this.characterName, { font: "20px p-script", fill: "#7e4035" });
     this.add.text(640, 425, this.characterHealth, { font: "30px p-script", fill: "#7e4035" });
@@ -204,6 +204,7 @@ create ()
     const clickBP8 = this.add.sprite(709,742, 'gear', this.backpack8 -1).setInteractive(); // backpack 8
 
 
+// ================================ FUNCTIONS =================================================    
 const updateStats = () =>{
 
     console.log('updating the Stats');
@@ -224,285 +225,282 @@ const updateStats = () =>{
 
     // **************** emit new stats to current level **************************
     eventsCenter.emit('updateStats',  this.characterHealth, this.characterMaxHealth,this.characterArmor,this.characterAttack,this.characterSpeed);
-
 }
 
 
-
-
-
+// ==================================== EQUIP ITEMS ====================================================
 const equipItem = (originalLocation, targetLocation) =>{
    let temp = null;
-//    console.log('in the equipItem function. originalLocation and targetLocation',originalLocation, ' ', targetLocation);
+    // console.log('in the equipItem function. originalLocation and targetLocation',originalLocation, ' ', targetLocation);
     switch (originalLocation){
-            case "BP1":
-                switch (targetLocation){
-                    case 1:
-                        temp = this.head_gear1;
-                        this.head_gear1 = this.backpack1;
-                        this.backpack1 = temp;
-                        break;
-                    case 2:
-                        temp = this.left_hand_gear2;
-                        this.left_hand_gear2 = this.backpack1;
-                        this.backpack1 = temp;
-                        break;
-                    case 3:
-                        temp = this.right_hand_gear3;
-                        this.right_hand_gear3 = this.backpack1;
-                        this.backpack1 = temp;
-                        break;
-                    case 4:
-                        temp = this.foot_gear4;
-                        this.foot_gear4 = this.backpack1;
-                        this.backpack1 = temp;
-                        break;
-                    case 5:
-                        temp = this.chest_gear5;
-                        this.chest_gear5 = this.backpack1;
-                        this.backpack1 = temp;
-                        break;
-                    default: // pick up from ground
-                        temp = this.ground;
-                        this.ground = this.backpack1;
-                        this.backpack1 = temp;
-                        break;
-                }break;
-            case "BP2":
-                switch (targetLocation){
-                    case 1:
-                        temp = this.head_gear1;
-                        this.head_gear1 = this.backpack2;
-                        this.backpack2 = temp;
-                        break;
-                    case 2:
-                        temp = this.left_hand_gear2;
-                        this.left_hand_gear2 = this.backpack2;
-                        this.backpack2 = temp;
-                        break;
-                    case 3:
-                        temp = this.right_hand_gear3;
-                        this.right_hand_gear3 = this.backpack2;
-                        this.backpack2 = temp;
-                        break;
-                    case 4:
-                        temp = this.foot_gear4;
-                        this.foot_gear4 = this.backpack2;
-                        this.backpack2 = temp;
-                        break;
-                    case 5:
-                        temp = this.chest_gear5;
-                        this.chest_gear5 = this.backpack2;
-                        this.backpack2 = temp;
-                        break;
-                    default: // pick up from ground
-                        temp = this.ground;
-                        this.ground = this.backpack2;
-                        this.backpack2 = temp;
-                    break;
-                }break;
-            case "BP3":
-            switch (targetLocation){
-                case 1:
-                    temp = this.head_gear1;
-                    this.head_gear1 = this.backpack3;
-                    this.backpack3 = temp;
-                    break;
-                case 2:
-                    temp = this.left_hand_gear2;
-                    this.left_hand_gear2 = this.backpack3;
-                    this.backpack3 = temp;
-                    break;
-                case 3:
-                    temp = this.right_hand_gear3;
-                    this.right_hand_gear3 = this.backpack3;
-                    this.backpack3 = temp;
-                    break;
-                case 4:
-                    temp = this.foot_gear4;
-                    this.foot_gear4 = this.backpack3;
-                    this.backpack3 = temp;
-                    break;
-                case 5:
-                    temp = this.chest_gear5;
-                    this.chest_gear5 = this.backpack3;
-                    this.backpack3 = temp;
-                    break;
-                default: // pick up from ground
-                    temp = this.ground;
-                    this.ground = this.backpack3;
-                    this.backpack3 = temp;
-                    break;
-            }break;
-            case "BP4":
-            switch (targetLocation){
-                case 1:
-                    temp = this.head_gear1;
-                    this.head_gear1 = this.backpack4;
-                    this.backpack4 = temp;
-                    break;
-                case 2:
-                    temp = this.left_hand_gear2;
-                    this.left_hand_gear2 = this.backpack4;
-                    this.backpack4 = temp;
-                    break;
-                case 3:
-                    temp = this.right_hand_gear3;
-                    this.right_hand_gear3 = this.backpack4;
-                    this.backpack4 = temp;
-                    break;
-                case 4:
-                    temp = this.foot_gear4;
-                    this.foot_gear4 = this.backpack4;
-                    this.backpack4 = temp;
-                    break;
-                case 5:
-                    temp = this.chest_gear5;
-                    this.chest_gear5 = this.backpack4;
-                    this.backpack4 = temp;
-                    break;
-                default: // pick up from ground
-                    temp = this.ground;
-                    this.ground = this.backpack4;
-                    this.backpack4 = temp;
-                    break;
-            } break;
-            case "BP5":
-                switch (targetLocation){
-                    case 1:
-                        temp = this.head_gear1;
-                        this.head_gear1 = this.backpack5;
-                        this.backpack5 = temp;
-                        break;
-                    case 2:
-                        temp = this.left_hand_gear2;
-                        this.left_hand_gear2 = this.backpack5;
-                        this.backpack5 = temp;
-                        break;
-                    case 3:
-                        temp = this.right_hand_gear3;
-                        this.right_hand_gear3 = this.backpack5;
-                        this.backpack5 = temp;
-                        break;
-                    case 4:
-                        temp = this.foot_gear4;
-                        this.foot_gear4 = this.backpack5;
-                        this.backpack5 = temp;
-                        break;
-                    case 5:
-                        temp = this.chest_gear5;
-                        this.chest_gear5 = this.backpack5;
-                        this.backpack5 = temp;
-                        break;
-                    default: // pick up from ground
-                        temp = this.ground;
-                        this.ground = this.backpack5;
-                        this.backpack5 = temp;
-                        break;
-                }break;
-            case "BP6":
-                switch (targetLocation){
-                    case 1:
-                        temp = this.head_gear1;
-                        this.head_gear1 = this.backpack6;
-                        this.backpack6 = temp;
-                        break;
-                    case 2:
-                        temp = this.left_hand_gear2;
-                        this.left_hand_gear2 = this.backpack6;
-                        this.backpack6 = temp;
-                        break;
-                    case 3:
-                        temp = this.right_hand_gear3;
-                        this.right_hand_gear3 = this.backpack6;
-                        this.backpack6 = temp;
-                        break;
-                    case 4:
-                        temp = this.foot_gear4;
-                        this.foot_gear4 = this.backpack6;
-                        this.backpack6 = temp;
-                        break;
-                    case 5:
-                        temp = this.chest_gear5;
-                        this.chest_gear5 = this.backpack6;
-                        this.backpack6 = temp;
-                        break;
-                    default: // pick up from ground
-                        temp = this.ground;
-                        this.ground = this.backpack6;
-                        this.backpack6 = temp;
-                        break;
-                }break;
-            case "BP7":
-            switch (targetLocation){
-                case 1:
-                    temp = this.head_gear1;
-                    this.head_gear1 = this.backpack7;
-                    this.backpack7 = temp;
-                    break;
-                case 2:
-                    temp = this.left_hand_gear2;
-                    this.left_hand_gear2 = this.backpack7;
-                    this.backpack7 = temp;
-                    break;
-                case 3:
-                    temp = this.right_hand_gear3;
-                    this.right_hand_gear3 = this.backpack7;
-                    this.backpack7 = temp;
-                    break;
-                case 4:
-                    temp = this.foot_gear4;
-                    this.foot_gear4 = this.backpack7;
-                    this.backpack7 = temp;
-                    break;
-                case 5:
-                    temp = this.chest_gear5;
-                    this.chest_gear5 = this.backpack7;
-                    this.backpack7 = temp;
-                    break;
-                default: // pick up from ground
-                    temp = this.ground;
-                    this.ground = this.backpack7;
-                    this.backpack7 = temp;
-                    break;
-            }break;
-            case "BP8":
-            switch (targetLocation){
-                case 1:
-                    temp = this.head_gear1;
-                    this.head_gear1 = this.backpack8;
-                    this.backpack8 = temp;
-                    break;
-                case 2:
-                    temp = this.left_hand_gear2;
-                    this.left_hand_gear2 = this.backpack8;
-                    this.backpack8 = temp;
-                    break;
-                case 3:
-                    temp = this.right_hand_gear3;
-                    this.right_hand_gear3 = this.backpack8;
-                    this.backpack8 = temp;
-                    break;
-                case 4:
-                    temp = this.foot_gear4;
-                    this.foot_gear4 = this.backpack8;
-                    this.backpack8 = temp;
-                    break;
-                case 5:
-                    temp = this.chest_gear5;
-                    this.chest_gear5 = this.backpack8;
-                    this.backpack8 = temp;
-                    break;
-                default: // pick up from ground
-                    temp = this.ground;
-                    this.ground = this.backpack8;
-                    this.backpack8 = temp;
-                    break;
-            }break;
-        }
-        updateStats();
-        this.scene.restart();
+    case "BP1":
+        switch (targetLocation){
+            case 1:
+                temp = this.head_gear1;
+                this.head_gear1 = this.backpack1;
+                this.backpack1 = temp;
+                break;
+            case 2:
+                temp = this.left_hand_gear2;
+                this.left_hand_gear2 = this.backpack1;
+                this.backpack1 = temp;
+                break;
+            case 3:
+                temp = this.right_hand_gear3;
+                this.right_hand_gear3 = this.backpack1;
+                this.backpack1 = temp;
+                break;
+            case 4:
+                temp = this.foot_gear4;
+                this.foot_gear4 = this.backpack1;
+                this.backpack1 = temp;
+                break;
+            case 5:
+                temp = this.chest_gear5;
+                this.chest_gear5 = this.backpack1;
+                this.backpack1 = temp;
+                break;
+            default: // pick up from ground
+                temp = this.ground;
+                this.ground = this.backpack1;
+                this.backpack1 = temp;
+                break;
+        }break;
+    case "BP2":
+        switch (targetLocation){
+            case 1:
+                temp = this.head_gear1;
+                this.head_gear1 = this.backpack2;
+                this.backpack2 = temp;
+                break;
+            case 2:
+                temp = this.left_hand_gear2;
+                this.left_hand_gear2 = this.backpack2;
+                this.backpack2 = temp;
+                break;
+            case 3:
+                temp = this.right_hand_gear3;
+                this.right_hand_gear3 = this.backpack2;
+                this.backpack2 = temp;
+                break;
+            case 4:
+                temp = this.foot_gear4;
+                this.foot_gear4 = this.backpack2;
+                this.backpack2 = temp;
+                break;
+            case 5:
+                temp = this.chest_gear5;
+                this.chest_gear5 = this.backpack2;
+                this.backpack2 = temp;
+                break;
+            default: // pick up from ground
+                temp = this.ground;
+                this.ground = this.backpack2;
+                this.backpack2 = temp;
+            break;
+        }break;
+    case "BP3":
+    switch (targetLocation){
+        case 1:
+            temp = this.head_gear1;
+            this.head_gear1 = this.backpack3;
+            this.backpack3 = temp;
+            break;
+        case 2:
+            temp = this.left_hand_gear2;
+            this.left_hand_gear2 = this.backpack3;
+            this.backpack3 = temp;
+            break;
+        case 3:
+            temp = this.right_hand_gear3;
+            this.right_hand_gear3 = this.backpack3;
+            this.backpack3 = temp;
+            break;
+        case 4:
+            temp = this.foot_gear4;
+            this.foot_gear4 = this.backpack3;
+            this.backpack3 = temp;
+            break;
+        case 5:
+            temp = this.chest_gear5;
+            this.chest_gear5 = this.backpack3;
+            this.backpack3 = temp;
+            break;
+        default: // pick up from ground
+            temp = this.ground;
+            this.ground = this.backpack3;
+            this.backpack3 = temp;
+            break;
+    }break;
+    case "BP4":
+    switch (targetLocation){
+        case 1:
+            temp = this.head_gear1;
+            this.head_gear1 = this.backpack4;
+            this.backpack4 = temp;
+            break;
+        case 2:
+            temp = this.left_hand_gear2;
+            this.left_hand_gear2 = this.backpack4;
+            this.backpack4 = temp;
+            break;
+        case 3:
+            temp = this.right_hand_gear3;
+            this.right_hand_gear3 = this.backpack4;
+            this.backpack4 = temp;
+            break;
+        case 4:
+            temp = this.foot_gear4;
+            this.foot_gear4 = this.backpack4;
+            this.backpack4 = temp;
+            break;
+        case 5:
+            temp = this.chest_gear5;
+            this.chest_gear5 = this.backpack4;
+            this.backpack4 = temp;
+            break;
+        default: // pick up from ground
+            temp = this.ground;
+            this.ground = this.backpack4;
+            this.backpack4 = temp;
+            break;
+    } break;
+    case "BP5":
+        switch (targetLocation){
+            case 1:
+                temp = this.head_gear1;
+                this.head_gear1 = this.backpack5;
+                this.backpack5 = temp;
+                break;
+            case 2:
+                temp = this.left_hand_gear2;
+                this.left_hand_gear2 = this.backpack5;
+                this.backpack5 = temp;
+                break;
+            case 3:
+                temp = this.right_hand_gear3;
+                this.right_hand_gear3 = this.backpack5;
+                this.backpack5 = temp;
+                break;
+            case 4:
+                temp = this.foot_gear4;
+                this.foot_gear4 = this.backpack5;
+                this.backpack5 = temp;
+                break;
+            case 5:
+                temp = this.chest_gear5;
+                this.chest_gear5 = this.backpack5;
+                this.backpack5 = temp;
+                break;
+            default: // pick up from ground
+                temp = this.ground;
+                this.ground = this.backpack5;
+                this.backpack5 = temp;
+                break;
+        }break;
+    case "BP6":
+        switch (targetLocation){
+            case 1:
+                temp = this.head_gear1;
+                this.head_gear1 = this.backpack6;
+                this.backpack6 = temp;
+                break;
+            case 2:
+                temp = this.left_hand_gear2;
+                this.left_hand_gear2 = this.backpack6;
+                this.backpack6 = temp;
+                break;
+            case 3:
+                temp = this.right_hand_gear3;
+                this.right_hand_gear3 = this.backpack6;
+                this.backpack6 = temp;
+                break;
+            case 4:
+                temp = this.foot_gear4;
+                this.foot_gear4 = this.backpack6;
+                this.backpack6 = temp;
+                break;
+            case 5:
+                temp = this.chest_gear5;
+                this.chest_gear5 = this.backpack6;
+                this.backpack6 = temp;
+                break;
+            default: // pick up from ground
+                temp = this.ground;
+                this.ground = this.backpack6;
+                this.backpack6 = temp;
+                break;
+        }break;
+    case "BP7":
+    switch (targetLocation){
+        case 1:
+            temp = this.head_gear1;
+            this.head_gear1 = this.backpack7;
+            this.backpack7 = temp;
+            break;
+        case 2:
+            temp = this.left_hand_gear2;
+            this.left_hand_gear2 = this.backpack7;
+            this.backpack7 = temp;
+            break;
+        case 3:
+            temp = this.right_hand_gear3;
+            this.right_hand_gear3 = this.backpack7;
+            this.backpack7 = temp;
+            break;
+        case 4:
+            temp = this.foot_gear4;
+            this.foot_gear4 = this.backpack7;
+            this.backpack7 = temp;
+            break;
+        case 5:
+            temp = this.chest_gear5;
+            this.chest_gear5 = this.backpack7;
+            this.backpack7 = temp;
+            break;
+        default: // pick up from ground
+            temp = this.ground;
+            this.ground = this.backpack7;
+            this.backpack7 = temp;
+            break;
+    }break;
+    case "BP8":
+    switch (targetLocation){
+        case 1:
+            temp = this.head_gear1;
+            this.head_gear1 = this.backpack8;
+            this.backpack8 = temp;
+            break;
+        case 2:
+            temp = this.left_hand_gear2;
+            this.left_hand_gear2 = this.backpack8;
+            this.backpack8 = temp;
+            break;
+        case 3:
+            temp = this.right_hand_gear3;
+            this.right_hand_gear3 = this.backpack8;
+            this.backpack8 = temp;
+            break;
+        case 4:
+            temp = this.foot_gear4;
+            this.foot_gear4 = this.backpack8;
+            this.backpack8 = temp;
+            break;
+        case 5:
+            temp = this.chest_gear5;
+            this.chest_gear5 = this.backpack8;
+            this.backpack8 = temp;
+            break;
+        default: // pick up from ground
+            temp = this.ground;
+            this.ground = this.backpack8;
+            this.backpack8 = temp;
+            break;
+    }break;
     }
+    updateStats();
+    this.scene.restart();
+}
 
 clickHead.on('pointerdown', (event) => {
     if (this.backpack1 === 7){
@@ -605,89 +603,81 @@ clickChest.on('pointerdown', (event) => {
     }
 });
 
+// =============================== DROPPING GEAR ====================================
 const dropGear = (location) =>{
     console.log('in the dropGear function on pause screen. location is: ', location);
     eventsCenter.emit('droppingGear',location);
-
     location = 7; // this makes the slot empty
 }
 
-clickBP1.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack1);
-        this.backpack1 = 7;
-        this.scene.restart();
-    }else{
-    equipItem('BP1',state.gear.allPossibleGear[this.backpack1].equip_location );
-}});
-clickBP2.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack2);
-        this.backpack2 = 7;
-        this.scene.restart();
-    }else{
-    equipItem('BP2',state.gear.allPossibleGear[this.backpack2].equip_location );
-}});
-clickBP3.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack3);
-        this.backpack3 = 7;
-        this.scene.restart();
-    }else{
-    equipItem('BP3',state.gear.allPossibleGear[this.backpack3].equip_location );
-}});
-clickBP4.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack4);
-        this.backpack4 = 7;
-        this.scene.restart();
-    }else{
-    equipItem('BP4',state.gear.allPossibleGear[this.backpack4].equip_location );
-}});
-clickBP5.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack5);
-        this.backpack5 = 7;
-        this.scene.restart();
-    }else{
-    equipItem('BP5',state.gear.allPossibleGear[this.backpack5].equip_location );
-}});
-clickBP6.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack6);
-        this.backpack6 = 7;
-        this.scene.restart();
-    }else{
-    equipItem('BP6',state.gear.allPossibleGear[this.backpack6].equip_location );
-}});
-clickBP7.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack7);
-        this.backpack7 = 7;
-        this.scene.restart();
-    }else{
-    console.log('you clicked on the item in Back Pack 7');
-    equipItem('BP7',state.gear.allPossibleGear[this.backpack7].equip_location );
-}});
-clickBP8.on('pointerdown', (event) => {
-    if (event.rightButtonDown()) {
-        dropGear(this.backpack8);
-        this.backpack8 = 7;
-        this.scene.restart();
-    }else{
-    equipItem('BP8',state.gear.allPossibleGear[this.backpack8].equip_location );
-}});
+    clickBP1.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack1);
+            this.backpack1 = 7;
+            this.scene.restart();
+        }else{
+        equipItem('BP1',state.gear.allPossibleGear[this.backpack1].equip_location );
+    }});
+    clickBP2.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack2);
+            this.backpack2 = 7;
+            this.scene.restart();
+        }else{
+        equipItem('BP2',state.gear.allPossibleGear[this.backpack2].equip_location );
+    }});
+    clickBP3.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack3);
+            this.backpack3 = 7;
+            this.scene.restart();
+        }else{
+        equipItem('BP3',state.gear.allPossibleGear[this.backpack3].equip_location );
+    }});
+    clickBP4.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack4);
+            this.backpack4 = 7;
+            this.scene.restart();
+        }else{
+        equipItem('BP4',state.gear.allPossibleGear[this.backpack4].equip_location );
+    }});
+    clickBP5.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack5);
+            this.backpack5 = 7;
+            this.scene.restart();
+        }else{
+        equipItem('BP5',state.gear.allPossibleGear[this.backpack5].equip_location );
+    }});
+    clickBP6.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack6);
+            this.backpack6 = 7;
+            this.scene.restart();
+        }else{
+        equipItem('BP6',state.gear.allPossibleGear[this.backpack6].equip_location );
+    }});
+    clickBP7.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack7);
+            this.backpack7 = 7;
+            this.scene.restart();
+        }else{
+        console.log('you clicked on the item in Back Pack 7');
+        equipItem('BP7',state.gear.allPossibleGear[this.backpack7].equip_location );
+    }});
+    clickBP8.on('pointerdown', (event) => {
+        if (event.rightButtonDown()) {
+            dropGear(this.backpack8);
+            this.backpack8 = 7;
+            this.scene.restart();
+        }else{
+        equipItem('BP8',state.gear.allPossibleGear[this.backpack8].equip_location );
+    }});
 
 
-    //  Input Events
-    this.keys = this.input.keyboard.addKeys({
-    //   w: Phaser.Input.Keyboard.KeyCodes.W,
-    //   a: Phaser.Input.Keyboard.KeyCodes.A,
-    //   s: Phaser.Input.Keyboard.KeyCodes.S,
-    //   d: Phaser.Input.Keyboard.KeyCodes.D,
-      k: Phaser.Input.Keyboard.KeyCodes.K,
-      p: Phaser.Input.Keyboard.KeyCodes.P,
-    });
+// ======================= KEY AND BUTTON FUNCTIONS ================================
 
     this.input.keyboard.on('keydown-P', function (event) {
         // this.scene.resume("LEVEL1");
@@ -732,14 +722,14 @@ clickBP8.on('pointerdown', (event) => {
 
     }, this);
 
-    
-    // this updates the player stats in the game at the start
+// ================================= UPDATES STATS AT START OF EACH LEVEL ============================    
     if(!this.updateStatsOnce){
         updateStats();
         this.updateStatsOnce=true;
     }
 };
 
+// #################################### UPDATE ######################################################
 update ()
 {
     // if (this.gameOver)
