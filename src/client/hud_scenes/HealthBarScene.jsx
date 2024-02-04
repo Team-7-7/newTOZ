@@ -6,7 +6,15 @@ import eventsCenter from "../EventsCenter.jsx";
 export class HealthBarScene extends Phaser.Scene {
   constructor() {
     super({ key: CST.SCENES.HEALTH });
-  }
+ 
+    //character stats to be loaded from pause screen
+    this.characterHealth = 1;
+    this.characterMaxHealth = 1;
+    this.characterArmor = 1;
+    this.characterAttack = 1;
+    this.characterSpeed = 1;
+ }
+
 
   preload() {
     this.load.spritesheet('heart', 'assets/hud/heart_spritesheet.png', {
@@ -18,7 +26,19 @@ export class HealthBarScene extends Phaser.Scene {
   }
 
   create() {
-    let playerHealth = 100; //use a 5 heart system to represent the total HP
+
+    // GETS HEALTH WHEN STATS ARE UPDATED:
+    //eventsCenter.emit('updateStats',  this.characterHealth, this.characterMaxHealth,this.characterArmor,this.characterAttack,this.characterSpeed);
+    eventsCenter.on('updateStats', (health, maxHealth, armor, attack, speed ) =>{
+    this.characterHealth = health; 
+    this.characterMaxHealth = maxHealth;
+    this.characterArmor = armor;
+    this.characterAttack = attack;
+    this.characterSpeed = speed;
+} )
+    // let playerHealth = 100; //use a 5 heart system to represent the total HP
+    let playerHealth = this.characterMaxHealth; //use a 5 heart system to represent the total HP
+
 
     this.hearts = this.add.group();
     for (let i = 0; i < playerHealth/20; i++) {
