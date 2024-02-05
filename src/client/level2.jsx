@@ -18,6 +18,8 @@ export class Level2 extends Phaser.Scene {
     this.chest5;
     this.chest6;
     this.chest7;
+    this.barrel1;
+    this.barrel2;
     this.cursors;
     this.monster;
     this.monster1;
@@ -347,7 +349,7 @@ this.isSound1PlayedLast = true;
     //x: 78  y: 948
     //x: 996 y: 259
         this.chest1 = this.physics.add.staticSprite(463, 256, 'chest', 2);
-        this.chest2 = this.physics.add.staticSprite(136, 254, 'chest', 2);
+        this.chest2 = this.physics.add.staticSprite(75, 272, 'chest', 2);
         this.chest3 = this.physics.add.staticSprite(78, 948, 'chest', 2);
         this.chest4 = this.physics.add.staticSprite(996, 259, 'chest', 2);
         this.chest5 = this.physics.add.staticSprite(1270, 95, 'chest', 2);
@@ -359,6 +361,27 @@ this.isSound1PlayedLast = true;
         const chest4Collider = this.physics.add.collider(this.player, this.chest4, ()=>openChestBottomLeft(this.chest4));
         const chest5Collider = this.physics.add.collider(this.player, this.chest5, ()=>openChestBottomLeft(this.chest5));
         const chest6Collider = this.physics.add.collider(this.player, this.chest6, ()=>openChestTopRight(this.chest6));
+
+         //***************** barrels ******************* */
+
+      this.barrel1 = this.physics.add.staticSprite(207, 272, 'barrels', 2); // healing barrel
+      this.barrel2 = this.physics.add.staticSprite(1171, 761, 'barrels', 1); // poison barrel
+      const barrel1Collider = this.physics.add.collider(this.player, this.barrel1, ()=> {
+
+        this.barrel1.setFrame(3);
+        //update player health
+        eventsCenter.emit('updateHP', this.characterMaxHealth);
+        barrel1Collider.destroy();
+
+      });
+      const barrel2Collider = this.physics.add.collider(this.player, this.barrel2, ()=> {
+        this.barrel2.setFrame(3);
+        //update player health
+        eventsCenter.emit('updateHP', this.characterHealth/2);
+        barrel2Collider.destroy();
+
+      });
+
     
 // ======================camera controls, follows player and zooms in ==================================
 this.cameras.main.startFollow(this.player, true, 0.05, 0.05);

@@ -16,6 +16,8 @@ export class Level3 extends Phaser.Scene {
     this.player;
     this.chest1;
     this.chest2;
+    this.barrel1;
+    this.barrel2;
     this.cursors;
     this.monster;
     this.gameOver = false;
@@ -103,6 +105,8 @@ export class Level3 extends Phaser.Scene {
 
   create() {
     
+    this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
+    this.scene.launch("PAUSE"); // starts the pause screen and loads stats
     
     
     this.isSound1PlayedLast = true;
@@ -227,6 +231,23 @@ export class Level3 extends Phaser.Scene {
    });
     
 
+         //***************** barrels ******************* */
+
+         this.barrel1 = this.physics.add.staticSprite(89, 663, 'barrels', 2); // healing barrel
+         this.barrel2 = this.physics.add.staticSprite(945, 75, 'barrels', 2); // healing barrel
+         const barrel1Collider = this.physics.add.collider(this.player, this.barrel1, ()=> {
+   
+           this.barrel1.setFrame(3);
+           //update player health
+           eventsCenter.emit('updateHP', this.characterMaxHealth);
+           barrel1Collider.destroy();
+         });
+         const barrel2Collider = this.physics.add.collider(this.player, this.barrel2, ()=> {
+           this.barrel2.setFrame(3);
+           //update player health
+           eventsCenter.emit('updateHP', this.characterMaxHealth);  
+          barrel2Collider.destroy();
+         });
  
     //camera controls, follows player and zooms in
     this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
