@@ -565,7 +565,8 @@ this.isSound1PlayedLast = true;
        this.physics.add.overlap(this.player, monster, () => { // decrease health when player and monster collide
          // ************* monster damage code update ******************  
          if (!this.timerDamage){ // this has the player hit only every half second. uses less memory same effect
-           this.updateCharacterHealth(this.monster.damage*.50);
+           this.updateCharacterHealth(10*.50);
+
            console.log('character is hit');
            this.timerDamage = true;
            this.timerDamage = this.time.delayedCall(500, () => {
