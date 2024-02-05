@@ -41,7 +41,8 @@ export class HealthBarScene extends Phaser.Scene {
 
 
     this.hearts = this.add.group();
-    for (let i = 0; i < playerHealth/20; i++) {
+    // for (let i = 0; i < playerHealth/20; i++) {
+      for (let i = 0; i < 5; i++) {
       const heart = this.add.sprite(30 + i * 40, 30, 'heart');
       this.hearts.add(heart.setFrame(0));
     }
