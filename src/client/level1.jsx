@@ -26,7 +26,9 @@ export class Level1 extends Phaser.Scene {
     this.monster3;
     this.monster4;
     this.monster5;
-    this.monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5];
+    this.monster6;
+    this.monster7;
+    this.monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7];
     this.gameOver = false;
     this.door;
     this.collisionCalled = false;
@@ -240,12 +242,14 @@ this.isSound1PlayedLast = true;
     });
 
     // ================== MONSTER STUFF ===========================  
-    this.monster = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
+    this.monster  = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
     this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
     this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
     this.monster3= this.physics.add.sprite(67, 838, "skeleton" , "sprite9");
     this.monster4= this.physics.add.sprite(1474, 219, "skeleton" , "sprite9");
     this.monster5= this.physics.add.sprite(1474, 974, "skeleton" , "sprite9");
+    this.monster6= this.physics.add.sprite(595, 767, "skeleton" , "sprite9");
+    this.monster7= this.physics.add.sprite(1322, 333, "skeleton" , "sprite9");
     this.monster.setSize(60, 54);
 
     //keeps monster in bounds
@@ -291,12 +295,15 @@ this.isSound1PlayedLast = true;
       repeat: 0,
     });
 
-   // play monster animations
+   //play monster animations
     this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
     this.monster1.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
     this.monster2.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-  
-
+    this.monster3.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);  
+    this.monster4.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
+    this.monster5.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
+    this.monster6.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
+    this.monster7.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
   
 // =================== GEAR, CHESTS, GOLD STUFF ====================================================
 
@@ -455,202 +462,175 @@ this.isSound1PlayedLast = true;
       },this);
   }
 // ############################### UPDATE ###############################################
-  update() {
-    if (this.gameOver) {
-      return;
-    }
+    update() {
+      if (this.gameOver) {
+        return;
+      }
 
-// ===================  KEY CONTROLS ==============================================
-    if (this.keys.a.isDown || this.cursors.left.isDown) {
-      // this.player.setVelocityX(-160);
-      this.player.setVelocityX(-10* this.characterSpeed);
-      this.player.anims.play("left", true);
-    } else if (this.keys.d.isDown || this.cursors.right.isDown) {
-      this.player.setVelocityX(10* this.characterSpeed);
-      this.player.anims.play("right", true);
-    } else {
-      this.player.setVelocityX(0);
-      this.player.anims.play("turn", true);
-    }
-    if (this.keys.w.isDown || this.cursors.up.isDown) {
-      this.player.setVelocityY(-10* this.characterSpeed);
-      this.player.anims.play("left", true);
-    } else if (this.keys.s.isDown || this.cursors.down.isDown) {
-      this.player.setVelocityY(10* this.characterSpeed);
-      this.player.anims.play("right", true);
-    } else {
-      this.player.setVelocityY(0);
-    }
-    if (this.keys.k.isDown) {
-      this.player.anims.play("attackLeft", true);
-      //   this.player.on('animationupdate-attackRight', function (animation, frame) {
-    }
-    if (this.keys.p.isDown) {
-      this.scene.pause("LEVEL1");
-      this.scene.launch("PAUSE");
-    }
-    if (this.keys.l.isDown) {
-      console.log(
-        "The player is at these coordinates",
-        `x: ${this.player.x}`,
-        `y: ${this.player.y}`
-      );
-    }
+  // ===================  KEY CONTROLS ==============================================
+      if (this.keys.a.isDown || this.cursors.left.isDown) {
+        // this.player.setVelocityX(-160);
+        this.player.setVelocityX(-10* this.characterSpeed);
+        this.player.anims.play("left", true);
+      } else if (this.keys.d.isDown || this.cursors.right.isDown) {
+        this.player.setVelocityX(10* this.characterSpeed);
+        this.player.anims.play("right", true);
+      } else {
+        this.player.setVelocityX(0);
+        this.player.anims.play("turn", true);
+      }
+      if (this.keys.w.isDown || this.cursors.up.isDown) {
+        this.player.setVelocityY(-10* this.characterSpeed);
+        this.player.anims.play("left", true);
+      } else if (this.keys.s.isDown || this.cursors.down.isDown) {
+        this.player.setVelocityY(10* this.characterSpeed);
+        this.player.anims.play("right", true);
+      } else {
+        this.player.setVelocityY(0);
+      }
+      if (this.keys.k.isDown) {
+        this.player.anims.play("attackLeft", true);
+        //   this.player.on('animationupdate-attackRight', function (animation, frame) {
+      }
+      if (this.keys.p.isDown) {
+        this.scene.pause("LEVEL1");
+        this.scene.launch("PAUSE");
+      }
+      if (this.keys.l.isDown) {
+        console.log(
+          "The player is at these coordinates",
+          `x: ${this.player.x}`,
+          `y: ${this.player.y}`
+        );
+      }
 
-  // ===========================  SOUNDS STUFF ==================================================
-    //code alternates walking sound effects to avoid overlap
-    if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {
-        this.walkingSound.play();
-      } else {
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if((this.keys.d.isDown || this.cursors.right.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {
-        this.walkingSound.play();
-      } else {       
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if((this.keys.w.isDown || this.cursors.up.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {    
-        this.walkingSound.play();
-      } else {
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if((this.keys.s.isDown || this.cursors.down.isDown) && this.time.now - this.lastSoundTimestamp > 500){
-      if(this.isSound1PlayedLast) {  
-        this.walkingSound.play();
-      } else {
-        this.walkingSound2.play();
-      }
-      this.isSound1PlayedLast = !this.isSound1PlayedLast;
-      this.lastSoundTimestamp = this.time.now;
-    }
-    if(this.keys.a.isDown || this.keys.d.isDown || this.keys.w.isDown || this.keys.s.isDown || this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown){
-      this.isMoving = true;
-    } else {
-      this.isMoving = false;
-      setTimeout(() => {
-        if(this.player.body.velocity.y === 0 && !this.isMoving){
-          
-          this.walkingSound.stop();
-          this.walkingSound2.stop();
+    // ===========================  SOUNDS STUFF ==================================================
+      //code alternates walking sound effects to avoid overlap
+      if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+        if(this.isSound1PlayedLast) {
+          this.walkingSound.play();
+        } else {
+          this.walkingSound2.play();
         }
-      }); 
-    }
-   if(this.keys.k.isDown){
-    this.swoosh.play();
-   }
-   
-   // ========================  MONSTER STUFF ============================================
-    this.physics.add.overlap(this.player, this.monster, () => {
-      // Decrease the player's health
-    // ************* monster damage code update ******************  
-      if (!this.timerDamage){ // this has the player hit only every half second. uses less memory same effect
+        this.isSound1PlayedLast = !this.isSound1PlayedLast;
+        this.lastSoundTimestamp = this.time.now;
+      }
+      if((this.keys.d.isDown || this.cursors.right.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+        if(this.isSound1PlayedLast) {
+          this.walkingSound.play();
+        } else {       
+          this.walkingSound2.play();
+        }
+        this.isSound1PlayedLast = !this.isSound1PlayedLast;
+        this.lastSoundTimestamp = this.time.now;
+      }
+      if((this.keys.w.isDown || this.cursors.up.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+        if(this.isSound1PlayedLast) {    
+          this.walkingSound.play();
+        } else {
+          this.walkingSound2.play();
+        }
+        this.isSound1PlayedLast = !this.isSound1PlayedLast;
+        this.lastSoundTimestamp = this.time.now;
+      }
+      if((this.keys.s.isDown || this.cursors.down.isDown) && this.time.now - this.lastSoundTimestamp > 500){
+        if(this.isSound1PlayedLast) {  
+          this.walkingSound.play();
+        } else {
+          this.walkingSound2.play();
+        }
+        this.isSound1PlayedLast = !this.isSound1PlayedLast;
+        this.lastSoundTimestamp = this.time.now;
+      }
+      if(this.keys.a.isDown || this.keys.d.isDown || this.keys.w.isDown || this.keys.s.isDown || this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown){
+        this.isMoving = true;
+      } else {
+        this.isMoving = false;
+        setTimeout(() => {
+          if(this.player.body.velocity.y === 0 && !this.isMoving){
+            
+            this.walkingSound.stop();
+            this.walkingSound2.stop();
+          }
+        }); 
+      }
+     if(this.keys.k.isDown){
+      this.swoosh.play();
+     }
+     
+     // ========================  MONSTER STUFF ============================================ 
+     let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7];
 
-        this.updateCharacterHealth(this.monster.damage*.1);
-        console.log('character is hit');
-        this.timerDamage = true;
-        this.timerDamage = this.time.delayedCall(500, () => {this.timerDamage = false;}, [], this);
-        
+     monsters.forEach(monster => {
+       this.physics.add.overlap(this.player, monster, () => { // decrease health when player and monster collide
+         // ************* monster damage code update ******************  
+         if (!this.timerDamage){ // this has the player hit only every half second. uses less memory same effect
+           this.updateCharacterHealth(this.monster.damage*.50);
+           console.log('character is hit');
+           this.timerDamage = true;
+           this.timerDamage = this.time.delayedCall(500, () => {
+             this.timerDamage = false;
+             this.player.clearTint(); // Remove the tint
+           }, [], this);
+     
+           this.player.setTint(0xff0000); // Set the player sprite to red
+     
+           if (this.characterHealth <= 0) {
+             console.log ('player is dead');
+           }
+         }
+       });
+     });
+    
+      // ***************  end of monster damage code update **********************  
 
-    // ******************  moving this inside the timed loop minimizes the tinting, player can run away. ****************    
-              // Apply a damage effect, like flashing the player sprite
-      this.player.setTint(0xff0000); // Set the player sprite to red
-      // Use a timer to remove the tint after a short delay
-      this.timeDamage = this.time.addEvent({
-        delay: 500,                // delay in ms
-        callback: () => {
-          this.timeDamage = false;
-          this.player.clearTint(); // Remove the tint
-        },
-        callbackScope: this,
-        loop: false
+      let followDistance = 150;
+      let speed = 50;
+      //let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7];
+      monsters.forEach(monster => {
+        // Seek AI movement
+        let directionX = this.player.x - monster.x;
+        let directionY = this.player.y - monster.y;
+    
+        // direction to unit vector
+        let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+    
+        // Check if the distance is less than a certain value
+        if (magnitude < followDistance) {
+          directionX /= magnitude;
+          directionY /= magnitude;
+    
+          // monsters velocity
+          monster.body.velocity.x = directionX * speed;
+          monster.body.velocity.y = directionY * speed;
+
+          // Monster attack
+          if ( Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y) < 75
+          ) { 
+            monster.damage = 10;
+            monster.body.velocity.x = 0;
+            monster.anims.play("SkeletonAttack", true);
+          }
+        } else {
+          // If the player is too far, stop the monster
+          monster.body.velocity.x = 0;
+          monster.body.velocity.y = 0;
+        }
       });
 
+      // =====================  LEVEL CHANGE ============================================
+      let threshold = 10;
+
+
+      if (Math.abs(this.player.x - 1505.5) < threshold && Math.abs(this.player.y - 59) < threshold) {
+        
+        eventsCenter.emit('levelChange', 2);
+        this.zurpalen.stop();
+        this.walkingSound.stop();
+        this.walkingSound2.stop();
+        this.scene.start(CST.SCENES.LEVEL2);
+        this.scene.destroy(Level1);
+
       }
-
-      // this.updateCharacterHealth(this.monster.damage*.0001);
-      // console.log('character is hit');
-      // console.log ('monster damage is: ', this.monster.damage);
-      // Check if the player's health is 0 or less
-    // ***************  end of monster damage code update **********************  
-      if (this.characterHealth <= 0) {
-        console.log ('player is dead');
-      }
-      // // Apply a damage effect, like flashing the player sprite
-      // this.player.setTint(0xff0000); // Set the player sprite to red
-      // // Use a timer to remove the tint after a short delay
-      // this.timeDamage = this.time.addEvent({
-      //   delay: 500,                // delay in ms
-      //   callback: () => {
-      //     this.timeDamage = false;
-      //     this.player.clearTint(); // Remove the tint
-      //   },
-      //   callbackScope: this,
-      //   loop: false
-      // });
-    }, null, this);
-
-    let followDistance = 150;
-    let speed = 50;
-    let monsters = [this.monster, this.monster1, this.monster2];
-    monsters.forEach(monster => {
-      // Seek AI movement
-      let directionX = this.player.x - monster.x;
-      let directionY = this.player.y - monster.y;
-  
-      // direction to unit vector
-      let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
-  
-      // Check if the distance is less than a certain value
-      if (magnitude < followDistance) {
-        directionX /= magnitude;
-        directionY /= magnitude;
-  
-        // monsters velocity
-        monster.body.velocity.x = directionX * speed;
-        monster.body.velocity.y = directionY * speed;
-
-        // Monster attack
-        if ( Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y) < 75
-        ) { 
-          monster.damage = 10;
-          monster.body.velocity.x = 0;
-          monster.anims.play("SkeletonAttack", true);
-        }
-      } else {
-        // If the player is too far, stop the monster
-        monster.body.velocity.x = 0;
-        monster.body.velocity.y = 0;
-      }
-    });
-
-    // =====================  LEVEL CHANGE ============================================
-    let threshold = 10;
-
-
-    if (Math.abs(this.player.x - 1505.5) < threshold && Math.abs(this.player.y - 59) < threshold) {
-      
-      eventsCenter.emit('levelChange', 2);
-      this.zurpalen.stop();
-      this.walkingSound.stop();
-      this.walkingSound2.stop();
-      this.scene.start(CST.SCENES.LEVEL2);
-      this.scene.destroy(Level1);
-
+    };
   }
-
-
-
-  };
-}
