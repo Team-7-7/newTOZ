@@ -56,6 +56,8 @@ preload ()
 {
 
     const state = store.getState() // this brings in the state from redux
+    // this.characterHealth = state.userCharacter.character.currentHP;
+
 
     //bring in values of the character from state:
     if(!this.loadedCharacterStats){
@@ -170,7 +172,7 @@ create ()
     eventsCenter.on('updateHP', (health) => {
         this.characterHealth = health;
         console.log ('in the pause scene, characterHealth is: ', this.characterHealth);
-        // updateStats();
+        updateStats();
     })
             
 
@@ -214,7 +216,9 @@ const updateStats = () =>{
     let armorSum = state.gear.allPossibleGear[this.head_gear1].armor_bonus + state.gear.allPossibleGear[this.left_hand_gear2].armor_bonus + state.gear.allPossibleGear[this.right_hand_gear3].armor_bonus + state.gear.allPossibleGear[this.foot_gear4].armor_bonus + state.gear.allPossibleGear[this.chest_gear5].armor_bonus;
     let speedSum = state.gear.allPossibleGear[this.head_gear1].speed_bonus + state.gear.allPossibleGear[this.left_hand_gear2].speed_bonus + state.gear.allPossibleGear[this.right_hand_gear3].speed_bonus + state.gear.allPossibleGear[this.foot_gear4].speed_bonus + state.gear.allPossibleGear[this.chest_gear5].speed_bonus;
 
-    this.characterHealth = state.userCharacter.character.currentHP;
+    // this.characterHealth = state.userCharacter.character.currentHP;
+    this.characterHealth = this.characterHealth;
+
     this.characterMaxHealth = state.userCharacter.character.maxHP + healthSum;
     this.characterArmor = state.userCharacter.character.base_armor +armorSum;
     this.characterAttack = state.userCharacter.character.base_attack + attackSum;
