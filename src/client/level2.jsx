@@ -489,7 +489,7 @@ eventsCenter.on(
    this.zurpalen.stop();
    this.walkingSound.stop();
    this.walkingSound2.stop();
-   this.scene.start(CST.SCENES.LEVEL3);
+   this.scene.start(CST.SCENES.ZARPULEN);
    this.scene.destroy(Level2);
 
 }
