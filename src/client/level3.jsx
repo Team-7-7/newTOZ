@@ -333,7 +333,7 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
           if(!this.timerPlayerDamage){
             console.log('medusa health is: ', this.medusa.health);
             let playerDamage = this.characterAttack*2;
-            medusa.health -= playerDamage;
+            this.medusa.health -= playerDamage;
             console.log('in overlap function, monster health is: ', this.medusa.health);
             this.timerPlayerDamage = true;
             this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
