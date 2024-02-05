@@ -572,6 +572,7 @@ this.isSound1PlayedLast = true;
          // decrease health when player and monster collide
          if (!this.timerDamage){ 
            this.updateCharacterHealth(10*.50);
+
            console.log('character is hit');
            this.timerDamage = true;
            this.timerDamage = this.time.delayedCall(800, () => {
