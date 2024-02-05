@@ -241,7 +241,7 @@ this.isSound1PlayedLast = true;
       repeat: -1,
     });
 
-    // ================== MONSTER STUFF ===========================  
+    // ================== MONSTER STUFF =========================== 
     this.monster  = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
     this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
     this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
@@ -251,6 +251,12 @@ this.isSound1PlayedLast = true;
     this.monster6= this.physics.add.sprite(595, 767, "skeleton" , "sprite9");
     this.monster7= this.physics.add.sprite(1322, 333, "skeleton" , "sprite9");
     this.monster.setSize(60, 54);
+
+    let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7];
+    monsters.forEach(monster => {
+      monster.health = 100; 
+    });
+    
 
     //keeps monster in bounds
     this.physics.add.collider(this.monsters, WorldLayer);
@@ -503,7 +509,7 @@ this.isSound1PlayedLast = true;
           `y: ${this.player.y}`
         );
       }
-
+      
     // ===========================  SOUNDS STUFF ==================================================
       //code alternates walking sound effects to avoid overlap
       if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
@@ -557,18 +563,18 @@ this.isSound1PlayedLast = true;
      if(this.keys.k.isDown){
       this.swoosh.play();
      }
-     
-     // ========================  MONSTER STUFF ============================================ 
-     let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7];
+
+     // ========================  MONSTER STUFF ============================================
+     let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7]; 
 
      monsters.forEach(monster => {
-       this.physics.add.overlap(this.player, monster, () => { // decrease health when player and monster collide
-         // ************* monster damage code update ******************  
-         if (!this.timerDamage){ // this has the player hit only every half second. uses less memory same effect
-           this.updateCharacterHealth(this.monster.damage*.50);
+       const monsterCollider = this.physics.add.overlap(this.player, monster, () => { 
+         // decrease health when player and monster collide
+         if (!this.timerDamage){ 
+           this.updateCharacterHealth(10*.50);
            console.log('character is hit');
            this.timerDamage = true;
-           this.timerDamage = this.time.delayedCall(500, () => {
+           this.timerDamage = this.time.delayedCall(800, () => {
              this.timerDamage = false;
              this.player.clearTint(); // Remove the tint
            }, [], this);
@@ -579,14 +585,34 @@ this.isSound1PlayedLast = true;
              console.log ('player is dead');
            }
          }
+     
+         // the player can attack while there is overlap
+         if(this.keys.k.isDown){
+           if(!this.timerPlayerDamage){
+             console.log('monster health is: ', monster.health);
+             let playerDamage = this.characterAttack*2;
+             monster.health -= playerDamage;
+             console.log('in overlap function, monster health is: ', monster.health);
+             console.log('this.monster is: ', monster)
+             this.timerPlayerDamage = true;
+             this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
+             console.log('this.monster.health is: ', monster.health);
+             if(monster.health <1){
+               console.log('monster is dead')
+               monster.anims.play("SkeletonDie", true);
+               monsterCollider.destroy();
+               this.physics.add.staticSprite(monster.x, monster.y, 'chest', 2);
+               monster.destroy()
+             }
+           }
+         }
        });
      });
-    
-      // ***************  end of monster damage code update **********************  
 
-      let followDistance = 150;
+    //=================================MonsterTracking=====================================
+    let followDistance = 150;
       let speed = 50;
-      //let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7];
+
       monsters.forEach(monster => {
         // Seek AI movement
         let directionX = this.player.x - monster.x;
