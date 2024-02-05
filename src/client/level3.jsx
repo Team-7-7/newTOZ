@@ -1,4 +1,4 @@
-// level2.jsx
+// level3.jsx
 
 import { CST } from "./loading_menu/CST.jsx";
 
@@ -18,8 +18,24 @@ export class Level3 extends Phaser.Scene {
     this.chest2;
     this.cursors;
     this.monster;
+    this.medusa;
     this.gameOver = false;
   }
+
+
+  //this method takes in the amount the health needs to change for a loss. To increase health the argument would need to paradoxically, be a negative mumber
+  //example:    this.updateCharacterHealth(this.monster.damage*.0001); 
+  updateCharacterHealth(healthChange) {
+    console.log('healthchange is: ', healthChange);
+    this.characterHealth -= healthChange;
+    if (this.characterHealth <= 0) {   //no more health? go to GAME OVER 
+      this.zurpalen.stop();            //stop the music
+      this.walkingSound.stop();
+      this.walkingSound2.stop();
+      this.scene.start(CST.SCENES.GAMEOVER)};
+      console.log('health is at: ', this.characterHealth);
+    eventsCenter.emit('updateHP', this.characterHealth); // Emit 'updateCharacterHealth' event with the new health value
+  };
 
   init() {
     console.log("level3");
@@ -98,11 +114,16 @@ export class Level3 extends Phaser.Scene {
     this.load.audio('swoosh', 'assets/audio/soundeffects/swoosh.mp3')
  
  
- 
+ // ########################### Medusa boss ############################
+ this.load.atlas('medusa', 'assets/levelAssets/medusa.png', 'assets/levelAssets/medusa-sprite.json');
   }
 
   create() {
-    
+      // =========== Health Bar healthbar =========== //
+      eventsCenter.on('updateHP', (newHealth) => {
+        this.characterHealth = newHealth;
+      }, this);
+      // =========== End Health Bar ======== /// 
     
     
     this.isSound1PlayedLast = true;
@@ -132,9 +153,14 @@ export class Level3 extends Phaser.Scene {
     this.zurpalen.play();
     
     this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
+    this.scene.launch("PAUSE"); // starts the pause screen and loads stats
 
     this.map = this.make.tilemap({ key: "map3" });
     const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles3");
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
     
     this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
     this.floorLayer.setCollisionByProperty({ collides: false });
@@ -147,8 +173,7 @@ export class Level3 extends Phaser.Scene {
 
     this.player = this.physics.add.sprite(57, 1104, "playerSprite");
 
-    // this.selectLayer(this.floorLayer);
-    // this.selectLayer(this.worldLayer);
+
     this.physics.add.collider(this.player, this.WorldLayer);
 
     // **************** Loading player stats ************************
@@ -212,7 +237,155 @@ export class Level3 extends Phaser.Scene {
     frameRate: 10,
     repeat: -1,
   });
+//################ MEDUSA BELOW  ###########//
 
+
+  this.medusa = this.physics.add.sprite(513, 109, "medusa", "a1")
+  this.medusa.health = 300;
+  this.medusa.setScale(1.5)
+  this.medusa.setOrigin(0.5, 0.5);
+
+
+  //keeps medusa in bounds
+  this.physics.add.collider(this.medusa, this.WorldLayer);
+  this.physics.add.collider(this.player, this.medusa);
+  this.medusa.setImmovable(true);
+  this.medusa.setCollideWorldBounds(true);
+  this.medusa.body.onCollide = (true);
+
+  //medusa animation movements
+  this.anims.create({
+    key: "MedusaIdle",
+    frames: this.anims.generateFrameNames("medusa", { frames: [ "idle1","idle2","idle3","idle4","idle5","idle6" ], }),
+    frameRate: 8,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "MedusaMove",
+    frames: this.anims.generateFrameNames("medusa", { frames: [ "move1", "move2", "move3", "move4" ], }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "MedusaDeath",
+    frames: this.anims.generateFrameNames("medusa", { frames: [ "death1", "death2", "death3", "death4", "death5", "death6" ], }),
+    frameRate: 10,
+    repeat: -1,
+  });
+  
+  this.anims.create({
+    key: "MedusaHurt",
+    frames: this.anims.generateFrameNames("medusa", { frames: [ "hurt1", "hurt2", "hurt3" ], }),
+    frameRate: 10,
+    repeat: -1,
+  });
+  
+  this.anims.create({
+    key: "MedusaAttackSnakes",
+    frames: this.anims.generateFrameNames("medusa", { frames: [ "a1", "a2", "a3", "a4", "a5", "a6", "a7" ], }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "MedusaAttackDeathRay",
+    frames: this.anims.generateFrameNames("medusa", { frames: [ "attack1", "attack2", "attack3", "attack4", "attack5", "attack6" ], }),
+    frameRate: 10,
+    repeat: -1,
+  });
+  
+//play monster animations
+this.medusa.anims.play('MedusaIdle', 'MedusaMove', 'MedusaDeath', 'MedusaHurt', 'MedusaAttackSnakes', 'MedusaAttackDeathRay', true);
+
+
+//MEDUSA Collider
+
+const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => { 
+         // decrease health when player and monster collide
+         if (!this.timerDamage){ 
+          this.updateCharacterHealth(5);
+
+          console.log('character is hit');
+          this.timerDamage = true;
+          this.timerDamage = this.time.delayedCall(800, () => {
+            this.timerDamage = false;
+            this.player.clearTint(); // Remove the tint
+          }, [], this);
+    
+          this.player.setTint(0xff0000); // Set the player sprite to red
+    
+          if (this.characterHealth <= 0) {
+            console.log ('player is dead');
+          }
+        }
+    
+        // the player can attack while there is overlap
+        if(this.keys.k.isDown){
+          if(!this.timerPlayerDamage){
+            console.log('medusa health is: ', this.medusa.health);
+            let playerDamage = this.characterAttack*2;
+            medusa.health -= playerDamage;
+            console.log('in overlap function, monster health is: ', this.medusa.health);
+            this.timerPlayerDamage = true;
+            this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
+            console.log('this.monster.health is: ', this.medusa.health);
+            if(this.medusa.health <1){
+              console.log('medusa is dead')
+              this.medusa.anims.play("MedusaDeath", true);
+              medusaCollider.destroy();
+              // this.physics.add.staticSprite(monster.x, monster.y, 'chest', 2);
+              this.medusa.destroy()
+            }
+          }
+        }
+      });
+
+//=================================Medusa Tracking=====================================
+let followDistance = 500;
+let speed = 80;
+
+
+  // Seek AI movement
+  let directionX = this.player.x - this.medusa.x;
+  let directionY = this.player.y - this.medusa.y;
+
+  // direction to unit vector
+  let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+
+  // Check if the distance is less than a certain value
+  if (magnitude < followDistance) {
+    directionX /= magnitude;
+    directionY /= magnitude;
+
+      // Set Medusa's animation for movement
+  this.medusa.anims.play("MedusaMove", true);
+  console.log("medusa move")
+
+    // medusas velocity
+    this.medusa.body.velocity.x = directionX * speed;
+    this.medusa.body.velocity.y = directionY * speed;
+
+    // medusa attack
+    if ( Phaser.Math.Distance.Between(this.medusa.x, this.medusa.y, this.player.x, this.player.y) < 75
+    ) { 
+      this.medusa.damage = 10;
+      this.medusa.body.velocity.x = 0;
+      this.medusa.anims.play("MedusaAttackDeathRay", true);
+    }
+  } else {
+    // If the player is too far, stop the medusa
+    this.medusa.body.velocity.x = 0;
+    this.medusa.body.velocity.y = 0;
+
+     // Set Medusa's animation for idle or any other appropriate animation
+  this.medusa.anims.play("MedusaIdle", true);
+  }
+
+
+
+//################ MEDUSA ABOVE  ###########//
 
   this.cursors = this.input.keyboard.createCursorKeys();
   this.keys = this.input.keyboard.addKeys({
@@ -273,18 +446,7 @@ export class Level3 extends Phaser.Scene {
       }
       if (this.keys.p.isDown) {
         console.log("p is pressed, pausing game");
-        this.scene.pause("LEVEL2");
-        this.scene.launch("PAUSE");
-      }
-
-      if (this.keys.k.isDown) {
-        this.player.anims.play("attackLeft", true);
-        //   this.player.on('animationupdate-attackRight', function (animation, frame) {
-        //     console.log(frame.frame.name);
-      }
-      if (this.keys.p.isDown) {
-        console.log("p is pressed, pausing game");
-        this.scene.pause("LEVEL2");
+        this.scene.pause("LEVEL3");
         this.scene.launch("PAUSE");
       }
     
