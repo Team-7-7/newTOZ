@@ -160,8 +160,7 @@ export class Level3 extends Phaser.Scene {
 
     this.zurpalen.play();
     
-    this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
-    this.scene.launch("PAUSE"); // starts the pause screen and loads stats
+
 
     this.map = this.make.tilemap({ key: "map3" });
     const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles3");
@@ -350,46 +349,7 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
         }
       });
 
-//=================================Medusa Tracking=====================================
-let followDistance = 500;
-let speed = 80;
 
-
-  // Seek AI movement
-  let directionX = this.player.x - this.medusa.x;
-  let directionY = this.player.y - this.medusa.y;
-
-  // direction to unit vector
-  let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
-
-  // Check if the distance is less than a certain value
-  if (magnitude < followDistance) {
-    directionX /= magnitude;
-    directionY /= magnitude;
-
-      // Set Medusa's animation for movement
-  this.medusa.anims.play("MedusaMove", true);
-  console.log("medusa move")
-
-    // medusas velocity
-    this.medusa.body.velocity.x = directionX * speed;
-    this.medusa.body.velocity.y = directionY * speed;
-
-    // medusa attack
-    if ( Phaser.Math.Distance.Between(this.medusa.x, this.medusa.y, this.player.x, this.player.y) < 75
-    ) { 
-      this.medusa.damage = 10;
-      this.medusa.body.velocity.x = 0;
-      this.medusa.anims.play("MedusaAttackDeathRay", true);
-    }
-  } else {
-    // If the player is too far, stop the medusa
-    this.medusa.body.velocity.x = 0;
-    this.medusa.body.velocity.y = 0;
-
-     // Set Medusa's animation for idle or any other appropriate animation
-  this.medusa.anims.play("MedusaIdle", true);
-  }
 
 
 
@@ -550,8 +510,71 @@ let speed = 80;
 
 
 
+///=================================Medusa Tracking=====================================
+let followDistance = 500;
+let speed = 70;
 
+// Stagger variables
+let staggerTimer = 0;
+let staggerDuration = 200; // Adjust the duration of staggered movements
+let isZigZag = true;
 
+// Flag to track if Medusa has attacked
+let hasAttacked = false;
+
+// Seek AI movement
+let directionX = this.player.x - this.medusa.x;
+let directionY = this.player.y - this.medusa.y;
+
+// direction to unit vector
+let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+
+// Check if the distance is less than a certain value
+if (magnitude < followDistance) {
+  directionX /= magnitude;
+  directionY /= magnitude;
+
+  // Staggered movements
+  staggerTimer -= this.time.deltaTime;
+  if (staggerTimer <= 0) {
+    // Toggle between zig-zag and straight movements
+    isZigZag = !isZigZag;
+
+    // Apply staggered movements
+    if (isZigZag) {
+      // Zig-zag movement
+      directionX = Math.cos(this.time.now / 100) * directionX;
+      directionY = Math.sin(this.time.now / 100) * directionY;
+    }
+
+    // Reset the stagger timer
+    staggerTimer = staggerDuration;
+  }
+
+  // Set Medusa's velocity
+  this.medusa.body.velocity.x = directionX * speed;
+  this.medusa.body.velocity.y = directionY * speed;
+
+  // Medusa attack
+  if (Phaser.Math.Distance.Between(this.medusa.x, this.medusa.y, this.player.x, this.player.y) < 75 && !hasAttacked) { 
+    this.medusa.damage = 10;
+    this.medusa.body.velocity.x = 0;
+    this.medusa.anims.play("MedusaAttackDeathRay", true).on('animationcomplete', function () {
+      // Callback function triggered when the attack animation completes
+      hasAttacked = true;  // Set the flag to true after the attack
+    }, this);
+  }
+} else {
+  // If the player is too far, stop the Medusa
+  this.medusa.body.velocity.x = 0;
+  this.medusa.body.velocity.y = 0;
+
+  // Set Medusa's animation for idle or any other appropriate animation
+  this.medusa.anims.play("MedusaIdle", true);
+
+  // Reset the hasAttacked flag when player is not in range
+  hasAttacked = false;
+}
 
 
 
