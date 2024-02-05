@@ -63,6 +63,8 @@ export class Level3 extends Phaser.Scene {
         );
         break;
 
+    
+   
         
     }
 
@@ -97,8 +99,8 @@ export class Level3 extends Phaser.Scene {
     this.load.audio('zurpalen', 'assets/audio/soundeffects/zurpalen.mp3')
     this.load.audio('swoosh', 'assets/audio/soundeffects/swoosh.mp3')
  
- 
- 
+ // ########################### Medusa boss ############################
+ this.load.atlas('medusa', 'assets/levelAssets/medusa.png', 'assets/levelAssets/medusa_sprite.json');
   }
 
   create() {
