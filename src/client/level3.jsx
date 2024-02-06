@@ -290,51 +290,6 @@ this.anims.create({
 this.medusa.anims.play('MedusaIdle', 'MedusaMove', 'MedusaDeath', 'MedusaHurt', 'MedusaAttackSnakes', 'MedusaAttackDeathRay', true);
 
 
-//MEDUSA Collider
-const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => { 
-         // decrease health when player and monster collide
-         if (!this.timerDamage){ 
-          this.updateCharacterHealth(5);
-
-          console.log('character is hit');
-          this.timerDamage = true;
-          this.timerDamage = this.time.delayedCall(800, () => {
-            this.timerDamage = false;
-            this.player.clearTint(); // Remove the tint
-          }, [], this);
-    
-          this.player.setTint(0xff0000); // Set the player sprite to red
-    
-          if (this.characterHealth <= 0) {
-            console.log ('player is dead');
-          }
-        }
-    
-        // the player can attack while there is overlap
-        if(this.keys.k.isDown){
-          if(!this.timerPlayerDamage){
-            console.log('medusa health is: ', this.medusa.health);
-            let playerDamage = this.characterAttack*2;
-            this.medusa.health -= playerDamage;
-            this.medusa.anims.play("MedusaHurt", true);
-            console.log('in overlap function, monster health is: ', this.medusa.health);
-            this.timerPlayerDamage = true;
-            this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
-            console.log('this.monster.health is: ', this.medusa.health);
-            if(this.medusa.health <1){
-              console.log('medusa is dead')
-              this.medusa.anims.stop();
-              this.medusa.anims.play("MedusaDeath", true);
-            //   setTimeout(() => {
-            //   medusaCollider.destroy();
-            //   this.medusa.destroy()
-            // }, 2000)
-          }
-        }
-  }});
-
-//################ MEDUSA ABOVE  ###########//
-
   this.cursors = this.input.keyboard.createCursorKeys();
   this.keys = this.input.keyboard.addKeys({
     w: Phaser.Input.Keyboard.KeyCodes.W,
@@ -516,10 +471,56 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
 
 
 
+//MEDUSA Collider
+const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => { 
+  // decrease health when player and monster collide
+  if (!this.timerDamage){ 
+   this.updateCharacterHealth(5);
+
+   console.log('character is hit');
+   this.timerDamage = true;
+   this.timerDamage = this.time.delayedCall(800, () => {
+     this.timerDamage = false;
+     this.player.clearTint(); // Remove the tint
+   }, [], this);
+
+   this.player.setTint(0xff0000); // Set the player sprite to red
+
+   if (this.characterHealth <= 0) {
+     console.log ('player is dead');
+   }
+ }
+
+ // the player can attack while there is overlap
+ if(this.keys.k.isDown){
+   if(!this.timerPlayerDamage){
+     console.log('medusa health is: ', this.medusa.health);
+     let playerDamage = this.characterAttack*2;
+     this.medusa.health -= playerDamage;
+     this.medusa.anims.play("MedusaHurt", true);
+     console.log('in overlap function, monster health is: ', this.medusa.health);
+     this.timerPlayerDamage = true;
+     this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
+     console.log('this.monster.health is: ', this.medusa.health);
+     if(this.medusa.health <1){
+       console.log('medusa is dead')
+       this.medusa.anims.stop();
+       this.medusa.anims.play("MedusaDeath", true);
+       setTimeout(() => {
+       medusaCollider.destroy();
+       this.medusa.destroy()
+     }, 2000)
+   }
+ }
+}});
+
+//################ MEDUSA ABOVE  ###########//
+
+
 ///=================================Medusa Tracking=====================================
 let followDistance = 500;
 let speed = 70;
-let stopDistance = 100;
+let stopDistance = 50;
 
 //checks to see if medusa is dead 
 if(!this.medusa || !this.medusa.body){
