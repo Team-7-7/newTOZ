@@ -14,6 +14,7 @@ export class GameOver extends Phaser.Scene {
   }
 
   create() {
+    this.scene.stop("HEALTH");
     // Background setup
     let bg1 = this.add.image(400, 300, "background1");
     let scaleX = this.scale.width / bg1.width;
