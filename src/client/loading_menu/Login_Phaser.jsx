@@ -77,13 +77,13 @@ export class LoginScene extends Phaser.Scene {
 
                             //get User Record from DB and set it in state
                             const { data: userRecord } = await axios.get(`/api/user/${userId}`);
-                            console.log("user record: ", userRecord)
+                            // console.log("user record: ", userRecord)
 
                             // TO DO -> SELECT CHARACTER CLASS /////////
                             // if no character is associated with the user yet, take them to the character selection page
                             if (!userRecord.character_id) {
 
-                                console.log('no character record, you need to build your character')
+                                // console.log('no character record, you need to build your character')
                                 // TO DO!
                                 // navigate('/character') 
                             }
@@ -96,7 +96,7 @@ export class LoginScene extends Phaser.Scene {
                                 store.dispatch(setUserCharacter(characterRecord));
                                 //load up 
                                 const { data: userInventory } = await axios.get(`/api/inventory/${userRecord.character_id}`);
-                                console.log("UserInventory : ", userInventory)
+                                // console.log("UserInventory : ", userInventory)
                                 userInventory.forEach(async (gearItem) => {
                                     const { data: gearDetails } = await axios.get(`/api/gear/${gearItem.gear_id}`)
                                     store.dispatch(addItemToInventory(gearDetails));
@@ -158,8 +158,8 @@ export class LoginScene extends Phaser.Scene {
                 else {
                     //  Flash the prompt
 
-                    console.log(text)
-                    console.log(element)
+                    // console.log(text)
+                    // console.log(element)
 
                     this.scene.tweens.add({
                         targets: text,

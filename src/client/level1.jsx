@@ -49,14 +49,12 @@ export class Level1 extends Phaser.Scene {
   //this method takes in the amount the health needs to change for a loss. To increase health the argument would need to paradoxically, be a negative mumber
   //example:    this.updateCharacterHealth(this.monster.damage*.0001); 
   updateCharacterHealth(healthChange) {
-    console.log('healthchange is: ', healthChange);
     this.characterHealth -= healthChange;
     if (this.characterHealth <= 0) {   //no more health? go to GAME OVER 
       this.zurpalen.stop();            //stop the music
       this.walkingSound.stop();
       this.walkingSound2.stop();
       this.scene.start(CST.SCENES.GAMEOVER)};
-      console.log('health is at: ', this.characterHealth);
     eventsCenter.emit('updateHP', this.characterHealth); // Emit 'updateCharacterHealth' event with the new health value
   };
 
@@ -66,7 +64,6 @@ export class Level1 extends Phaser.Scene {
   preload ()
   {
     const state = store.getState() // this brings in the state from redux
-    console.log(state, "in preload")
 
       this.load.image('floor', '/assets/levelAssets/floor.png');
       this.load.image('tiles', '/assets/levelAssets/OLDtileset32x32.png');
@@ -75,15 +72,12 @@ export class Level1 extends Phaser.Scene {
       // the three classes sprites load here
       switch(state.userCharacter.character.character_class){
       case "warrior":
-          console.log('loading the warrior');
           this.load.atlas('playerSprite', 'assets/levelAssets/knight78x60.png', 'assets/levelAssets/knight.json');
           break;
       case "mage":
-          console.log('loading the mage');
           this.load.atlas('playerSprite', 'assets/levelAssets/mage78x60.png', 'assets/levelAssets/mage.json');
           break;
       case "rogue":
-          console.log('loading the rogue');
           this.load.atlas('playerSprite', 'assets/levelAssets/rogue78x60.png', 'assets/levelAssets/rogue.json');
           break;
       };
@@ -124,8 +118,6 @@ export class Level1 extends Phaser.Scene {
     function getRandomInt(max) {
       return Math.floor(Math.random() * max);
     }
-
-  
 
     this.map = this.make.tilemap({ key: "map" });
     const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles");
@@ -186,13 +178,11 @@ this.isSound1PlayedLast = true;
 
     // eventsCenter.on('updateStats', 'health', 'maxHealth','armor','attack','speed') => {
     eventsCenter.on('updateStats', (health, maxHealth,armor,attack,speed) => {
-      console.log('on main screen updating stats ');
       this.characterHealth = health;
       this.characterMaxHealth = maxHealth;
       this.characterArmor = armor;
       this.characterAttack = attack;
       this.characterSpeed = speed;
-      console.log('character speed is: ', this.characterSpeed);
   }, this);
 
     //  Our player animations, turning, walking left and walking right.
@@ -313,16 +303,12 @@ this.isSound1PlayedLast = true;
      
        eventsCenter.on('droppingGear', (droppedGearNumber)=>{
         if(this.level ===1){
-        console.log('this.currentLevel in level 1 is: ', this.currentLevel);
-      console.log ('back on level 1 dropped gear number is: ', droppedGearNumber);
       let xdroplocation = getRandomInt(50)+50;
         if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
         xdroplocation += this.player.x;
       let ydroplocation = getRandomInt(50)+50;
         if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
         ydroplocation += this.player.y;
-        // console.log('player location is: ', this.player.x, ' ', this.player.y);
-        // console.log('x and y are: ', xdroplocation, ' ', ydroplocation);
       let droppedGear = this.physics.add.sprite(xdroplocation, ydroplocation, 'gear' , droppedGearNumber-1);
       this.physics.add.collider(this.player, droppedGear, () => {
         this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
@@ -338,13 +324,9 @@ this.isSound1PlayedLast = true;
         //item is added to inventory
         if(lootItem === 'lootGold'){
           const amountOfGold=1+ Math.floor(Math.random()*5);
-          console.log('Character Gold should be increasing by ', amountOfGold);
-          console.log('transmitting from level1 to the pause screen the gold');
           eventsCenter.emit('updateGold', amountOfGold);
 
         }else if (lootItem === 'lootGear') {
-          console.log('the item picked up is a ', item);
-          console.log('transmitting from level1 to the pause screen the item');
           eventsCenter.emit('lootedItem', gearNumber);
         }
       };
@@ -361,7 +343,6 @@ this.isSound1PlayedLast = true;
               }, null, this)
         // gear loot code here        
             const randomLootNumber = getRandomInt(10)+1;
-            console.log('random loot number is: ', randomLootNumber);
               if (randomLootNumber>6){ // ******************************* there are 6 possible loot items in the gear database *****
                 // no extra loot found
               }else{
@@ -401,7 +382,6 @@ this.isSound1PlayedLast = true;
                   this.collectItem(gold, 'lootGold');
                 }, null, this);
           const randomLootNumber = getRandomInt(10)+1;
-          console.log('random loot number is: ', randomLootNumber);
             if (randomLootNumber>6){ // ******************************* there are 6 possible loot items in the gear database *****
               // no extra loot found
             }else{
@@ -467,42 +447,27 @@ this.isSound1PlayedLast = true;
   
         });
 
-    // ========================= DOOR  to next level =========================================
-
-      // this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
-      // this.door = this.physics.add.staticSprite(1570,75, 'door', 1); 
-      // this.physics.add.collider(this.player, this.door, () => {
-      //   WorldLayer.destroy();
-      //   eventsCenter.emit('levelChange', 2);
-      //   this.zurpalen.stop();
-      //   this.walkingSound.stop();
-      //   this.walkingSound2.stop();
-      //   this.scene.start(CST.SCENES.LEVEL2);
-      //   this.scene.destroy(Level1);
-      // }, null, this)
   
     // ======================camera controls, follows player and zooms in ==================================
     this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     this.cameras.main.setZoom(1); // 1 is the default zoom level
     // Set boundaries for the camera
-    //   this.cameras.main.setBounds(0, 0, 1600, 1200);k
     this.cameras.main.setBounds(-500, -500, 2300, 2100);
     eventsCenter.on(
       "gameOver",
       (bool) => {
-        console.log("someone quit the game");
         this.gameOver = bool;
       },this);
   }
 // ############################### UPDATE ###############################################
-    update() {
-      if (this.gameOver) {
-        return;
-      }
+  update() {
+    if (this.gameOver) {
+      return;
+    }
 
-      function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-      }
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
 
   // ===================  KEY CONTROLS ==============================================
      
@@ -537,10 +502,8 @@ if (this.keys.k.isDown) {
   this.player.anims.stop(); // stop animation to play attack animation
   if (playerDirection === "left") {
     this.player.anims.play("attackLeft", true);
-    console.log(this.player.anims.isPlaying);
   } else if (playerDirection === "right") {
     this.player.anims.play("attackRight", true);
-    console.log(this.player.anims.isPlaying);
   } else if (playerDirection === "up") {
     this.player.anims.play("attackUp", true);
   } else if (playerDirection === "down") {
@@ -560,12 +523,7 @@ if (this.keys.l.isDown) {
     `y: ${this.player.y}`
   );
 }
-  
-  
-  
-  
- 
-      
+    
     // ===========================  SOUNDS STUFF ==================================================
       //code alternates walking sound effects to avoid overlap
       if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
@@ -610,7 +568,6 @@ if (this.keys.l.isDown) {
         this.isMoving = false;
         setTimeout(() => {
           if(this.player.body.velocity.y === 0 && !this.isMoving){
-            
             this.walkingSound.stop();
             this.walkingSound2.stop();
           }
@@ -628,8 +585,6 @@ if (this.keys.l.isDown) {
          // decrease health when player and monster collide
          if (!this.timerDamage){ 
            this.updateCharacterHealth(10*.50);
-
-           console.log('character is hit');
            this.timerDamage = true;
            this.timerDamage = this.time.delayedCall(800, () => {
              this.timerDamage = false;
@@ -639,7 +594,6 @@ if (this.keys.l.isDown) {
            this.player.setTint(0xff0000); // Set the player sprite to red
      
            if (this.characterHealth <= 0) {
-             console.log ('player is dead');
            }
          }
      
@@ -649,11 +603,8 @@ if (this.keys.l.isDown) {
              console.log('monster health is: ', monster.health);
              let playerDamage = this.characterAttack*4;
              monster.health -= playerDamage;
-             console.log('in overlap function, monster health is: ', monster.health);
-             console.log('this.monster is: ', monster)
              this.timerPlayerDamage = true;
              this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
-             console.log('this.monster.health is: ', monster.health);
              if(monster.health <= 1){
                console.log('monster is dead')
                monster.anims.play("SkeletonDie", true);

@@ -48,7 +48,7 @@ const PhaserGame = () => {
           families: ['p-script', 'pixle script bold']
       },
       active: function() {
-          console.log('font loaded');
+          // console.log('font loaded');
           // Once the fonts are loaded, start the Phaser game
           var game = new Phaser.Game(config);
       }

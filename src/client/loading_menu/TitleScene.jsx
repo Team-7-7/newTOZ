@@ -25,11 +25,6 @@ export class TitleScene extends Phaser.Scene {
 
   create() {
 
-
-
-
-
-
     let bg1 = this.add.image(400, 300, "castle");
     let scaleX = this.scale.width / bg1.width;
     let scaleY = this.scale.height / bg1.height;
@@ -77,7 +72,8 @@ export class TitleScene extends Phaser.Scene {
   
       function logout() {
         localStorage.removeItem('TOKEN');
-        console.log('Token removed. User logged out.');}
+        // console.log('Token removed. User logged out.');
+      }
   
         logoutText.setInteractive();
         logoutText.on('pointerup', () => {
@@ -101,7 +97,7 @@ export class TitleScene extends Phaser.Scene {
       });
 
       registerButton.on('pointerup', () => {
-        console.log('Register button clicked');
+        // console.log('Register button clicked');
         this.scene.start('REGISTRATION');
       });
 

@@ -56,8 +56,6 @@ preload ()
 {
 
     const state = store.getState() // this brings in the state from redux
-    // this.characterHealth = state.userCharacter.character.currentHP;
-
 
     //bring in values of the character from state:
     if(!this.loadedCharacterStats){
@@ -113,8 +111,6 @@ create ()
     const state = store.getState() // this brings in the state from redux
     this.input.mouse.disableContextMenu();  // makes the right mouse button usable in the game
 
-    // console.log('this is state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl: ', state.gear.allPossibleGear[this.right_hand_gear3].graphicUrl);
-
     //  Input Events
     this.keys = this.input.keyboard.addKeys({
         //   w: Phaser.Input.Keyboard.KeyCodes.W,
@@ -139,7 +135,6 @@ create ()
         if(!this.timerGear){
         //***********************  code here for putting in backpack */
         this.ground = item;
-        console.log('this is the this.ground: ', this.ground);
         if (this.backpack1 === 7){
             equipItem('BP1', )
         } else if(this.backpack2 === 7){
@@ -171,7 +166,6 @@ create ()
 
     eventsCenter.on('updateHP', (health) => {
         this.characterHealth = health;
-        console.log ('in the pause scene, characterHealth is: ', this.characterHealth);
         updateStats();
     })
             
@@ -209,27 +203,19 @@ create ()
 // ================================ FUNCTIONS =================================================    
 const updateStats = () =>{
 
-    console.log('updating the Stats');
-
     let attackSum = state.gear.allPossibleGear[this.head_gear1].attack + state.gear.allPossibleGear[this.left_hand_gear2].attack + state.gear.allPossibleGear[this.right_hand_gear3].attack + state.gear.allPossibleGear[this.foot_gear4].attack + state.gear.allPossibleGear[this.chest_gear5].attack ;
     let healthSum = state.gear.allPossibleGear[this.head_gear1].health_bonus + state.gear.allPossibleGear[this.left_hand_gear2].health_bonus + state.gear.allPossibleGear[this.right_hand_gear3].health_bonus + state.gear.allPossibleGear[this.foot_gear4].health_bonus + state.gear.allPossibleGear[this.chest_gear5].health_bonus;
     let armorSum = state.gear.allPossibleGear[this.head_gear1].armor_bonus + state.gear.allPossibleGear[this.left_hand_gear2].armor_bonus + state.gear.allPossibleGear[this.right_hand_gear3].armor_bonus + state.gear.allPossibleGear[this.foot_gear4].armor_bonus + state.gear.allPossibleGear[this.chest_gear5].armor_bonus;
     let speedSum = state.gear.allPossibleGear[this.head_gear1].speed_bonus + state.gear.allPossibleGear[this.left_hand_gear2].speed_bonus + state.gear.allPossibleGear[this.right_hand_gear3].speed_bonus + state.gear.allPossibleGear[this.foot_gear4].speed_bonus + state.gear.allPossibleGear[this.chest_gear5].speed_bonus;
 
-    // this.characterHealth = state.userCharacter.character.currentHP;
     this.characterHealth = this.characterHealth;
-
     this.characterMaxHealth = state.userCharacter.character.maxHP + healthSum;
     this.characterArmor = state.userCharacter.character.base_armor +armorSum;
     this.characterAttack = state.userCharacter.character.base_attack + attackSum;
     this.characterSpeed = state.userCharacter.character.base_speed + speedSum;
     this.characterXp = state.userCharacter.character.xp;
-    // this.characterLevel = state.userCharacter.character.level;
     this.characterLevel = this.characterLevel;
     this.characterGold = this.characterGold;
-
-
-
 
     // **************** emit new stats to current level **************************
     eventsCenter.emit('updateStats',  this.characterHealth, this.characterMaxHealth,this.characterArmor,this.characterAttack,this.characterSpeed);
@@ -239,7 +225,6 @@ const updateStats = () =>{
 // ==================================== EQUIP ITEMS ====================================================
 const equipItem = (originalLocation, targetLocation) =>{
    let temp = null;
-    // console.log('in the equipItem function. originalLocation and targetLocation',originalLocation, ' ', targetLocation);
     switch (originalLocation){
     case "BP1":
         switch (targetLocation){
@@ -613,7 +598,6 @@ clickChest.on('pointerdown', (event) => {
 
 // =============================== DROPPING GEAR ====================================
 const dropGear = (location) =>{
-    console.log('in the dropGear function on pause screen. location is: ', location);
     eventsCenter.emit('droppingGear',location);
     location = 7; // this makes the slot empty
 }
@@ -725,7 +709,6 @@ const dropGear = (location) =>{
 
     quitButton.on('pointerup', function(event){
         console.log('quit the game function required')
-        // may need to emit this to the current scene
         eventsCenter.emit('gameOver', true);
 
     }, this);
@@ -764,10 +747,9 @@ update ()
     // {
     // }
 
-    if (this.keys.k.isDown)
-    {
-        console.log('k is pressed, attacking now');
-    }
+    // if (this.keys.k.isDown)
+    // {
+    // }
 
     if (this.keys.p.isDown)
     {
