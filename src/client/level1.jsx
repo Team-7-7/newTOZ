@@ -523,7 +523,7 @@ if (this.keys.l.isDown) {
     `y: ${this.player.y}`
   );
 }
-      
+    
     // ===========================  SOUNDS STUFF ==================================================
       //code alternates walking sound effects to avoid overlap
       if((this.keys.a.isDown || this.cursors.left.isDown) && this.time.now - this.lastSoundTimestamp > 500){
