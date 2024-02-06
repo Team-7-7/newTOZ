@@ -130,6 +130,47 @@ export class Level1 extends Phaser.Scene {
     this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
     this.wallmounts.setCollisionByProperty({ collides: false });
 
+    // ########################### mask for fog of war for later use #################
+    // this.gameWidth = this.scale.width;
+    // this.gameHeight = this.scale.height;
+
+    // this.rt = this.make.renderTexture({ x: 0, y: 0, width: this.gameWidth, height: this.gameHeight });
+
+    // this.mask = this.make.graphics();
+    // this.mask.fillStyle(0xffffff); // Fill with white
+    // this.mask.fillCircle(100, 100, 100); // Adjust the position and size as needed
+
+    // this.rt.clear();
+    // this.rt.fill(0x000000, 1);
+    // this.rt.draw(this.mask);
+
+    // this.map = this.make.tilemap({ key: "map" });
+    // const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles");
+
+    // this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
+    // this.floorLayer.setCollisionByProperty({ collides: false });
+    // const WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
+    // WorldLayer.setCollisionByProperty({ collides: true });
+
+    // this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
+    // this.wallmounts.setCollisionByProperty({ collides: false });
+
+    // // Apply the mask to the layers
+    // this.floorLayer.mask = new Phaser.Display.Masks.BitmapMask(this, this.mask);
+    // WorldLayer.mask = new Phaser.Display.Masks.BitmapMask(this, this.mask);
+    // this.wallmounts.mask = new Phaser.Display.Masks.BitmapMask(this, this.mask);
+
+    // // Create the player after the mask
+    // this.player = this.physics.add.sprite(90, 90, "playerSprite");
+    // this.player.setSize(60, 54);
+    
+    
+    //  ################################
+    // update fucntion code needs to uncommented for fog of war to work
+    // ################################
+    // works just did not have time to ad the monsters and other items in them game 
+ //################################# end fog of war ################  
+
     //  Input Events
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
@@ -458,6 +499,21 @@ this.isSound1PlayedLast = true;
     if (this.gameOver) {
       return;
     }
+
+
+ // ############################## fog of war effect ########################################
+      // this.mask.clear(); // Clear the old drawing
+      // this.mask.fillStyle(0xffffff); // Fill with white
+      // this.mask.fillCircle(this.player.x, this.player.y, 100); // Draw at the player's position
+      // this.mask.generateTexture('mask', this.gameWidth, this.gameHeight); // Update the mask texture
+      // this.rt.clear();
+      // this.rt.fill(0x000000, 1);
+      // this.rt.draw(this.mask);
+          
+    //##########################################################################################
+
+
+
 
     function getRandomInt(max) {
       return Math.floor(Math.random() * max);
