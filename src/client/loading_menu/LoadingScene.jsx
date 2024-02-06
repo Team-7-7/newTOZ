@@ -19,9 +19,6 @@ export class Load extends Phaser.Scene {
     
     create(){
         // this.scene.start(CST.SCENES.LOGIN);
-        this.scene.start(CST.SCENES.MENU,'hello from load scene');
-        console.log('this is the loadingScene.jsx running');
-
-        
+        this.scene.start(CST.SCENES.MENU,'hello from load scene'); 
     }
 }

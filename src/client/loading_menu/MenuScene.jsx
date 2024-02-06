@@ -10,8 +10,8 @@ export class Menu extends Phaser.Scene {
     }
 
     init(data) {
-        console.log(data);
-        console.log("I GOT IT - at the MENU scene");
+        // console.log(data);
+        // console.log("I GOT IT - at the MENU scene");
     }
 
     preload() {

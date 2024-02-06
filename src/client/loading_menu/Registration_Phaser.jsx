@@ -134,7 +134,7 @@ export class RegistrationScene extends Phaser.Scene {
         const inputCharacterName = element.getChildByID('charactername');
         const selectedClass = document.querySelector('input[name="classes"]:checked');
 
-        console.log(inputUsername.value, inputPassword.value, inputCharacterName.value, selectedClass.value)
+        // console.log(inputUsername.value, inputPassword.value, inputCharacterName.value, selectedClass.value)
 
         //  Have they entered the required fields?
         if (inputUsername.value !== '' && inputPassword.value !== '' && inputCharacterName.value !== '') {
@@ -148,13 +148,13 @@ export class RegistrationScene extends Phaser.Scene {
               })
               localStorage.setItem("TOKEN", JSON.stringify(authResponse.token))
               store.dispatch(setToken(authResponse.token)) //pushes token into redux state
-              console.log("user created", authResponse.username, "and put into state")
+              // console.log("user created", authResponse.username, "and put into state")
               const userId = authResponse.id
 
               //get character class stats 1:warrior, 2:mage, 3:rogue
               const { data: characterStats } = await axios.get(`/api/characterclass/${selectedClass.value}`);
               const { name, beginning_attack, beginning_armor, beginning_speed, beginning_hp, graphicUrl } = characterStats;
-              console.log(name, beginning_attack, beginning_armor, beginning_speed, beginning_hp, graphicUrl);
+              // console.log(name, beginning_attack, beginning_armor, beginning_speed, beginning_hp, graphicUrl);
 
               //make character for user in db and add in the base stats from their charater class
               const { data: newCharacter } = await axios.post('/api/character', {
@@ -173,14 +173,14 @@ export class RegistrationScene extends Phaser.Scene {
                 stagescompleted: 0
               });
               store.dispatch(setUserCharacter(newCharacter));  //pushes character info to redux state
-              console.log("character record into state")
+              // console.log("character record into state")
 
               //connect character ID onto user record
               const { data: updateUserWithCharacterId } = await axios.patch('/api/user', {
                 character_id: +newCharacter.id,
                 id: +userId
               })
-              console.log("added character id to user record")
+              // console.log("added character id to user record")
               store.dispatch(removeUser()); //clears user from redux state
               store.dispatch(setUser(updateUserWithCharacterId)); // pushes user info into redux state
             } catch (err) {
@@ -214,8 +214,8 @@ export class RegistrationScene extends Phaser.Scene {
         else {
           //  Flash the prompt
 
-          console.log(text)
-          console.log(element)
+          // console.log(text)
+          // console.log(element)
 
           this.scene.tweens.add({
             targets: text,
