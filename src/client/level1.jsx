@@ -564,41 +564,7 @@ if (this.keys.l.isDown) {
   
   
   
-  // if (this.keys.a.isDown || this.cursors.left.isDown) {
-  //       // this.player.setVelocityX(-160);
-  //       this.player.setVelocityX(-10* this.characterSpeed);
-  //       this.player.anims.play("left", true);
-  //     } else if (this.keys.d.isDown || this.cursors.right.isDown) {
-  //       this.player.setVelocityX(10* this.characterSpeed);
-  //       this.player.anims.play("right", true);
-  //     } else {
-  //       this.player.setVelocityX(0);
-  //       this.player.anims.play("turn", true);
-  //     }
-  //     if (this.keys.w.isDown || this.cursors.up.isDown) {
-  //       this.player.setVelocityY(-10* this.characterSpeed);
-  //       this.player.anims.play("left", true);
-  //     } else if (this.keys.s.isDown || this.cursors.down.isDown) {
-  //       this.player.setVelocityY(10* this.characterSpeed);
-  //       this.player.anims.play("right", true);
-  //     } else {
-  //       this.player.setVelocityY(0);
-  //     }
-  //     if (this.keys.k.isDown) {
-  //       this.player.anims.play("attackLeft", true);
-  //       //   this.player.on('animationupdate-attackRight', function (animation, frame) {
-  //     }
-  //     if (this.keys.p.isDown) {
-  //       this.scene.pause("LEVEL1");
-  //       this.scene.launch("PAUSE");
-  //     }
-  //     if (this.keys.l.isDown) {
-  //       console.log(
-  //         "The player is at these coordinates",
-  //         `x: ${this.player.x}`,
-  //         `y: ${this.player.y}`
-  //       );
-  //     }
+ 
       
     // ===========================  SOUNDS STUFF ==================================================
       //code alternates walking sound effects to avoid overlap
