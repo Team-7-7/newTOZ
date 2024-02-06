@@ -42,6 +42,15 @@ export class Level2 extends Phaser.Scene {
     this.characterSpeed = 1;
 
   }
+  updateCharacterHealth(healthChange) {
+    this.characterHealth -= healthChange;
+    if (this.characterHealth <= 0) {   //no more health? go to GAME OVER 
+      this.zurpalen.stop();            //stop the music
+      this.walkingSound.stop();
+      this.walkingSound2.stop();
+      this.scene.start(CST.SCENES.GAMEOVER)};
+    eventsCenter.emit('updateHP', this.characterHealth); // Emit 'updateCharacterHealth' event with the new health value
+  };
 
   init() {
     console.log("level2");
@@ -90,6 +99,12 @@ export class Level2 extends Phaser.Scene {
 // #########################  CREATE ############################################### 
 
   create() {
+
+// =========== Health Bar healthbar =========== //
+eventsCenter.on('updateHP', (newHealth) => {
+  this.characterHealth = newHealth;
+}, this);
+// =========== End Health Bar ======== ///
 
 // ==============  World Building Section ===================================
 
@@ -474,6 +489,10 @@ eventsCenter.on(
     
     if (this.gameOver) {
         return;
+      }
+      
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
       }
   // ===================  KEY CONTROLS ==============================================
      
