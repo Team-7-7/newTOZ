@@ -35,6 +35,8 @@ export class Level1 extends Phaser.Scene {
     this.door;
     this.collisionCalled = false;
     this.timerDamage = false;
+    this.level = 1;
+
 
     //character stats to be loaded from pause screen
     this.characterHealth = 1;
@@ -311,8 +313,11 @@ this.isSound1PlayedLast = true;
 // =================== GEAR, CHESTS, GOLD STUFF ====================================================
 
        // ********************* dropping gear ********************************
-    eventsCenter.on('droppingGear', (droppedGearNumber)=>{
-      // console.log ('dropped gear number is: ', droppedGearNumber);
+     
+       eventsCenter.on('droppingGear', (droppedGearNumber)=>{
+        if(this.level ===1){
+        console.log('this.currentLevel in level 1 is: ', this.currentLevel);
+      console.log ('back on level 1 dropped gear number is: ', droppedGearNumber);
       let xdroplocation = getRandomInt(50)+50;
         if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
         xdroplocation += this.player.x;
@@ -325,8 +330,11 @@ this.isSound1PlayedLast = true;
       this.physics.add.collider(this.player, droppedGear, () => {
         this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
       }, null, this); 
-      //maybe add a timer here to make the item disappear after a short time
+     } // end of if level 1 statement
     },this)
+ 
+
+
 
       this.collectItem = (item, lootItem, gearNumber) => {
         item.destroy();        //item is removed from the scene
@@ -693,7 +701,7 @@ this.isSound1PlayedLast = true;
 
 
       if (Math.abs(this.player.x - 1505.5) < threshold && Math.abs(this.player.y - 59) < threshold) {
-        
+        this.level = 2;
         eventsCenter.emit('levelChange', 2);
         this.zurpalen.stop();
         this.walkingSound.stop();
