@@ -19,7 +19,6 @@ export class Level1 extends Phaser.Scene {
     this.chest5;
     this.chest6;
     this.chest7;
-    this.barrel1;
     this.cursors;
     this.monster;
     this.monster1;
@@ -93,7 +92,6 @@ export class Level1 extends Phaser.Scene {
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
       this.load.spritesheet('door','assets/levelAssets/door50x100.png', {frameWidth: 50, frameHeight: 100}) ;
       this.load.spritesheet('gear', 'assets/gear50x50.png', { frameWidth: 50, frameHeight: 50 });
-      this.load.spritesheet('barrels','assets/levelAssets/barrels37x48.png', {frameWidth: 37, frameHeight: 48}) ;
 
     // ========== SOUND STUFF ======================
       this.load.audio('walking', 'assets/audio/soundeffects/steps1.mp3')
@@ -130,15 +128,9 @@ export class Level1 extends Phaser.Scene {
     this.floorLayer.setCollisionByProperty({ collides: false });
     const WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
     WorldLayer.setCollisionByProperty({ collides: true });
-    
-     
+         
     this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
     this.wallmounts.setCollisionByProperty({ collides: false });
-
-
-
-
-
 
     //  Input Events
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -258,7 +250,6 @@ this.isSound1PlayedLast = true;
     monsters.forEach(monster => {
       monster.health = 100; 
     });
-    
 
     //keeps monster in bounds
     this.physics.add.collider(this.monsters, WorldLayer);
@@ -442,27 +433,6 @@ this.isSound1PlayedLast = true;
       const chest5Collider = this.physics.add.collider(this.player, this.chest5, ()=>openChestTopRight(this.chest5));
       const chest6Collider = this.physics.add.collider(this.player, this.chest6, ()=>openChestTopRight(this.chest6));
 
-      //***************** barrels ******************* */
-
-      this.barrel1 = this.physics.add.staticSprite(702, 68, 'barrels', 2); // healing barrel
-      this.barrel2 = this.physics.add.staticSprite(1086, 71, 'barrels', 1); // poison barrel
-      const barrel1Collider = this.physics.add.collider(this.player, this.barrel1, ()=> {
-
-        this.barrel1.setFrame(3);
-        //update player health
-        eventsCenter.emit('updateHP', this.characterMaxHealth);
-        barrel1Collider.destroy();
-
-      });
-      const barrel2Collider = this.physics.add.collider(this.player, this.barrel2, ()=> {
-        this.barrel2.setFrame(3);
-        //update player health
-        eventsCenter.emit('updateHP', this.characterHealth/2);
-        barrel2Collider.destroy();
-
-      });
-
-
     // ========================= DOOR  to next level =========================================
 
       // this.door = this.physics.add.staticSprite(700,75, 'door', 1); // dev location
@@ -614,16 +584,16 @@ this.isSound1PlayedLast = true;
          if(this.keys.k.isDown){
            if(!this.timerPlayerDamage){
              console.log('monster health is: ', monster.health);
-             let playerDamage = this.characterAttack*2;
+             let playerDamage = this.characterAttack*4;
              monster.health -= playerDamage;
              console.log('in overlap function, monster health is: ', monster.health);
              console.log('this.monster is: ', monster)
              this.timerPlayerDamage = true;
              this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
              console.log('this.monster.health is: ', monster.health);
-             if(monster.health <1){
+             if(monster.health <= 1){
                console.log('monster is dead')
-               monster.anims.play("SkeletonDie", true);
+               monster.anims.play("Skel etonDie", true);
                monsterCollider.destroy();
                this.physics.add.staticSprite(monster.x, monster.y, 'chest', 2);
                monster.destroy()
@@ -634,10 +604,13 @@ this.isSound1PlayedLast = true;
      });
 
     //=================================MonsterTracking=====================================
-    let followDistance = 150;
+      let followDistance = 150;
       let speed = 50;
 
       monsters.forEach(monster => {
+        if(!monster || !monster.body){
+          return;
+        }
         // Seek AI movement
         let directionX = this.player.x - monster.x;
         let directionY = this.player.y - monster.y;
@@ -654,6 +627,13 @@ this.isSound1PlayedLast = true;
           monster.body.velocity.x = directionX * speed;
           monster.body.velocity.y = directionY * speed;
 
+          // Determine the direction of the monster's movement and play the appropriate animation
+          if (directionX > 0) {
+            monster.anims.play("SkeletonRight", true);
+          } else {
+            monster.anims.play("SkeletonLeft", true);
+          }
+
           // Monster attack
           if ( Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y) < 75
           ) { 
@@ -665,6 +645,7 @@ this.isSound1PlayedLast = true;
           // If the player is too far, stop the monster
           monster.body.velocity.x = 0;
           monster.body.velocity.y = 0;
+          monster.anims.stop;
         }
       });
 
