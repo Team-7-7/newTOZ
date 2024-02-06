@@ -55,34 +55,21 @@ export class Level3 extends Phaser.Scene {
     this.load.image("tiles3", "/assets/levelAssets/OLDtileset32x32.png");
     this.load.tilemapTiledJSON("map3", "/assets/levelAssets/level3.json");
 
-    switch (state.userCharacter.character.character_class) {
+    // the three classes sprites load here
+    switch(state.userCharacter.character.character_class){
       case "warrior":
-        console.log("loading the warrior");
-        this.load.spritesheet(
-          "playerSprite",
-          "assets/levelAssets/knight78x60.png",
-          { frameWidth: 78, frameHeight: 60 }
-        );
-        break;
+          console.log('loading the warrior');
+          this.load.atlas('playerSprite', 'assets/levelAssets/knight78x60.png', 'assets/levelAssets/knight.json');
+          break;
       case "mage":
-        console.log("loading the mage");
-        this.load.spritesheet(
-          "playerSprite",
-          "assets/levelAssets/mage78x60.png",
-          { frameWidth: 78, frameHeight: 60 }
-        );
-        break;
+          console.log('loading the mage');
+          this.load.atlas('playerSprite', 'assets/levelAssets/mage78x60.png', 'assets/levelAssets/mage.json');
+          break;
       case "rogue":
-        console.log("loading the rogue");
-        this.load.spritesheet(
-          "playerSprite",
-          "assets/levelAssets/rogue78x60.png",
-          { frameWidth: 78, frameHeight: 60 }
-        );
-        break;
-
-        
-    }
+          console.log('loading the rogue');
+          this.load.atlas('playerSprite', 'assets/levelAssets/rogue78x60.png', 'assets/levelAssets/rogue.json');
+          break;
+      };
 
     this.load.atlas(
       "skeleton",
@@ -199,51 +186,49 @@ export class Level3 extends Phaser.Scene {
     }, this);
 
    
+ //  Our player animations, turning, walking left and walking right.
  this.anims.create({
-    key: "left",
-    frames: this.anims.generateFrameNumbers("playerSprite", {
-      start: 9,
-      end: 12,
-    }),
-    frameRate: 10,
-    repeat: -1,
-  });
+  key: "left",
+  frames: this.anims.generateFrameNumbers("playerSprite", {
+    frames:["sprite8", "sprite9", "sprite10", "sprite11", "sprite12", "sprite13"]
+  }),
+  frameRate: 10,
+  repeat: -1,
+});
 
-  this.anims.create({
-    key: "turn",
-    frames: [{ key: "playerSprite", frame: 1 }],
+this.anims.create({
+  key: "turn",
+  frames: [{ key: "playerSprite", frame: ["sprite1"] }],
+  frameRate: -1,
+});
 
-    frameRate: -1,
-  });
+this.anims.create({
+  key: "right",
+  frames: this.anims.generateFrameNumbers("playerSprite", {
+    frames: ["sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7"]
+  }),
+  frameRate: 10,
+  repeat: -1,
+});
 
-  this.anims.create({
-    key: "right",
-    frames: this.anims.generateFrameNumbers("playerSprite", {
-      start: 2,
-      end: 5,
-    }),
-    frameRate: 10,
-    repeat: -1,
-  });
+this.anims.create({
+  key: "attackRight",
+  frames: this.anims.generateFrameNumbers("playerSprite", {
+   frames: ["sprite14", "sprite15", "sprite16", "sprite17", "sprite18", "sprite19"]
+ 
+  }),
+  frameRate: 2,
+  repeat: -1,
+});
+this.anims.create({
+  key: "attackLeft",
+  frames: this.anims.generateFrameNumbers("playerSprite", {
+    frames: ["sprite20", "sprite21", "sprite22", "sprite23", "sprite24", "sprite25"]
+  }),
+  frameRate: 2,
+  repeat: -1,
+});
 
-  this.anims.create({
-    key: "attackRight",
-    frames: this.anims.generateFrameNumbers("playerSprite", {
-      start: 14,
-      end: 19,
-    }),
-    frameRate: 10,
-    repeat: -1,
-  });
-  this.anims.create({
-    key: "attackLeft",
-    frames: this.anims.generateFrameNumbers("playerSprite", {
-      start: 20,
-      end: 25,
-    }),
-    frameRate: 10,
-    repeat: -1,
-  });
 //################ MEDUSA BELOW  ###########//
 
 
@@ -399,42 +384,53 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
         return;
       }
   
+      let playerDirection = "right"; // Default direction
+
       if (this.keys.a.isDown || this.cursors.left.isDown) {
-        this.player.setVelocityX(-160);
-  
+        this.player.setVelocityX(-10* this.characterSpeed);
         this.player.anims.play("left", true);
+        playerDirection = "left";
       } else if (this.keys.d.isDown || this.cursors.right.isDown) {
-        this.player.setVelocityX(160);
-  
+        this.player.setVelocityX(10* this.characterSpeed);
         this.player.anims.play("right", true);
+        playerDirection = "right";
       } else {
         this.player.setVelocityX(0);
-  
         this.player.anims.play("turn", true);
       }
+      
       if (this.keys.w.isDown || this.cursors.up.isDown) {
-        this.player.setVelocityY(-160);
-  
+        this.player.setVelocityY(-10* this.characterSpeed);
         this.player.anims.play("left", true);
+        playerDirection = "up";
       } else if (this.keys.s.isDown || this.cursors.down.isDown) {
-        this.player.setVelocityY(160);
-  
+        this.player.setVelocityY(10* this.characterSpeed);
         this.player.anims.play("right", true);
+        playerDirection = "down";
       } else {
         this.player.setVelocityY(0);
       }
-  
+      
       if (this.keys.k.isDown) {
-        this.player.anims.play("attackLeft", true);
-        //   this.player.on('animationupdate-attackRight', function (animation, frame) {
-        //     console.log(frame.frame.name);
+        this.player.anims.stop(); // stop animation to play attack animation
+        if (playerDirection === "left") {
+          this.player.anims.play("attackLeft", true);
+          console.log(this.player.anims.isPlaying);
+        } else if (playerDirection === "right") {
+          this.player.anims.play("attackRight", true);
+          console.log(this.player.anims.isPlaying);
+        } else if (playerDirection === "up") {
+          this.player.anims.play("attackUp", true);
+        } else if (playerDirection === "down") {
+          this.player.anims.play("attackDown", true);
+        }
       }
+      
       if (this.keys.p.isDown) {
-        console.log("p is pressed, pausing game");
-        this.scene.pause("LEVEL3");
+        this.scene.pause("LEVEL1");
         this.scene.launch("PAUSE");
       }
-    
+      
       if (this.keys.l.isDown) {
         console.log(
           "The player is at these coordinates",
@@ -442,8 +438,6 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
           `y: ${this.player.y}`
         );
       }
-     
-      
 
 
       //code alternates walking sound effects to avoid overlap
