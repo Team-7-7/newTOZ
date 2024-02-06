@@ -24,6 +24,11 @@ export class Level2 extends Phaser.Scene {
     this.monster;
     this.monster1;
     this.monster2;
+    this.monster3;
+    this.monster4;
+    this.monster5;
+    this.monster6;
+    this.monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6];
     this.gameOver = false;
     this.door;
     this.collisionCalled = false;
@@ -66,6 +71,9 @@ export class Level2 extends Phaser.Scene {
           this.load.atlas('playerSprite', 'assets/levelAssets/rogue78x60.png', 'assets/levelAssets/rogue.json');
           break;
       };
+   //============================MONSTERS===============================================================
+   this.load.atlas('werewolf', 'assets/levelAssets/white_wolf_spritesheet.png', 'assets/levelAssets/white_wolf_sprites.json');
+
    // ================ GOLD, DOORS, GEAR STUFF =============  
    this.load.spritesheet('chest', 'assets/levelAssets/chest_sprite.png', {frameWidth: 32, frameHeight: 32 });
    this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
@@ -226,6 +234,63 @@ this.isSound1PlayedLast = true;
       frameRate: 2,
       repeat: -1,
     });
+
+  //==========================================MONSTER====================================================
+  //======================================MONSTER SPRITES===========================================
+  this.monster = this.physics.add.sprite(776, 90, "werewolf", "sprite12");
+  this.monster1 = this.physics.add.sprite(217, 951, "werewolf", "sprite12");
+  this.monster2 = this.physics.add.sprite(436, 541, "werewolf", "sprite12");
+  this.monster3 = this.physics.add.sprite(1186, 1071, "werewolf", "sprite12");
+  this.monster4 = this.physics.add.sprite(1268, 298, "werewolf", "sprite12");
+  this.monster5 = this.physics.add.sprite(992, 594, "werewolf", "sprite12");
+  this.monster6 = this.physics.add.sprite(1436, 597, "werewolf", "sprite12");
+  this.monster.setSize(60, 54);
+
+  let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6];
+  monsters.forEach(monster => {
+    monster.health = 100; 
+  });
+
+  //keeps monster in bounds
+  this.physics.add.collider(this.monsters, WorldLayer);
+  this.physics.add.collider(this.player, this.monsters);
+  this.monster.setImmovable(true);
+  this.monster.setCollideWorldBounds(true);
+  this.monster.body.onCollide = (true);
+
+  //monster animaiton movements
+  this.anims.create({
+    key: "WerewolfIdle",
+    frames: this.anims.generateFrameNames("werewolf", { frames: [ "sprite6", "sprite7", "sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite8", ], }),
+    frameRate: 5,
+    repeat: -1,
+    flipX: false,
+  });
+
+  this.anims.create({
+    key: "WerewolfWalk",
+    frames: this.anims.generateFrameNames("werewolf", { frames: [ "sprite18", "sprite15", "sprite11", "sprite9", "sprite12", "sprite16", "sprite19", "sprite17", "sprite13", "sprite10", "sprite14" ], }),
+    frameRate: 5,
+    repeat: -1,
+    flipX: true,
+  });
+
+  this.anims.create({
+    key: "WerewolfAttack",
+    frames: this.anims.generateFrameNames("werewolf", { frames: [ "sprite55", "sprite53", "sprite52", "sprite50", "sprite51", "sprite54", "sprite56","sprite57", "sprite58", "sprite59", "sprite65", "sprite62" ], }),
+    frameRate: 5,
+    repeat: -1,
+    flipX: true,
+  });
+
+  //play monster animations
+  this.monster.anims.play('WerewolfIdle', 'WerewolfAttack', 'WerewolfWalk', true);
+  this.monster1.anims.play('WerewolfIdle', 'WerewolfAttack', 'WerewolfWalk', true);
+  this.monster2.anims.play('WerewolfIdle', 'WerewolfAttack', 'WerewolfWalk', true);
+  this.monster3.anims.play('WerewolfIdle', 'WerewolfAttack', 'WerewolfWalk', true);
+  this.monster4.anims.play('WerewolfIdle', 'WerewolfAttack', 'WerewolfWalk', true);
+  this.monster5.anims.play('WerewolfIdle', 'WerewolfAttack', 'WerewolfWalk', true);
+  this.monster6.anims.play('WerewolfIdle', 'WerewolfAttack', 'WerewolfWalk', true);
     
 
   // =================== GEAR, CHESTS, GOLD STUFF ====================================================
