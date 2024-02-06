@@ -310,6 +310,7 @@ export class ZarpulenScene extends Phaser.Scene {
 
     setTimeout(() => {
     this.scene.start(CST.SCENES.LEVEL3);
+    this.scene.destroy(ZarpulenScene);
     }, duration*18);
 
 
@@ -323,11 +324,13 @@ export class ZarpulenScene extends Phaser.Scene {
     // Handle Enter key press to restart the game
     this.input.keyboard.on("keydown-ENTER", () => {
       this.scene.start(CST.SCENES.LEVEL3);
+      this.scene.destroy(ZarpulenScene);
     });
 
     // Handle pointer click to restart the game
     this.input.on("pointerup", () => {
       this.scene.start(CST.SCENES.LEVEL3);
+      this.scene.destroy(ZarpulenScene);
     });
 
 
