@@ -22,6 +22,7 @@ export class Level3 extends Phaser.Scene {
     this.monster;
     this.medusa;
     this.gameOver = false;
+    this.level = 3;
   }
 
 
@@ -352,6 +353,23 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
 
    });
     
+   eventsCenter.on('droppingGear', (droppedGearNumber)=>{
+    if (this.level === 3){
+    console.log ('dropped gear number is: ', droppedGearNumber);
+    let xdroplocation = getRandomInt(50)+50;
+      if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
+      xdroplocation += this.player.x;
+    let ydroplocation = getRandomInt(50)+50;
+      if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
+      ydroplocation += this.player.y;
+      console.log('player location is: ', this.player.x, ' ', this.player.y);
+      console.log('x and y are: ', xdroplocation, ' ', ydroplocation);
+    let droppedGear = this.physics.add.sprite(xdroplocation, ydroplocation, 'gear' , droppedGearNumber-1);
+    this.physics.add.collider(this.player, droppedGear, () => {
+      this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
+    }, null, this); 
+  }
+  },this)
 
          //***************** barrels ******************* */
 

@@ -35,6 +35,8 @@ export class Level1 extends Phaser.Scene {
     this.door;
     this.collisionCalled = false;
     this.timerDamage = false;
+    this.level = 1;
+
 
     //character stats to be loaded from pause screen
     this.characterHealth = 1;
@@ -237,14 +239,14 @@ this.isSound1PlayedLast = true;
     });
 
     // ================== MONSTER STUFF =========================== 
-    this.monster  = this.physics.add.sprite(300, 300, "skeleton" , "sprite9");
-    this.monster1= this.physics.add.sprite(956, 419, "skeleton" , "sprite9");
-    this.monster2= this.physics.add.sprite(995, 973, "skeleton" , "sprite9");
-    this.monster3= this.physics.add.sprite(67, 838, "skeleton" , "sprite9");
-    this.monster4= this.physics.add.sprite(1474, 219, "skeleton" , "sprite9");
-    this.monster5= this.physics.add.sprite(1474, 974, "skeleton" , "sprite9");
-    this.monster6= this.physics.add.sprite(595, 767, "skeleton" , "sprite9");
-    this.monster7= this.physics.add.sprite(1322, 333, "skeleton" , "sprite9");
+    this.monster  = this.physics.add.sprite(412, 393, "skeleton" , "sprite9");
+    this.monster1= this.physics.add.sprite(468, 832, "skeleton" , "sprite9");
+    this.monster2= this.physics.add.sprite(1503, 997, "skeleton" , "sprite9");
+    this.monster3= this.physics.add.sprite(1303, 78, "skeleton" , "sprite9");
+    this.monster4= this.physics.add.sprite(1112, 809, "skeleton" , "sprite9");
+    this.monster5= this.physics.add.sprite(1135, 544, "skeleton" , "sprite9");
+    this.monster6= this.physics.add.sprite(525, 1085, "skeleton" , "sprite9");
+    this.monster7= this.physics.add.sprite(737, 406, "skeleton" , "sprite9");
     this.monster.setSize(60, 54);
 
     let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6, this.monster7];
@@ -308,22 +310,28 @@ this.isSound1PlayedLast = true;
 // =================== GEAR, CHESTS, GOLD STUFF ====================================================
 
        // ********************* dropping gear ********************************
-    eventsCenter.on('droppingGear', (droppedGearNumber)=>{
-      console.log ('dropped gear number is: ', droppedGearNumber);
+     
+       eventsCenter.on('droppingGear', (droppedGearNumber)=>{
+        if(this.level ===1){
+        console.log('this.currentLevel in level 1 is: ', this.currentLevel);
+      console.log ('back on level 1 dropped gear number is: ', droppedGearNumber);
       let xdroplocation = getRandomInt(50)+50;
         if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
         xdroplocation += this.player.x;
       let ydroplocation = getRandomInt(50)+50;
         if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
         ydroplocation += this.player.y;
-        console.log('player location is: ', this.player.x, ' ', this.player.y);
-        console.log('x and y are: ', xdroplocation, ' ', ydroplocation);
+        // console.log('player location is: ', this.player.x, ' ', this.player.y);
+        // console.log('x and y are: ', xdroplocation, ' ', ydroplocation);
       let droppedGear = this.physics.add.sprite(xdroplocation, ydroplocation, 'gear' , droppedGearNumber-1);
       this.physics.add.collider(this.player, droppedGear, () => {
         this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
       }, null, this); 
-      //maybe add a timer here to make the item disappear after a short time
+     } // end of if level 1 statement
     },this)
+ 
+
+
 
       this.collectItem = (item, lootItem, gearNumber) => {
         item.destroy();        //item is removed from the scene
@@ -437,7 +445,7 @@ this.isSound1PlayedLast = true;
         //***************** barrels ******************* */
 
         this.barrel1 = this.physics.add.staticSprite(702, 68, 'barrels', 2); // healing barrel
-        this.barrel2 = this.physics.add.staticSprite(1086, 71, 'barrels', 1); // poison barrel
+        this.barrel2 = this.physics.add.staticSprite(1130, 108, 'barrels', 1); // poison barrel
         const barrel1Collider = this.physics.add.collider(this.player, this.barrel1, ()=> {
   
           this.barrel1.setFrame(3);
@@ -450,6 +458,11 @@ this.isSound1PlayedLast = true;
           this.barrel2.setFrame(3);
           //update player health
           eventsCenter.emit('updateHP', this.characterHealth/2);
+          this.player.setTint(0x00FF00); // Set the player sprite to green
+          this.time.delayedCall(1000, () => {
+            this.player.clearTint(); // Remove the tint after 1 second
+          }, [], this);
+          
           barrel2Collider.destroy();
   
         });
@@ -485,6 +498,10 @@ this.isSound1PlayedLast = true;
     update() {
       if (this.gameOver) {
         return;
+      }
+
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
       }
 
   // ===================  KEY CONTROLS ==============================================
@@ -639,9 +656,20 @@ if (this.keys.l.isDown) {
              console.log('this.monster.health is: ', monster.health);
              if(monster.health <= 1){
                console.log('monster is dead')
-               monster.anims.play("Skel etonDie", true);
+               monster.anims.play("SkeletonDie", true);
                monsterCollider.destroy();
-               this.physics.add.staticSprite(monster.x, monster.y, 'chest', 2);
+               //gold coin drop
+               let xdroplocation = getRandomInt(50)+50;
+               if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
+               xdroplocation += this.player.x;
+                let ydroplocation = getRandomInt(50)+50;
+               if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
+               ydroplocation += this.player.y;
+               const gold = this.physics.add.sprite(xdroplocation,ydroplocation,'goldCoin');
+               this.physics.add.collider(this.player, gold, () => {
+                   this.collectItem(gold, 'lootGold');
+                 }, null, this)
+              //  this.physics.add.staticSprite(monster.x, monster.y, 'chest', 2);
                monster.destroy()
              }
            }
@@ -700,7 +728,7 @@ if (this.keys.l.isDown) {
 
 
       if (Math.abs(this.player.x - 1505.5) < threshold && Math.abs(this.player.y - 59) < threshold) {
-        
+        this.level = 2;
         eventsCenter.emit('levelChange', 2);
         this.zurpalen.stop();
         this.walkingSound.stop();

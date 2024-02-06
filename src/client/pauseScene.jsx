@@ -224,8 +224,12 @@ const updateStats = () =>{
     this.characterAttack = state.userCharacter.character.base_attack + attackSum;
     this.characterSpeed = state.userCharacter.character.base_speed + speedSum;
     this.characterXp = state.userCharacter.character.xp;
-    this.characterLevel = state.userCharacter.character.level;
-    this.characterGold = state.userCharacter.character.gold;
+    // this.characterLevel = state.userCharacter.character.level;
+    this.characterLevel = this.characterLevel;
+    this.characterGold = this.characterGold;
+
+
+
 
     // **************** emit new stats to current level **************************
     eventsCenter.emit('updateStats',  this.characterHealth, this.characterMaxHealth,this.characterArmor,this.characterAttack,this.characterSpeed);

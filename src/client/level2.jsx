@@ -27,6 +27,7 @@ export class Level2 extends Phaser.Scene {
     this.gameOver = false;
     this.door;
     this.collisionCalled = false;
+    this.level = 2;
 
     //character stats to be loaded from pause screen
     this.characterHealth = 1;
@@ -230,7 +231,9 @@ this.isSound1PlayedLast = true;
   // =================== GEAR, CHESTS, GOLD STUFF ====================================================
 
        // ********************* dropping gear ********************************
+      
        eventsCenter.on('droppingGear', (droppedGearNumber)=>{
+        if (this.level === 2){
         console.log ('dropped gear number is: ', droppedGearNumber);
         let xdroplocation = getRandomInt(50)+50;
           if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
@@ -244,8 +247,9 @@ this.isSound1PlayedLast = true;
         this.physics.add.collider(this.player, droppedGear, () => {
           this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
         }, null, this); 
-        //maybe add a timer here to make the item disappear after a short time
+      }
       },this)
+
   
         this.collectItem = (item, lootItem, gearNumber) => {
           item.destroy();        //item is removed from the scene
@@ -376,6 +380,10 @@ this.isSound1PlayedLast = true;
         this.barrel2.setFrame(3);
         //update player health
         eventsCenter.emit('updateHP', this.characterHealth/2);
+        this.player.setTint(0x00FF00); // Set the player sprite to green
+          this.time.delayedCall(1000, () => {
+            this.player.clearTint(); // Remove the tint after 1 second
+          }, [], this);
         barrel2Collider.destroy();
 
       });
@@ -443,6 +451,7 @@ if (this.keys.k.isDown) {
     this.player.anims.play("attackUp", true);
   } else if (playerDirection === "down") {
     this.player.anims.play("attackDown", true);
+
   }
 }
 
@@ -526,7 +535,7 @@ if (this.keys.l.isDown) {
 
 
  if (Math.abs(this.player.x - 1441) < threshold && Math.abs(this.player.y - 62) < threshold) {
-   
+   this.level = 3;
    eventsCenter.emit('levelChange', 3);
    this.zurpalen.stop();
    this.walkingSound.stop();
