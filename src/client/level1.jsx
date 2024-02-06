@@ -74,11 +74,11 @@ export class Level1 extends Phaser.Scene {
       switch(state.userCharacter.character.character_class){
       case "warrior":
           console.log('loading the warrior');
-          this.load.spritesheet('playerSprite', 'assets/levelAssets/knight78x60.png', { frameWidth: 78, frameHeight: 60 });
+          this.load.atlas('playerSprite', 'assets/levelAssets/knight78x60.png', 'assets/levelAssets/knight.json');
           break;
       case "mage":
           console.log('loading the mage');
-          this.load.spritesheet('playerSprite', 'assets/levelAssets/mage78x60.png', { frameWidth: 78, frameHeight: 60 });
+          this.load.atlas('playerSprite', 'assets/levelAssets/mage78x60.png', 'assets/levelAssets/mage.json');
           break;
       case "rogue":
           console.log('loading the rogue');
@@ -221,8 +221,8 @@ this.isSound1PlayedLast = true;
     this.anims.create({
       key: "attackRight",
       frames: this.anims.generateFrameNumbers("playerSprite", {
-      //  frames: ["sprite14", "sprite15", "sprite16", "sprite17", "sprite18", "sprite19"]
-      start: "sprite14", end: "sprite19"
+       frames: ["sprite14", "sprite15", "sprite16", "sprite17", "sprite18", "sprite19"]
+     
       }),
       frameRate: 2,
       repeat: -1,
