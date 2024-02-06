@@ -15,9 +15,30 @@ export class WinScene extends Phaser.Scene {
 
   preload() {
     this.load.image("castle", "/assets/castle.png")
+    this.load.image("victory", "/assets/titlePage/victory.png")
+    this.load.image("credits", "/assets/titlePage/credits.png")
   }
 
   create() {
+    /////HELPER UTIL TO SEE WHAT SCENES ARE STILL ACTIVE IN PHASER///////
+    let runOnce = 0;
+    if (runOnce < 1) {
+      let sceneManager = this.scene.manager;
+      let activeScenes = sceneManager.scenes;   // Get the list of active scenes
+      // Iterate over all scenes
+      this.scene.manager.scenes.forEach(scene => {
+        if (this.scene.isActive(scene.scene.key)) {
+          console.log(`Scene ${scene.scene.key} is ACTIVE`);
+        } else {
+          console.log(`Scene ${scene.scene.key} is NOT ACTIVE`);
+        }
+      });
+      this.scene.stop("HEALTH");
+      runOnce++
+    }
+    /////////////////////END HELPER/////
+
+
     console.log("FINALE scene")
     let bg1 = this.add.image(400, 300, "castle");
     let scaleX = this.scale.width / bg1.width;
@@ -25,17 +46,86 @@ export class WinScene extends Phaser.Scene {
     let scale = Math.max(scaleX, scaleY);
     bg1.setScale(scale);
     bg1.setPosition(this.scale.width / 2, this.scale.height / 2);
-    const text = this.add.text(20, 20, 'Congratulations, you win, however, Zarpulen escapes. To be continued.', { color: 'white', fontFamily: 'p-script', fontSize: '120px' })
+    const finaleText = this.add.text(20, 900, 'Congratulations, you win, however, Zarpulen, clinging to life, slithers away. To be continued...in the Return of Zurpalen', {
+      color: 'white',
+      fontFamily: 'p-script',
+      fontSize: '40px',
+      wordWrap: {
+        width: this.scale.width - 20,
+        useAdvancedWrap: true
+      },
+      padding: {
+        left: 10,
+        right: 10,
+        top: 5,
+        bottom: 5
+      },
+      backgroundColor: '#000'
+    });
 
-        // Handle Enter key press to restart the game
-        this.input.keyboard.on("keydown-ENTER", () => {
-          this.scene.start(CST.SCENES.TITLE);
-        });
-    
-        // Handle pointer click to restart the game
-        this.input.on("pointerup", () => {
-          this.scene.start(CST.SCENES.TITLE);
-        });
+
+
+// Victory HEADLINE WITH RAINBOW COLORS ////
+let victory = this.add.image(this.scale.width / 2, this.scale.height / 2, "victory");
+victory.setScale(5); 
+victory.setOrigin(0.5); 
+
+// Makes the title alternate between rainbow-colors
+this.tweens.addCounter({
+  from: 0,
+  to: 100,
+  duration: 4000, // speed of the change
+  repeat: -1, // Repeat the animation continuously
+  onUpdate: function (tween) {
+    const value = Math.floor(tween.getValue());
+    const color = Phaser.Display.Color.HSVToRGB(value / 100, 1, 1).color;
+    victory.setTint(color);
+  }
+});
+////////////////////////////////////////////////////////////////
+
+// Credits ////
+let credits = this.add.image(this.scale.width / 6, this.scale.height / 7, "credits");
+credits.setScale(2); 
+credits.setOrigin(0.5); 
+
+// Makes the title alternate between rainbow-colors
+this.tweens.addCounter({
+  from: 0,
+  to: 100,
+  duration: 2000, // speed of the color change
+  repeat: -1, // Repeat the animation continuously
+  onUpdate: function (tween) {
+    const value = Math.floor(tween.getValue());
+    const color = Phaser.Display.Color.HSVToRGB(value / 100, 1, 1).color;
+    credits.setTint(color);
+  }
+});
+
+// Makes the credits bounce around the screen randomly
+this.tweens.add({
+  targets: credits,
+  x: {
+    value: credits.x + this.scale.width * 5/8,
+    duration: 3000,
+    ease: 'Sine.easeInOut',
+    yoyo: true,
+    repeat: -1
+  },
+});
+
+
+
+
+    // Handle Enter key press to restart the game
+    this.input.keyboard.on("keydown-ENTER", () => {
+      this.scene.start(CST.SCENES.TITLE);
+    });
+
+    // Handle pointer click to restart the game
+    this.input.on("pointerup", () => {
+      this.scene.start(CST.SCENES.TITLE);
+    });
 
   }
 

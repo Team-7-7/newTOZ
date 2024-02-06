@@ -231,13 +231,10 @@ this.anims.create({
 });
 
 //################ MEDUSA BELOW  ###########//
-
-
   this.medusa = this.physics.add.sprite(513, 109, "medusa", "a1")
   this.medusa.health = 300;
   this.medusa.setScale(1.5)
   this.medusa.setOrigin(0.5, 0.5);
-
 
   //keeps medusa in bounds
   this.physics.add.collider(this.medusa, this.WorldLayer);
@@ -264,7 +261,7 @@ this.anims.create({
   this.anims.create({
     key: "MedusaDeath",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "death1", "death2", "death3", "death4", "death5", "death6" ], }),
-    frameRate: 10,
+    frameRate: 8,
     repeat: -1,
   });
   
@@ -294,7 +291,6 @@ this.medusa.anims.play('MedusaIdle', 'MedusaMove', 'MedusaDeath', 'MedusaHurt', 
 
 
 //MEDUSA Collider
-
 const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => { 
          // decrease health when player and monster collide
          if (!this.timerDamage){ 
@@ -320,24 +316,22 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
             console.log('medusa health is: ', this.medusa.health);
             let playerDamage = this.characterAttack*2;
             this.medusa.health -= playerDamage;
+            this.medusa.anims.play("MedusaHurt", true);
             console.log('in overlap function, monster health is: ', this.medusa.health);
             this.timerPlayerDamage = true;
             this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
             console.log('this.monster.health is: ', this.medusa.health);
             if(this.medusa.health <1){
               console.log('medusa is dead')
+              this.medusa.anims.stop();
               this.medusa.anims.play("MedusaDeath", true);
-              medusaCollider.destroy();
-              // this.physics.add.staticSprite(monster.x, monster.y, 'chest', 2);
-              this.medusa.destroy()
-            }
+            //   setTimeout(() => {
+            //   medusaCollider.destroy();
+            //   this.medusa.destroy()
+            // }, 2000)
           }
         }
-      });
-
-
-
-
+  }});
 
 //################ MEDUSA ABOVE  ###########//
 
@@ -525,11 +519,16 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
 ///=================================Medusa Tracking=====================================
 let followDistance = 500;
 let speed = 70;
+let stopDistance = 100;
 
-// Stagger variables
-let staggerTimer = 0;
-let staggerDuration = 200; // Adjust the duration of staggered movements
-let isZigZag = true;
+//checks to see if medusa is dead 
+if(!this.medusa || !this.medusa.body){
+  console.log('medusa is dead')
+              setTimeout(() => {
+              this.scene.start(CST.SCENES.FINALE);
+            }, 500)
+  return;
+}
 
 // Flag to track if Medusa has attacked
 let hasAttacked = false;
@@ -542,26 +541,10 @@ let directionY = this.player.y - this.medusa.y;
 let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
 
 // Check if the distance is less than a certain value
-if (magnitude < followDistance) {
+if (magnitude < followDistance && magnitude > stopDistance) {
   directionX /= magnitude;
   directionY /= magnitude;
 
-  // Staggered movements
-  staggerTimer -= this.time.deltaTime;
-  if (staggerTimer <= 0) {
-    // Toggle between zig-zag and straight movements
-    isZigZag = !isZigZag;
-
-    // Apply staggered movements
-    if (isZigZag) {
-      // Zig-zag movement
-      directionX = Math.cos(this.time.now / 100) * directionX;
-      directionY = Math.sin(this.time.now / 100) * directionY;
-    }
-
-    // Reset the stagger timer
-    staggerTimer = staggerDuration;
-  }
 
   // Set Medusa's velocity
   this.medusa.body.velocity.x = directionX * speed;
@@ -576,19 +559,33 @@ if (magnitude < followDistance) {
       hasAttacked = true;  // Set the flag to true after the attack
     }, this);
   }
-} else {
+} 
+
+else if (magnitude <= stopDistance) { // New condition to check if Medusa is too close to the character
+  // If Medusa is too close, stop her movement
+  this.medusa.body.velocity.x = 0;
+  this.medusa.body.velocity.y = 0;
+
+  // Set Medusa's animation for idle
+  this.medusa.anims.play("MedusaIdle", true);
+
+  // Reset the hasAttacked flag when player is not in range
+  hasAttacked = false;
+} 
+
+else {
   // If the player is too far, stop the Medusa
   this.medusa.body.velocity.x = 0;
   this.medusa.body.velocity.y = 0;
 
-  // Set Medusa's animation for idle or any other appropriate animation
+  // Set Medusa's animation for idle 
   this.medusa.anims.play("MedusaIdle", true);
 
   // Reset the hasAttacked flag when player is not in range
   hasAttacked = false;
 }
 
-
+/////////////
 
 
 
