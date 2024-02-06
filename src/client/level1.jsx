@@ -458,6 +458,11 @@ this.isSound1PlayedLast = true;
           this.barrel2.setFrame(3);
           //update player health
           eventsCenter.emit('updateHP', this.characterHealth/2);
+          this.player.setTint(0x00FF00); // Set the player sprite to green
+          this.time.delayedCall(1000, () => {
+            this.player.clearTint(); // Remove the tint after 1 second
+          }, [], this);
+          
           barrel2Collider.destroy();
   
         });
