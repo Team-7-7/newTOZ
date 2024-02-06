@@ -53,14 +53,12 @@ export class Level2 extends Phaser.Scene {
   };
 
   init() {
-    console.log("level2");
     isWalking: false;
   }
 // ############################## PRELOAD ################################################  
 
   preload() {
     const state = store.getState(); // this brings in the state from redux
-    console.log(state, "in preload");
 
     this.load.image("tiles2", "/assets/levelAssets/OLDtileset32x32.png");
     this.load.tilemapTiledJSON("map2", "/assets/levelAssets/level2.json");
@@ -68,15 +66,12 @@ export class Level2 extends Phaser.Scene {
     // the three classes sprites load here
     switch(state.userCharacter.character.character_class){
       case "warrior":
-          console.log('loading the warrior');
           this.load.atlas('playerSprite', 'assets/levelAssets/knight78x60.png', 'assets/levelAssets/knight.json');
           break;
       case "mage":
-          console.log('loading the mage');
           this.load.atlas('playerSprite', 'assets/levelAssets/mage78x60.png', 'assets/levelAssets/mage.json');
           break;
       case "rogue":
-          console.log('loading the rogue');
           this.load.atlas('playerSprite', 'assets/levelAssets/rogue78x60.png', 'assets/levelAssets/rogue.json');
           break;
       };
@@ -119,8 +114,7 @@ eventsCenter.on('updateHP', (newHealth) => {
 
     this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
     this.floorLayer.setCollisionByProperty({ collides: false });
-    // this.worldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
-    // this.worldLayer.setCollisionByProperty({ collides: true });
+
     const WorldLayer = this.map.createLayer("WorldLayer", tileset, 0, 0);
     WorldLayer.setCollisionByProperty({ collides: true });
     
@@ -163,11 +157,9 @@ this.isSound1PlayedLast = true;
 
     this.zurpalen.play();
 
-    
     this.scene.run("pauseScene"); // used to keep the pause scene updated with stats causes pausescene to run in the background
 
     this.map = this.make.tilemap({ key: "map2" });
-    // const tileset = this.map.addTilesetImage("OLDtileset32x32", "tiles2");
     
     this.floorLayer = this.map.createLayer("floorLayer", tileset, 0, 0);
     this.floorLayer.setCollisionByProperty({ collides: false });
@@ -178,19 +170,15 @@ this.isSound1PlayedLast = true;
     this.wallmounts = this.map.createLayer('wallmounts', tileset, 0, 0);
     this.wallmounts.setCollisionByProperty({ collides: false });
 
-
-
     // this.selectLayer(this.floorLayer);
     // this.selectLayer(this.worldLayer);
     // this.physics.add.collider(this.player, this.WorldLayer);  //DUPLICATE?
 
 // ===================== PLAYER STUFF  ===========================================
 
-
     // The player and its settings
     this.player = this.physics.add.sprite(90, 90, "playerSprite");
     this.player.setSize(60, 54);
-
 
     // keep the player on the map
     this.player.setCollideWorldBounds(true);
@@ -198,13 +186,11 @@ this.isSound1PlayedLast = true;
 
     // eventsCenter.on('updateStats', 'health', 'maxHealth','armor','attack','speed') => {
     eventsCenter.on('updateStats', (health, maxHealth,armor,attack,speed) => {
-      console.log('on main screen updating stats ');
       this.characterHealth = health;
       this.characterMaxHealth = maxHealth;
       this.characterArmor = armor;
       this.characterAttack = attack;
       this.characterSpeed = speed;
-      console.log('character speed is: ', this.characterSpeed);
   }, this);
 
     //  Our player animations, turning, walking left and walking right.
@@ -314,15 +300,12 @@ this.isSound1PlayedLast = true;
       
        eventsCenter.on('droppingGear', (droppedGearNumber)=>{
         if (this.level === 2){
-        console.log ('dropped gear number is: ', droppedGearNumber);
         let xdroplocation = getRandomInt(50)+50;
           if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
           xdroplocation += this.player.x;
         let ydroplocation = getRandomInt(50)+50;
           if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
           ydroplocation += this.player.y;
-          console.log('player location is: ', this.player.x, ' ', this.player.y);
-          console.log('x and y are: ', xdroplocation, ' ', ydroplocation);
         let droppedGear = this.physics.add.sprite(xdroplocation, ydroplocation, 'gear' , droppedGearNumber-1);
         this.physics.add.collider(this.player, droppedGear, () => {
           this.collectItem(droppedGear, 'lootGear', droppedGearNumber);
@@ -336,13 +319,8 @@ this.isSound1PlayedLast = true;
           //item is added to inventory
           if(lootItem === 'lootGold'){
             const amountOfGold=1+ Math.floor(Math.random()*5);
-            console.log('Character Gold should be increasing by ', amountOfGold);
-            console.log('transmitting from level1 to the pause screen the gold');
             eventsCenter.emit('updateGold', amountOfGold);
-  
           }else if (lootItem === 'lootGear') {
-            console.log('the item picked up is a ', item);
-            console.log('transmitting from level1 to the pause screen the item');
             eventsCenter.emit('lootedItem', gearNumber);
           }
         };
@@ -359,7 +337,6 @@ this.isSound1PlayedLast = true;
                 }, null, this)
           // gear loot code here        
               const randomLootNumber = getRandomInt(10)+1;
-              console.log('random loot number is: ', randomLootNumber);
                 if (randomLootNumber>6){ // ******************************* there are 6 possible loot items in the gear database *****
                   // no extra loot found
                 }else{
@@ -395,11 +372,9 @@ this.isSound1PlayedLast = true;
           const ylocation=chest.y-30;
             const gold = this.physics.add.sprite(xlocation,ylocation,'goldCoin');
             this.physics.add.collider(this.player, gold, () => {
-                    console.log('Player collided with gold coin');
                     this.collectItem(gold, 'lootGold');
                   }, null, this);
             const randomLootNumber = getRandomInt(10)+1;
-            console.log('random loot number is: ', randomLootNumber);
               if (randomLootNumber>6){ // ******************************* there are 6 possible loot items in the gear database *****
                 // no extra loot found
               }else{
@@ -425,11 +400,7 @@ this.isSound1PlayedLast = true;
                 break;
             }
         };   
-      //location for chests
-    //x: 463 y: 256
-    //x: 136 y: 254
-    //x: 78  y: 948
-    //x: 996 y: 259
+
         this.chest1 = this.physics.add.staticSprite(463, 256, 'chest', 2);
         this.chest2 = this.physics.add.staticSprite(75, 272, 'chest', 2);
         this.chest3 = this.physics.add.staticSprite(78, 948, 'chest', 2);
@@ -535,12 +506,11 @@ if (this.keys.k.isDown) {
     this.player.anims.play("attackUp", true);
   } else if (playerDirection === "down") {
     this.player.anims.play("attackDown", true);
-
   }
 }
 
 if (this.keys.p.isDown) {
-  this.scene.pause("LEVEL1");
+  this.scene.pause("LEVEL2");
   this.scene.launch("PAUSE");
 }
 
@@ -596,8 +566,7 @@ if (this.keys.l.isDown) {
   } else {
     this.isMoving = false;
     setTimeout(() => {
-      if(this.player.body.velocity.y === 0 && !this.isMoving){
-        
+      if(this.player.body.velocity.y === 0 && !this.isMoving){    
         this.walkingSound.stop();
         this.walkingSound2.stop();
       }
@@ -622,7 +591,6 @@ let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.
        }, [], this);
  
        this.player.setTint(0xff0000); // Set the player sprite to red
- 
        if (this.characterHealth <= 0) {
        }
      }

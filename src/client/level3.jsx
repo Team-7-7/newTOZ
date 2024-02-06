@@ -394,7 +394,7 @@ this.medusa.anims.play('MedusaIdle', 'MedusaMove', 'MedusaDeath', 'MedusaHurt', 
       }
       
       if (this.keys.p.isDown) {
-        this.scene.pause("LEVEL1");
+        this.scene.pause("LEVEL3");
         this.scene.launch("PAUSE");
       }
       
