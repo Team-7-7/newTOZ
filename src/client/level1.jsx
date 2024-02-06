@@ -19,6 +19,8 @@ export class Level1 extends Phaser.Scene {
     this.chest5;
     this.chest6;
     this.chest7;
+    this.barrel1;
+    this.barrel2;
     this.cursors;
     this.monster;
     this.monster1;
@@ -92,6 +94,8 @@ export class Level1 extends Phaser.Scene {
       this.load.spritesheet('goldCoin', 'assets/levelAssets/goldCoin.png', {frameWidth: 40, frameHeight: 40});
       this.load.spritesheet('door','assets/levelAssets/door50x100.png', {frameWidth: 50, frameHeight: 100}) ;
       this.load.spritesheet('gear', 'assets/gear50x50.png', { frameWidth: 50, frameHeight: 50 });
+      this.load.spritesheet('barrels','assets/levelAssets/barrels37x48.png', {frameWidth: 37, frameHeight: 48}) ;
+
 
     // ========== SOUND STUFF ======================
       this.load.audio('walking', 'assets/audio/soundeffects/steps1.mp3')
@@ -432,6 +436,26 @@ this.isSound1PlayedLast = true;
       const chest4Collider = this.physics.add.collider(this.player, this.chest4, ()=>openChestBottomLeft(this.chest4));
       const chest5Collider = this.physics.add.collider(this.player, this.chest5, ()=>openChestTopRight(this.chest5));
       const chest6Collider = this.physics.add.collider(this.player, this.chest6, ()=>openChestTopRight(this.chest6));
+
+        //***************** barrels ******************* */
+
+        this.barrel1 = this.physics.add.staticSprite(702, 68, 'barrels', 2); // healing barrel
+        this.barrel2 = this.physics.add.staticSprite(1086, 71, 'barrels', 1); // poison barrel
+        const barrel1Collider = this.physics.add.collider(this.player, this.barrel1, ()=> {
+  
+          this.barrel1.setFrame(3);
+          //update player health
+          eventsCenter.emit('updateHP', this.characterMaxHealth);
+          barrel1Collider.destroy();
+  
+        });
+        const barrel2Collider = this.physics.add.collider(this.player, this.barrel2, ()=> {
+          this.barrel2.setFrame(3);
+          //update player health
+          eventsCenter.emit('updateHP', this.characterHealth/2);
+          barrel2Collider.destroy();
+  
+        });
 
     // ========================= DOOR  to next level =========================================
 
