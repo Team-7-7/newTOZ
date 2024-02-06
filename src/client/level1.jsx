@@ -260,17 +260,11 @@ this.isSound1PlayedLast = true;
     });
     
     this.anims.create({
-      key: "SkeletonLeft",
-      frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite1", "sprite2", "sprite3", "sprite4", "sprite5", "sprite6", "sprite7", "sprite8" ], }),
-      frameRate: 10,
-      repeat: 0,
-    });
-    
-    this.anims.create({
-      key: "SkeletonRight",
+      key: "SkeletonWalk",
       frames: this.anims.generateFrameNames("skeleton", { frames: [ "sprite11", "sprite12", "sprite13", "sprite14", "sprite15", "sprite16", "sprite17", "sprite18" ], }),
       frameRate: 10,
       repeat: 0,
+      flipX: true,
     });
     
     this.anims.create({
@@ -288,14 +282,14 @@ this.isSound1PlayedLast = true;
     });
 
    //play monster animations
-    this.monster.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster1.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster2.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster3.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);  
-    this.monster4.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster5.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster6.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
-    this.monster7.anims.play('SkeletonIdle', 'SkeletonLeft', 'SkeletonRight', 'SkeletonAttack', 'SkeletonDie', true);
+    this.monster.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);
+    this.monster1.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);
+    this.monster2.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);
+    this.monster3.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);  
+    this.monster4.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);
+    this.monster5.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);
+    this.monster6.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);
+    this.monster7.anims.play('SkeletonIdle', 'SkeletonWalk','SkeletonAttack', 'SkeletonDie', true);
   
 // =================== GEAR, CHESTS, GOLD STUFF ====================================================
 
@@ -606,8 +600,7 @@ if (this.keys.l.isDown) {
              this.timerPlayerDamage = true;
              this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
              if(monster.health <= 1){
-               console.log('monster is dead')
-               monster.anims.play("SkeletonDie", true);
+               console.log('monster is dead');
                monsterCollider.destroy();
                //gold coin drop
                let xdroplocation = getRandomInt(50)+50;
@@ -654,9 +647,11 @@ if (this.keys.l.isDown) {
 
           // Determine the direction of the monster's movement and play the appropriate animation
           if (directionX > 0) {
-            monster.anims.play("SkeletonRight", true);
+            monster.flipX = false; // face right
+            monster.anims.play("SkeletonWalk", true);
           } else {
-            monster.anims.play("SkeletonLeft", true);
+            monster.flipX = true; // face left
+            monster.anims.play("SkeletonWalk", true);
           }
 
           // Monster attack
