@@ -589,12 +589,102 @@ if (this.keys.l.isDown) {
  }
  
  // ========================  MONSTER STUFF ============================================
+let monsters = [this.monster, this.monster1, this.monster2, this.monster3, this.monster4, this.monster5, this.monster6]; 
 
-    if(this.keys.k.isDown){
-      this.swoosh.play();
+ monsters.forEach(monster => {
+   const monsterCollider = this.physics.add.overlap(this.player, monster, () => { 
+     // decrease health when player and monster collide
+     if (!this.timerDamage){ 
+       this.updateCharacterHealth(10*.50);
+       this.timerDamage = true;
+       this.timerDamage = this.time.delayedCall(800, () => {
+         this.timerDamage = false;
+         this.player.clearTint(); // Remove the tint
+       }, [], this);
+ 
+       this.player.setTint(0xff0000); // Set the player sprite to red
+ 
+       if (this.characterHealth <= 0) {
+       }
      }
+ 
+     // the player can attack while there is overlap
+     if(this.keys.k.isDown){
+       if(!this.timerPlayerDamage){
+         console.log('monster health is: ', monster.health);
+         let playerDamage = this.characterAttack*4;
+         monster.health -= playerDamage;
+         this.timerPlayerDamage = true;
+         this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
+         if(monster.health <= 1){
+           console.log('monster is dead');
+           monsterCollider.destroy();
+           //gold coin drop
+           let xdroplocation = getRandomInt(50)+50;
+           if(xdroplocation %2 ==0){ xdroplocation = xdroplocation * -1}
+           xdroplocation += this.player.x;
+            let ydroplocation = getRandomInt(50)+50;
+           if(ydroplocation %2 ==0){ ydroplocation = ydroplocation * -1}
+           ydroplocation += this.player.y;
+           const gold = this.physics.add.sprite(xdroplocation,ydroplocation,'goldCoin');
+           this.physics.add.collider(this.player, gold, () => {
+               this.collectItem(gold, 'lootGold');
+             }, null, this)
+          //  this.physics.add.staticSprite(monster.x, monster.y, 'chest', 2);
+           monster.destroy()
+         }
+       }
+     }
+   });
+ });
 
+//=================================MonsterTracking=====================================
+  let followDistance = 150;
+  let speed = 50;
 
+  monsters.forEach(monster => {
+    if(!monster || !monster.body){
+      return;
+    }
+    // Seek AI movement
+    let directionX = this.player.x - monster.x;
+    let directionY = this.player.y - monster.y;
+
+    // direction to unit vector
+    let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+
+    // Check if the distance is less than a certain value
+    if (magnitude < followDistance) {
+      directionX /= magnitude;
+      directionY /= magnitude;
+
+      // monsters velocity
+      monster.body.velocity.x = directionX * speed;
+      monster.body.velocity.y = directionY * speed;
+
+      // Determine the direction of the monster's movement and play the appropriate animation
+      if (directionX > 0) {
+        monster.flipX = false; // face right
+        monster.anims.play("WerewolfWalk", true);
+      } else {
+        monster.flipX = true; // face left
+        monster.anims.play("WerewolfWalk", true);
+      }
+
+      // Monster attack
+      if ( Phaser.Math.Distance.Between(monster.x, monster.y, this.player.x, this.player.y) < 75
+      ) { 
+        monster.damage = 10;
+        monster.body.velocity.x = 0;
+        monster.anims.play("WerewolfAttack", true);
+      }
+    } else {
+      // If the player is too far, stop the monster
+      monster.body.velocity.x = 0;
+      monster.body.velocity.y = 0;
+      monster.anims.stop;
+    }
+  });
  // =====================  LEVEL CHANGE ============================================
  let threshold = 50;
 
