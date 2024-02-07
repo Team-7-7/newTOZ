@@ -230,6 +230,8 @@ this.anims.create({
   repeat: -1,
 });
 
+this.player.setCollideWorldBounds(true);
+
 //################ MEDUSA BELOW  ###########//
   this.medusa = this.physics.add.sprite(513, 109, "medusa", "a1")
   this.medusa.health = 300;
@@ -268,22 +270,22 @@ this.anims.create({
   this.anims.create({
     key: "MedusaHurt",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "hurt1", "hurt2", "hurt3" ], }),
-    frameRate: 10,
-    repeat: -1,
+    frameRate: 9,
+    repeat: 9,
   });
   
   this.anims.create({
     key: "MedusaAttackSnakes",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "a1", "a2", "a3", "a4", "a5", "a6", "a7" ], }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 3,
   });
 
   this.anims.create({
     key: "MedusaAttackDeathRay",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "attack1", "attack2", "attack3", "attack4", "attack5", "attack6" ], }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 3,
   });
   
 //play monster animations
@@ -349,6 +351,10 @@ this.medusa.anims.play('MedusaIdle', 'MedusaMove', 'MedusaDeath', 'MedusaHurt', 
     
     if (this.gameOver) {
         return;
+      }
+
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
       }
   
       let playerDirection = "right"; // Default direction
@@ -516,51 +522,78 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
 
 //################ MEDUSA ABOVE  ###########//
 
-
-///=================================Medusa Tracking=====================================
-let followDistance = 500;
-let speed = 70;
-let stopDistance = 50;
-
-//checks to see if medusa is dead 
-if(!this.medusa || !this.medusa.body){
-  console.log('medusa is dead')
-              setTimeout(() => {
-              this.scene.start(CST.SCENES.FINALE);
-            }, 500)
-  return;
-}
-
-// Flag to track if Medusa has attacked
-let hasAttacked = false;
-
-// Seek AI movement
-let directionX = this.player.x - this.medusa.x;
-let directionY = this.player.y - this.medusa.y;
-
-// direction to unit vector
-let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
-
-// Check if the distance is less than a certain value
-if (magnitude < followDistance && magnitude > stopDistance) {
-  directionX /= magnitude;
-  directionY /= magnitude;
-
-
-  // Set Medusa's velocity
-  this.medusa.body.velocity.x = directionX * speed;
-  this.medusa.body.velocity.y = directionY * speed;
-
-  // Medusa attack
-  if (Phaser.Math.Distance.Between(this.medusa.x, this.medusa.y, this.player.x, this.player.y) < 75 && !hasAttacked) { 
-    this.medusa.damage = 10;
-    this.medusa.body.velocity.x = 0;
-    this.medusa.anims.play("MedusaAttackDeathRay", true).on('animationcomplete', function () {
-      // Callback function triggered when the attack animation completes
-      hasAttacked = true;  // Set the flag to true after the attack
-    }, this);
+this.medusa.on('animationcomplete', function (animation, frame) {
+  // Check if the completed animation is MedusaHurt
+  if (animation.key === "MedusaHurt") {
+      // Perform any actions you need after the MedusaHurt animation completes
+      // For example, you can play the MedusaIdle animation here
+      this.medusa.anims.play("MedusaMove", true);
   }
-} 
+}, this);
+
+
+    ///=================================Medusa Tracking=====================================
+    let followDistance = 500;
+    let speed = 70;
+    let stopDistance = 60;
+
+    //checks to see if medusa is dead 
+    if (!this.medusa || !this.medusa.body) {
+      console.log('medusa is dead')
+      setTimeout(() => {
+        this.scene.start(CST.SCENES.FINALE);
+      }, 500)
+      return;
+    }
+
+    // Flag to track if Medusa has attacked
+    let hasAttacked = false;
+
+    // Seek AI movement
+    let directionX = this.player.x - this.medusa.x;
+    let directionY = this.player.y - this.medusa.y;
+
+    // Determine the direction Medusa is moving in
+    let moveDirection = (directionX >= 0) ? 1 : -1;
+
+    // Flip Medusa's sprite based on the direction
+    if (moveDirection === 1) {
+      this.medusa.flipX = true; // flip for rightward movement
+    } else {
+      this.medusa.flipX = false; // no Flip horizontally for leftward movement
+    }
+
+    // direction to unit vector
+    let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+
+    // Check if the distance is less than a certain value
+    if (magnitude < followDistance && magnitude > stopDistance) {
+      directionX /= magnitude;
+      directionY /= magnitude;
+
+
+      // Set Medusa's velocity
+      this.medusa.body.velocity.x = directionX * speed;
+      this.medusa.body.velocity.y = directionY * speed;
+
+      // Medusa attack
+      if (Phaser.Math.Distance.Between(this.medusa.x, this.medusa.y, this.player.x, this.player.y) < 100 && !hasAttacked) {
+        this.medusa.damage = 10;
+        this.medusa.body.velocity.x = 0;
+
+        if (getRandomInt(10) % 2 === 0) {
+          this.medusa.anims.play("MedusaAttackDeathRay", true).on('animationcomplete', function () {
+            this.medusa.anims.play("MedusaMove", true)
+            hasAttacked = true;  // Set the flag to true after the attack
+          }, this);
+        } else {
+          this.medusa.anims.play("MedusaAttackSnakes", true).on('animationcomplete', function () {
+            this.medusa.anims.play("MedusaMove", true)
+            hasAttacked = true;  // Set the flag to true after the attack
+          }, this);
+        }
+      }
+    }
 
 else if (magnitude <= stopDistance) { // New condition to check if Medusa is too close to the character
   // If Medusa is too close, stop her movement
