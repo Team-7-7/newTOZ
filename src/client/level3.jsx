@@ -106,15 +106,47 @@ export class Level3 extends Phaser.Scene {
  
  // ########################### Medusa boss ############################
  this.load.atlas('medusa', 'assets/levelAssets/medusa.png', 'assets/levelAssets/medusa-sprite.json');
+ // Medusa hear spritesheet
+ this.load.spritesheet('medusa_heart', 'assets/hud/heart_spritesheet.png', {
+  frameWidth: 32,
+  frameHeight: 32,
+  startFrame: 0,
+  endFrame: 2
+});
+this.load.spritesheet('smoke', "/assets/finale/poison-cloud-spritesheet.png", {
+  frameWidth: 144,
+  frameHeight: 144,
+  startFrame: 0,
+  endFrame: 18
+});
+  }
+
+  updateMedusaHealth(health) {
+    // Update health bar based on Medusa's health
+    let healthConversion = Math.floor(health / 30);
+    let remainder = health % 30;
+
+    if (health > 0) {
+      this.medusa_hearts.children.iterate((medusa_heart, index) => {
+        if (index < healthConversion) {
+          medusa_heart.setFrame(2); // Filled heart
+        } else if (index === healthConversion && remainder > 15) {
+          medusa_heart.setFrame(1); // Half-filled heart for the remaining health
+          medusa_heart.setFlipX(true);
+        } else {
+          medusa_heart.setFrame(0); // Empty heart
+        }
+      });
+    }
   }
 
   create() {
 
-      // =========== Health Bar healthbar =========== //
-      eventsCenter.on('updateHP', (newHealth) => {
-        this.characterHealth = newHealth;
-      }, this);
-      // =========== End Health Bar ======== /// 
+    // =========== Health Bar healthbar =========== //
+    eventsCenter.on('updateHP', (newHealth) => {
+      this.characterHealth = newHealth;
+    }, this);
+    // =========== End Health Bar ======== /// 
 
     
     this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
@@ -230,8 +262,11 @@ this.anims.create({
   repeat: -1,
 });
 
+this.player.setCollideWorldBounds(true);
+
 //################ MEDUSA BELOW  ###########//
   this.medusa = this.physics.add.sprite(513, 109, "medusa", "a1")
+  this.medusa.maxHealth = 300;
   this.medusa.health = 300;
   this.medusa.setScale(1.5)
   this.medusa.setOrigin(0.5, 0.5);
@@ -243,6 +278,22 @@ this.anims.create({
   this.medusa.setCollideWorldBounds(true);
   this.medusa.body.onCollide = (true);
 
+  // MEDUSA HEALTH BAR //
+  let medusaHealth = this.medusa.maxHealth;
+  this.medusa_hearts = this.add.group();
+  for (let i = 0; i < 10; i++) {
+    const medusa_heart = this.add.sprite(583 + i * 40, 780, 'medusa_heart'); 
+    medusa_heart.setFrame(2); 
+    medusa_heart.setTint(0x32CD32); // Tint the medusa_heart green
+    this.medusa_hearts.add(medusa_heart);
+  }
+
+  // Listen for 'updateMedusaHP' event
+  eventsCenter.on('updateMedusaHP', (newMedusaHealth) => {
+    medusaHealth = newMedusaHealth; // Update Medusa's health
+    this.updateMedusaHealth(medusaHealth);
+  }, this);
+    
   //medusa animation movements
   this.anims.create({
     key: "MedusaIdle",
@@ -262,28 +313,28 @@ this.anims.create({
     key: "MedusaDeath",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "death1", "death2", "death3", "death4", "death5", "death6" ], }),
     frameRate: 8,
-    repeat: -1,
+    repeat: 1,
   });
   
   this.anims.create({
     key: "MedusaHurt",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "hurt1", "hurt2", "hurt3" ], }),
-    frameRate: 10,
-    repeat: -1,
+    frameRate: 9,
+    repeat: 9,
   });
   
   this.anims.create({
     key: "MedusaAttackSnakes",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "a1", "a2", "a3", "a4", "a5", "a6", "a7" ], }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 3,
   });
 
   this.anims.create({
     key: "MedusaAttackDeathRay",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "attack1", "attack2", "attack3", "attack4", "attack5", "attack6" ], }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 3,
   });
   
 //play monster animations
@@ -349,6 +400,10 @@ this.medusa.anims.play('MedusaIdle', 'MedusaMove', 'MedusaDeath', 'MedusaHurt', 
     
     if (this.gameOver) {
         return;
+      }
+
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
       }
   
       let playerDirection = "right"; // Default direction
@@ -502,65 +557,110 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
      this.timerPlayerDamage = true;
      this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
      console.log('this.monster.health is: ', this.medusa.health);
+     this.updateMedusaHealth(this.medusa.health)
      if(this.medusa.health <1){
        console.log('medusa is dead')
-       this.medusa.anims.stop();
+      //  this.medusa.anims.stop();
        this.medusa.anims.play("MedusaDeath", true);
-       setTimeout(() => {
+       
+       let medusaX = this.medusa.x; // Get Medusa's current x position
+       let medusaY = this.medusa.y-80; // Get Medusa's current y position
        medusaCollider.destroy();
        this.medusa.destroy()
-     }, 2000)
+
+       const smoke = this.add.sprite(medusaX, medusaY, 'smoke').setScale(2);
+       smoke.setAlpha(0.9);
+       smoke.setVisible(true);
+   
+       // Define the SMOKE animation configuration
+       const smokeAnimationConfig = {
+         key: 'smokeAnimation',
+         frames: this.anims.generateFrameNumbers('smoke', { start: 0, end: 18 }),
+         frameRate: 10,
+         repeat: -1,
+       };
+   
+       // Create the SMOKE animation
+       this.anims.create(smokeAnimationConfig);
+       smoke.anims.play('smokeAnimation')
    }
  }
 }});
 
 //################ MEDUSA ABOVE  ###########//
 
-
-///=================================Medusa Tracking=====================================
-let followDistance = 500;
-let speed = 70;
-let stopDistance = 50;
-
-//checks to see if medusa is dead 
-if(!this.medusa || !this.medusa.body){
-  console.log('medusa is dead')
-              setTimeout(() => {
-              this.scene.start(CST.SCENES.FINALE);
-            }, 500)
-  return;
-}
-
-// Flag to track if Medusa has attacked
-let hasAttacked = false;
-
-// Seek AI movement
-let directionX = this.player.x - this.medusa.x;
-let directionY = this.player.y - this.medusa.y;
-
-// direction to unit vector
-let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
-
-// Check if the distance is less than a certain value
-if (magnitude < followDistance && magnitude > stopDistance) {
-  directionX /= magnitude;
-  directionY /= magnitude;
-
-
-  // Set Medusa's velocity
-  this.medusa.body.velocity.x = directionX * speed;
-  this.medusa.body.velocity.y = directionY * speed;
-
-  // Medusa attack
-  if (Phaser.Math.Distance.Between(this.medusa.x, this.medusa.y, this.player.x, this.player.y) < 75 && !hasAttacked) { 
-    this.medusa.damage = 10;
-    this.medusa.body.velocity.x = 0;
-    this.medusa.anims.play("MedusaAttackDeathRay", true).on('animationcomplete', function () {
-      // Callback function triggered when the attack animation completes
-      hasAttacked = true;  // Set the flag to true after the attack
-    }, this);
+this.medusa.on('animationcomplete', function (animation, frame) {
+  // Check if the completed animation is MedusaHurt
+  if (animation.key === "MedusaHurt") {
+      // Perform any actions you need after the MedusaHurt animation completes
+      // For example, you can play the MedusaIdle animation here
+      this.medusa.anims.play("MedusaMove", true);
   }
-} 
+}, this);
+
+
+    ///=================================Medusa Tracking=====================================
+    let followDistance = 500;
+    let speed = 70;
+    let stopDistance = 30;
+
+    //checks to see if medusa is dead 
+    if (!this.medusa || !this.medusa.body) {
+      console.log('medusa is dead')
+      setTimeout(() => {
+        this.scene.start(CST.SCENES.FINALE);
+      }, 2000)
+      return;
+    }
+
+    // Flag to track if Medusa has attacked
+    let hasAttacked = false;
+
+    // Seek AI movement
+    let directionX = this.player.x - this.medusa.x;
+    let directionY = this.player.y - this.medusa.y;
+
+    // Determine the direction Medusa is moving in
+    let moveDirection = (directionX >= 0) ? 1 : -1;
+
+    // Flip Medusa's sprite based on the direction
+    if (moveDirection === 1) {
+      this.medusa.flipX = true; // flip for rightward movement
+    } else {
+      this.medusa.flipX = false; // no Flip horizontally for leftward movement
+    }
+
+    // direction to unit vector
+    let magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+
+    // Check if the distance is less than a certain value
+    if (magnitude < followDistance && magnitude > stopDistance) {
+      directionX /= magnitude;
+      directionY /= magnitude;
+
+
+      // Set Medusa's velocity
+      this.medusa.body.velocity.x = directionX * speed;
+      this.medusa.body.velocity.y = directionY * speed;
+
+      // Medusa attack
+      if (Phaser.Math.Distance.Between(this.medusa.x, this.medusa.y, this.player.x, this.player.y) < 100 && !hasAttacked) {
+        this.medusa.damage = 10;
+        this.medusa.body.velocity.x = 0;
+
+        if (getRandomInt(10) % 2 === 0) {
+          this.medusa.anims.play("MedusaAttackDeathRay", true).on('animationcomplete', function () {
+            this.medusa.anims.play("MedusaMove", true)
+            hasAttacked = true;  // Set the flag to true after the attack
+          }, this);
+        } else {
+          this.medusa.anims.play("MedusaAttackSnakes", true).on('animationcomplete', function () {
+            this.medusa.anims.play("MedusaMove", true)
+            hasAttacked = true;  // Set the flag to true after the attack
+          }, this);
+        }
+      }
+    }
 
 else if (magnitude <= stopDistance) { // New condition to check if Medusa is too close to the character
   // If Medusa is too close, stop her movement

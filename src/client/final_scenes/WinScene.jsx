@@ -23,16 +23,16 @@ export class WinScene extends Phaser.Scene {
     /////HELPER UTIL TO SEE WHAT SCENES ARE STILL ACTIVE IN PHASER///////
     let runOnce = 0;
     if (runOnce < 1) {
-      let sceneManager = this.scene.manager;
-      let activeScenes = sceneManager.scenes;   // Get the list of active scenes
-      // Iterate over all scenes
-      this.scene.manager.scenes.forEach(scene => {
-        if (this.scene.isActive(scene.scene.key)) {
-          console.log(`Scene ${scene.scene.key} is ACTIVE`);
-        } else {
-          console.log(`Scene ${scene.scene.key} is NOT ACTIVE`);
-        }
-      });
+      // let sceneManager = this.scene.manager;
+      // let activeScenes = sceneManager.scenes;   // Get the list of active scenes
+      // // Iterate over all scenes
+      // this.scene.manager.scenes.forEach(scene => {
+      //   if (this.scene.isActive(scene.scene.key)) {
+      //     console.log(`Scene ${scene.scene.key} is ACTIVE`);
+      //   } else {
+      //     console.log(`Scene ${scene.scene.key} is NOT ACTIVE`);
+      //   }
+      // });
       this.scene.stop("HEALTH");
       runOnce++
     }
