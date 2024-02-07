@@ -148,7 +148,8 @@ export class LoginScene extends Phaser.Scene {
                     if (hasToken) {
                         text.setText(` Hurry ${inputUsername.value}! The princess is in danger!`);
                     } else {
-                        text.setText(` ${inputUsername.value}! You need to register!`);
+                        text.setText(` Hurry ${inputUsername.value}! The princess is in danger!`);
+                        // text.setText(` ${inputUsername.value}! You need to register!`); // Text is setting before the token is issued!
                     }
 
                     this.time.delayedCall(3000, () => {

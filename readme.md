@@ -12,6 +12,16 @@ Inspired by 8-Bit RPG adventures like the original Nintendo Enternainment System
 - Joel Pickler 
 - Taggart Salcedo
 
+## Story
+### The Tower of Zarpulen
+*The princess has been captured by the evil wizard Zurpalen. The kindom is in disarray.*
+
+*Choose to be a warrior, a mage, or a rogue, each with their own unique strengths and weaknesses, in your quest to save the princess from the wizard’s tower, before chaos reigns eternal.*
+
+*Can you make your way up through each floor of the tower to face Zurpalen?*
+
+*The journey will be difficult, heroes have entered, but none have returned...* 
+
 ## Technologies
 - Phaser.io => 2D javascript game framework
 - React => JS Web Framework
