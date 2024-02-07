@@ -401,12 +401,12 @@ this.isSound1PlayedLast = true;
             }
         };   
 
-        this.chest1 = this.physics.add.staticSprite(463, 256, 'chest', 2);
-        this.chest2 = this.physics.add.staticSprite(75, 272, 'chest', 2);
-        this.chest3 = this.physics.add.staticSprite(78, 948, 'chest', 2);
-        this.chest4 = this.physics.add.staticSprite(996, 259, 'chest', 2);
-        this.chest5 = this.physics.add.staticSprite(1270, 95, 'chest', 2);
-        this.chest6 = this.physics.add.staticSprite(733, 1077, 'chest', 2);
+        this.chest1 = this.physics.add.staticSprite(463, 256, 'chest', 0);
+        this.chest2 = this.physics.add.staticSprite(75, 272, 'chest', 0);
+        this.chest3 = this.physics.add.staticSprite(78, 948, 'chest', 0);
+        this.chest4 = this.physics.add.staticSprite(996, 259, 'chest', 0);
+        this.chest5 = this.physics.add.staticSprite(1270, 95, 'chest', 0);
+        this.chest6 = this.physics.add.staticSprite(733, 1077, 'chest', 0);
   
         const chest1Collider = this.physics.add.collider(this.player, this.chest1, ()=>openChestTopRight(this.chest1));
         const chest2Collider = this.physics.add.collider(this.player, this.chest2, ()=>openChestBottomLeft(this.chest2));
