@@ -22,31 +22,33 @@ export class WinScene extends Phaser.Scene {
 
   create() {
     
+    setTimeout(()=>{
     this.victory = this.sound.add("victoryMusic", { 
-      volume: 0.5,
+      volume: 0.4,
       loop: true 
     });
     this.victory.play();
+  }, 1000)
     
     
     /////HELPER UTIL TO SEE WHAT SCENES ARE STILL ACTIVE IN PHASER///////
-    let runOnce = 0;
-    if (runOnce < 1) {
-      // let sceneManager = this.scene.manager;
-      // let activeScenes = sceneManager.scenes;   // Get the list of active scenes
-      // // Iterate over all scenes
-      // this.scene.manager.scenes.forEach(scene => {
-      //   if (this.scene.isActive(scene.scene.key)) {
-      //     console.log(`Scene ${scene.scene.key} is ACTIVE`);
-      //   } else {
-      //     console.log(`Scene ${scene.scene.key} is NOT ACTIVE`);
-      //   }
-      // });
-      this.scene.stop("HEALTH");
-      runOnce++
-    }
+    // let runOnce = 0;
+    // if (runOnce < 1) {
+    //   let sceneManager = this.scene.manager;
+    //   let activeScenes = sceneManager.scenes;   // Get the list of active scenes
+    //   // Iterate over all scenes
+    //   this.scene.manager.scenes.forEach(scene => {
+    //     if (this.scene.isActive(scene.scene.key)) {
+    //       console.log(`Scene ${scene.scene.key} is ACTIVE`);
+    //     } else {
+    //       console.log(`Scene ${scene.scene.key} is NOT ACTIVE`);
+    //     }
+    //   });
+    //   this.scene.stop("HEALTH");
+    //   runOnce++
+    // }
     /////////////////////END HELPER/////
-
+    this.scene.stop("HEALTH");
 
     console.log("FINALE scene")
     let bg1 = this.add.image(400, 300, "castle");
@@ -128,11 +130,13 @@ this.tweens.add({
 
     // Handle Enter key press to restart the game
     this.input.keyboard.on("keydown-ENTER", () => {
+      this.victory.stop();
       this.scene.start(CST.SCENES.TITLE);
     });
 
     // Handle pointer click to restart the game
     this.input.on("pointerup", () => {
+      this.victory.stop();
       this.scene.start(CST.SCENES.TITLE);
     });
 
