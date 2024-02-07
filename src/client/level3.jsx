@@ -23,6 +23,7 @@ export class Level3 extends Phaser.Scene {
     this.medusa;
     this.gameOver = false;
     this.level = 3;
+    this.hasPLayed = false;
   }
 
 
@@ -102,6 +103,7 @@ export class Level3 extends Phaser.Scene {
     this.load.audio('walking2', 'assets/audio/soundeffects/steps2.mp3')
     this.load.audio('zurpalen', 'assets/audio/soundeffects/zurpalen.mp3')
     this.load.audio('swoosh', 'assets/audio/soundeffects/swoosh.mp3')
+    this.load.audio('BossMusic', 'assets/audio/soundeffects/bossfight.mp3')
  
  
  // ########################### Medusa boss ############################
@@ -161,7 +163,10 @@ this.load.spritesheet('smoke', "/assets/finale/poison-cloud-spritesheet.png", {
       volume:0.8
     });
 
-
+    this.bossMusic = this.sound.add('BossMusic', {
+      volume:0.5,
+      loop:true
+    });
 
     
     this.zurpalen = this.sound.add('zurpalen', {
@@ -687,7 +692,15 @@ else {
 }
 
 /////////////
+ // =====================  boss fight audio change ============================================
+ let threshold = 50;
 
+
+ if (!this.hasPlayed && Math.abs(this.player.x - 1095) < threshold && Math.abs(this.player.y - 549) < threshold) {
+   this.bossMusic.play();
+    this.zurpalen.stop();
+    this.hasPlayed = true;
+ }
 
 
   } 

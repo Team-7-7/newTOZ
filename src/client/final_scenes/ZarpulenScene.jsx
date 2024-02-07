@@ -37,9 +37,20 @@ export class ZarpulenScene extends Phaser.Scene {
       startFrame: 0,
       endFrame: 18
     });
+  this.load.audio('zarpulen', '/assets/audio/soundeffects/zarpscene.mp3');
+  
   }
 
   create() {
+
+
+    this.zarp = this.sound.add('zarpulen', { 
+      volume: 0.5,
+      loop: true 
+    });
+
+    this.zarp.play();
+
     let bg2 = this.add.image(400, 300, "castle_tower");
     let scaleX = this.scale.width / bg2.width;
     let scaleY = this.scale.height / bg2.height;
@@ -311,6 +322,7 @@ export class ZarpulenScene extends Phaser.Scene {
     setTimeout(() => {
     this.scene.start(CST.SCENES.LEVEL3);
     this.scene.destroy(ZarpulenScene);
+    this.zarp.stop();
     }, duration*18);
 
 
@@ -325,12 +337,14 @@ export class ZarpulenScene extends Phaser.Scene {
     this.input.keyboard.on("keydown-ENTER", () => {
       this.scene.start(CST.SCENES.LEVEL3);
       this.scene.destroy(ZarpulenScene);
+      this.zarp.stop();
     });
 
     // Handle pointer click to restart the game
     this.input.on("pointerup", () => {
       this.scene.start(CST.SCENES.LEVEL3);
       this.scene.destroy(ZarpulenScene);
+      this.zarp.stop();
     });
 
 

@@ -17,9 +17,18 @@ export class WinScene extends Phaser.Scene {
     this.load.image("castle", "/assets/castle.png")
     this.load.image("victory", "/assets/titlePage/victory.png")
     this.load.image("credits", "/assets/titlePage/credits.png")
+    this.load.audio("victoryMusic", "/assets/audio/soundeffects/victorymusic.mp3")
   }
 
   create() {
+    
+    this.victory = this.sound.add("victoryMusic", { 
+      volume: 0.5,
+      loop: true 
+    });
+    this.victory.play();
+    
+    
     /////HELPER UTIL TO SEE WHAT SCENES ARE STILL ACTIVE IN PHASER///////
     let runOnce = 0;
     if (runOnce < 1) {
