@@ -588,6 +588,12 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
        // Create the SMOKE animation
        this.anims.create(smokeAnimationConfig);
        smoke.anims.play('smokeAnimation')
+
+       setTimeout(() => {
+        this.bossMusic.stop();
+        this.scene.start(CST.SCENES.FINALE);
+      }, 3000)
+
    }
  }
 }});
@@ -612,9 +618,10 @@ this.medusa.on('animationcomplete', function (animation, frame) {
     //checks to see if medusa is dead 
     if (!this.medusa || !this.medusa.body) {
       console.log('medusa is dead')
-      setTimeout(() => {
-        this.scene.start(CST.SCENES.FINALE);
-      }, 2000)
+      // setTimeout(() => {
+      //   this.bossMusic.stop();
+      //   this.scene.start(CST.SCENES.FINALE);
+      // }, 2000)
       return;
     }
 
