@@ -106,15 +106,47 @@ export class Level3 extends Phaser.Scene {
  
  // ########################### Medusa boss ############################
  this.load.atlas('medusa', 'assets/levelAssets/medusa.png', 'assets/levelAssets/medusa-sprite.json');
+ // Medusa hear spritesheet
+ this.load.spritesheet('medusa_heart', 'assets/hud/heart_spritesheet.png', {
+  frameWidth: 32,
+  frameHeight: 32,
+  startFrame: 0,
+  endFrame: 2
+});
+this.load.spritesheet('smoke', "/assets/finale/poison-cloud-spritesheet.png", {
+  frameWidth: 144,
+  frameHeight: 144,
+  startFrame: 0,
+  endFrame: 18
+});
+  }
+
+  updateMedusaHealth(health) {
+    // Update health bar based on Medusa's health
+    let healthConversion = Math.floor(health / 30);
+    let remainder = health % 30;
+
+    if (health > 0) {
+      this.medusa_hearts.children.iterate((medusa_heart, index) => {
+        if (index < healthConversion) {
+          medusa_heart.setFrame(2); // Filled heart
+        } else if (index === healthConversion && remainder > 15) {
+          medusa_heart.setFrame(1); // Half-filled heart for the remaining health
+          medusa_heart.setFlipX(true);
+        } else {
+          medusa_heart.setFrame(0); // Empty heart
+        }
+      });
+    }
   }
 
   create() {
 
-      // =========== Health Bar healthbar =========== //
-      eventsCenter.on('updateHP', (newHealth) => {
-        this.characterHealth = newHealth;
-      }, this);
-      // =========== End Health Bar ======== /// 
+    // =========== Health Bar healthbar =========== //
+    eventsCenter.on('updateHP', (newHealth) => {
+      this.characterHealth = newHealth;
+    }, this);
+    // =========== End Health Bar ======== /// 
 
     
     this.scene.run('pauseScene'); // used to keep the pause scene updated with stats causes pausescene to run in the background
@@ -234,6 +266,7 @@ this.player.setCollideWorldBounds(true);
 
 //################ MEDUSA BELOW  ###########//
   this.medusa = this.physics.add.sprite(513, 109, "medusa", "a1")
+  this.medusa.maxHealth = 300;
   this.medusa.health = 300;
   this.medusa.setScale(1.5)
   this.medusa.setOrigin(0.5, 0.5);
@@ -245,6 +278,22 @@ this.player.setCollideWorldBounds(true);
   this.medusa.setCollideWorldBounds(true);
   this.medusa.body.onCollide = (true);
 
+  // MEDUSA HEALTH BAR //
+  let medusaHealth = this.medusa.maxHealth;
+  this.medusa_hearts = this.add.group();
+  for (let i = 0; i < 10; i++) {
+    const medusa_heart = this.add.sprite(583 + i * 40, 780, 'medusa_heart'); 
+    medusa_heart.setFrame(2); 
+    medusa_heart.setTint(0x32CD32); // Tint the medusa_heart green
+    this.medusa_hearts.add(medusa_heart);
+  }
+
+  // Listen for 'updateMedusaHP' event
+  eventsCenter.on('updateMedusaHP', (newMedusaHealth) => {
+    medusaHealth = newMedusaHealth; // Update Medusa's health
+    this.updateMedusaHealth(medusaHealth);
+  }, this);
+    
   //medusa animation movements
   this.anims.create({
     key: "MedusaIdle",
@@ -264,7 +313,7 @@ this.player.setCollideWorldBounds(true);
     key: "MedusaDeath",
     frames: this.anims.generateFrameNames("medusa", { frames: [ "death1", "death2", "death3", "death4", "death5", "death6" ], }),
     frameRate: 8,
-    repeat: -1,
+    repeat: 1,
   });
   
   this.anims.create({
@@ -508,14 +557,32 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
      this.timerPlayerDamage = true;
      this.timerPlayerDamage = this.time.delayedCall(500, () => {this.timerPlayerDamage = false;}, [], this);
      console.log('this.monster.health is: ', this.medusa.health);
+     this.updateMedusaHealth(this.medusa.health)
      if(this.medusa.health <1){
        console.log('medusa is dead')
-       this.medusa.anims.stop();
+      //  this.medusa.anims.stop();
        this.medusa.anims.play("MedusaDeath", true);
-       setTimeout(() => {
+       
+       let medusaX = this.medusa.x; // Get Medusa's current x position
+       let medusaY = this.medusa.y-80; // Get Medusa's current y position
        medusaCollider.destroy();
        this.medusa.destroy()
-     }, 2000)
+
+       const smoke = this.add.sprite(medusaX, medusaY, 'smoke').setScale(2);
+       smoke.setAlpha(0.9);
+       smoke.setVisible(true);
+   
+       // Define the SMOKE animation configuration
+       const smokeAnimationConfig = {
+         key: 'smokeAnimation',
+         frames: this.anims.generateFrameNumbers('smoke', { start: 0, end: 18 }),
+         frameRate: 10,
+         repeat: -1,
+       };
+   
+       // Create the SMOKE animation
+       this.anims.create(smokeAnimationConfig);
+       smoke.anims.play('smokeAnimation')
    }
  }
 }});
@@ -535,14 +602,14 @@ this.medusa.on('animationcomplete', function (animation, frame) {
     ///=================================Medusa Tracking=====================================
     let followDistance = 500;
     let speed = 70;
-    let stopDistance = 60;
+    let stopDistance = 30;
 
     //checks to see if medusa is dead 
     if (!this.medusa || !this.medusa.body) {
       console.log('medusa is dead')
       setTimeout(() => {
         this.scene.start(CST.SCENES.FINALE);
-      }, 500)
+      }, 2000)
       return;
     }
 
