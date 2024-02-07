@@ -6,6 +6,10 @@ Inspired by 8-Bit RPG adventures like the original Nintendo Enternainment System
 
 ![Tower of Zurpalen](public/assets/readme/toz_title_castle.png)
 
+## Play online
+*the server takes a minute to spin up:*
+https://toz-7r70.onrender.com/
+
 ## Developed by
 - Salvador Carrazco
 - Nick Golebiewski
@@ -14,7 +18,7 @@ Inspired by 8-Bit RPG adventures like the original Nintendo Enternainment System
 
 ## Story
 ### The Tower of Zarpulen
-*The princess has been captured by the evil wizard Zurpalen. The kindom is in disarray.*
+*The princess has been captured by the evil wizard Zurpalen. The kingdom is in disarray.*
 
 *Choose to be a warrior, a mage, or a rogue, each with their own unique strengths and weaknesses, in your quest to save the princess from the wizard’s tower, before chaos reigns eternal.*
 
@@ -43,10 +47,6 @@ Inspired by 8-Bit RPG adventures like the original Nintendo Enternainment System
 4. create a .env file in the top level of the repo with...
   - JWT_SECRET:"zurpalen"
   - DATABASE_URL="postgresql://YOUR USERNAME:YOUR USERNAME@localhost:5432/toz_db?schema=public"
-
-## Play online
-*the server takes a minute to spin up: *
-https://toz-7r70.onrender.com/
 
 ## Useful links on this journey
 How do you start drawing pixel art? (*So useful on setting up Photoshop!*)
