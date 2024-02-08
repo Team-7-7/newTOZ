@@ -62,7 +62,7 @@ const characters =[
         head_gear1:7,
         left_hand_gear2:7,
         right_hand_gear3:7,
-        foot_gear4:7,
+        foot_gear4:4,
         chest_gear5:7,
         backpack1: 7,
         backpack2: 1,
