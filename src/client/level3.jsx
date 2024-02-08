@@ -591,6 +591,8 @@ const medusaCollider = this.physics.add.overlap(this.player, this.medusa, () => 
 
        setTimeout(() => {
         this.bossMusic.stop();
+        this.walkingSound.stop();
+        this.walkingSound2.stop();
         this.scene.start(CST.SCENES.FINALE);
       }, 3000)
 
