@@ -8,7 +8,7 @@ Inspired by 8-Bit RPG adventures like the original Nintendo Enternainment System
 
 ## Play online
 *the server takes a minute to spin up:*
-https://toz-7r70.onrender.com/
+https://tower-of-zurpelan.onrender.com/
 
 ## Developed by
 - Salvador Carrazco
